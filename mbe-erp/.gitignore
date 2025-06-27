@@ -1,0 +1,34 @@
+# Node.js
+/Users/ats2o/Desktop/MBE-ERP/node_modules
+.env
+dist/
+build/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Vite
+.vite/
+.vscode/
+
+# TypeScript
+*.tsbuildinfo
+
+# Frontend build
+apps/frontend/.next/
+apps/frontend/out/
+apps/frontend/dist/
+
+# Backend build
+apps/backend/dist/
