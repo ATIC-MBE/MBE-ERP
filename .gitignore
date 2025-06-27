@@ -1,5 +1,5 @@
 # Node.js
-/Users/ats2o/Desktop/MBE-ERP/node_modules
+node_modules
 .env
 dist/
 build/
