@@ -1,0 +1,828 @@
+import { Layout } from '@/components/Layout';
+import React, { useMemo, useState } from 'react';
+import {
+    ALERT_DANGER,
+    CITIES,
+    STATES,
+    TIPO_LEADS,
+} from '@/client/helpers/constants';
+import AlertContainer from '@/components/AlertContainer';
+import OptionsOnSelect from '@/components/OptionsOnSelect';
+import {
+    AiOutlinePlus,
+    AiFillSave,
+    AiOutlineClose,
+    AiOutlineWhatsApp,
+    AiOutlineMail,
+    AiOutlineComment,
+    AiFillEuroCircle,
+} from 'react-icons/ai';
+import { FaHandshake } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
+import ButtonContainerVertical from '@/components/ButtonContainerVertical';
+import Modal from '@/components/Modal';
+import FloatButton from '@/components/FloatButton';
+import EnumButtons from '@/components/EnumButtons';
+import {
+    BsFillHouseFill,
+    BsFillPersonCheckFill,
+    BsFillPersonFill,
+    BsFillPhoneFill,
+    BsFillTelephoneFill,
+    BsLink,
+    BsListCheck,
+} from 'react-icons/bs';
+import useLeadId from '@/client/hooks/share/leads/useLeadId';
+import AreaMMIcon from '@/components/Iconos/AreaMMIcon';
+import SpinnerCustom from '@/components/SpinnerCustom';
+
+
+
+const LeadNew = () => {
+    const _pathGoToBack = '/dnmaster/leads';
+    const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+   
+    const {
+        dataDB,
+        handleChange,
+        handleSave,
+        handleCancel,
+        handleContratar,
+        listAvance,
+        refTelefono,
+        refCorreo,
+        listInteresa,
+        listOcupacion,
+        listResponsable,
+        listCategoria,
+        errorValidate,
+        msgError,
+        isModalOpen,
+        listGrupo,
+        fnHidenModal,
+        handleChangeGrupo,
+        handleActionGrupo,
+        newGrupo,
+        handleNewGrupo,
+        handleContratarModal,
+        validateCodeGroup,
+        flagInteresa,
+        setFlagInteresa,
+        flagOcupacion,
+        setFlagOcupacion,
+        flagAvance,
+        loadingScreen,
+        setFlagAvance,
+        loadingBtnActions,
+    } = useLeadId(_pathGoToBack);
+
+    const drawListOnSelect = (
+        lData: Array<{ key: string; name: string }>,
+        codeKey: string,
+        label?: string
+    ) => {
+        return <OptionsOnSelect data={lData} codeKey={codeKey} label={label} />;
+    };
+
+    const sendPhoneNumberToMake = async (firstName: string, phoneNumber: string) => {
+        setLoading(true);
+        setSuccessMessage('');
+        setErrorMessage('');
+    
+        try {
+            let response;
+    
+            if (dataDB.tipo_lead == 'Colaborador') {
+                 //Manda el núm y el nombre a make y guarda contacto en google Contact dn3@micityhome.es
+                response = await fetch('https://hook.eu2.make.com/7h0s5b96t2tf7894yab4hlw3uuyhi3x8', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // Cambiar a los nombres correctos segun campos de MÓODULO MAKE
+                    body: JSON.stringify({ nombre_completo: firstName, telefono: phoneNumber }), 
+                });
+            } else if (dataDB.tipo_lead == 'Propietario') {
+                //Manda el núm y el nombre a make y guarda contacto en google Contact dn2@micityhome.es
+                response = await fetch('https://hook.eu2.make.com/pfllqshorkx3iu14ouxnrdafsxjnh6b2', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // Cambiar a los nombres correctos segun campos de MÓODULO MAKE
+                    body: JSON.stringify({ nombre_completo: firstName, telefono: phoneNumber }), 
+                });
+            } else {
+                setErrorMessage('Tipo de lead no soportado');
+                return;
+            }
+    
+            if (response.ok) {
+                setSuccessMessage('Número de teléfono y nombre enviados con éxito');
+            } else {
+                setErrorMessage('Falló el envío del número de teléfono y nombre');
+            }
+        } catch (error: any) {
+            setErrorMessage('Error al enviar el número de teléfono y nombre: ' + error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    return (
+        <Layout>
+            <div className="w-auto h-full grid grid-flow-col">
+                <div className="w-full min-h-[40rem] px-[6rem]">
+                    <div className="bg-[#ffffff72] h-full w-full rounded-2xl shadow-2xl p-5">
+
+                        
+                        {errorValidate ? (
+                            <AlertContainer typeAlert={ALERT_DANGER}>
+                                <div
+                                    dangerouslySetInnerHTML={{ __html: msgError }}
+                                />
+                            </AlertContainer>
+                        ) : (
+                            <></>
+                        )}
+
+                        <input
+                            type="hidden"
+                            name="id"
+                            value={dataDB.id?.toString()}
+                        />
+                        <div className="min-h-[35rem] grid grid-cols-2 space-x-5">
+                            <div className="h-full grid space-y-5">
+                                <div className=" min-h-[14rem] bg-[#5da7d5c0] rounded-2xl p-5 space-y-4">
+                                    <h1 className="text-lg text-[#0077bd] font-bold">
+                                        Datos Personales
+                                    </h1>
+
+                                    <div className=" w-full flex text-xs">
+                                        <label className="p-2 h-min w-[5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                            Tipo lead
+                                        </label>
+                                        <select
+                                            value={dataDB.tipo_lead}
+                                            onChange={handleChange}
+                                            name="tipo_lead"
+                                            className="rounded-r-full p-2 w-[100%] col-span-6"
+                                        >
+                                            {useMemo(
+                                                () =>
+                                                    drawListOnSelect(
+                                                        TIPO_LEADS,
+                                                        'tl',
+                                                        'Seleccionar tipo lead'
+                                                    ),
+                                                []
+                                            )}
+                                        </select>
+                                    </div>
+
+                                    <div className="grid space-x-2">
+                                        <div className=" w-full flex text-xs">
+                                            <label className="px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                <BsFillPersonFill
+                                                    title="Nombres persona"
+                                                    size={'1.2rem'}
+                                                />
+                                            </label>
+                                            <input
+                                                placeholder="Nombres completos"
+                                                value={dataDB.nombre_completo}
+                                                onChange={handleChange}
+                                                type="text"
+                                                name="nombre_completo"
+                                                className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 space-x-2">
+                                        <div className=" w-full flex text-xs">
+                                            <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                <AiOutlineWhatsApp
+                                                    title="Grupo whatsapp"
+                                                    size={'1.2rem'}
+                                                />
+                                            </label>
+                                            <input
+                                                placeholder="Grupo whatsaap"
+                                                value={dataDB.grupo_wpp}
+                                                onChange={handleChange}
+                                                type="text"
+                                                name="grupo_wpp"
+                                                className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                            />
+                                        </div>
+                                        <div className=" w-full flex text-xs">
+                                            <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                <BsLink
+                                                    title="Link referencia"
+                                                    size={'1.2rem'}
+                                                />
+                                            </label>
+                                            <input
+                                                placeholder="Link referencia"
+                                                value={dataDB.referencia}
+                                                onChange={handleChange}
+                                                type="text"
+                                                name="referencia"
+                                                className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {dataDB.tipo_lead === 'Colaborador' ? (
+                                        <div className="grid grid-cols-2 space-x-2">
+                                            <div className=" w-full flex text-xs">
+                                                <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    <BsFillHouseFill
+                                                        title="Empresa"
+                                                        size={'1.2rem'}
+                                                    />
+                                                </label>
+                                                <input
+                                                    placeholder="Nombre empresa"
+                                                    value={dataDB.empresa}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="empresa"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                            <div className=" w-full flex text-xs">
+                                                <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    <BsListCheck
+                                                        title="Categoría"
+                                                        size={'1.2rem'}
+                                                    />
+                                                </label>
+                                                <select
+                                                    value={dataDB.idcategoria}
+                                                    onChange={handleChange}
+                                                    name="idcategoria"
+                                                    className="rounded-r-full p-2 w-[100%] col-span-6"
+                                                >
+                                                    {drawListOnSelect(
+                                                        listCategoria,
+                                                        'cat',
+                                                        'Seleccionar Categoría'
+                                                    )}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
+
+                                    <div className="grid grid-cols-2 space-x-2">
+                                        <div className="w-full flex text-xs">
+                                            <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                <BsFillTelephoneFill
+                                                    title="Teléfono"
+                                                    size={'1rem'}
+                                                />
+                                            </label>
+                                            <input
+                                                placeholder="Número de teléfono"
+                                                ref={refTelefono}
+                                                value={dataDB.telefono}
+                                                onChange={handleChange}
+                                                type="text"
+                                                name="telefono"
+                                                className="p-2 w-[100%] rounded-r-full outline-blue-800"
+                                            />
+                                        </div>
+                                       
+
+                                        <div className="w-full flex text-xs">
+                                            <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                <AiOutlineMail
+                                                    title="Correo"
+                                                    size={'1.2rem'}
+                                                />
+                                            </label>
+                                            <input
+                                                placeholder="Correo electrónico"
+                                                ref={refCorreo}
+                                                value={dataDB.correo}
+                                                onChange={handleChange}
+                                                type="text"
+                                                name="correo"
+                                                className="p-2 w-[100%] rounded-r-full outline-blue-800"
+                                            />
+                                        </div>
+                                    </div>
+                                    {/* guarda el núm de telefono y el nombre de los campos  */}
+                                    <button
+                                    onClick={() => {
+                                        // verifica si los campos están vacíos
+                                        if (dataDB.nombre_completo && dataDB.telefono && dataDB.tipo_lead) {
+                                            // Valida nombre_completo es un string
+                                            if (typeof dataDB.nombre_completo === 'string' && dataDB.nombre_completo.trim() !== '') {
+                                                // Valida el núm (hasta 15 digitos,permitiendo prefijos opcionales)
+                                                const phoneRegex = /^(\+\d{1,3}[- ]?)?\d{1,15}$/; // Permite prefijos opcionales y un número de hasta 15 dígitos
+                                                if (phoneRegex.test(dataDB.telefono)) {
+                                                    // llama siguiendo el orden, primero el nombre, luego el telefono
+                                                    sendPhoneNumberToMake(dataDB.nombre_completo, dataDB.telefono);
+                                                } else {
+                                                    setErrorMessage('El número de teléfono no es válido. Debe tener hasta 15 dígitos y puede incluir un prefijo.');
+                                                }
+                                            } else {
+                                                setErrorMessage('El nombre completo debe ser un string no vacío.');
+                                            }
+                                        } else {
+                                            setErrorMessage('El número de teléfono y el nombre completo no pueden estar vacíos');
+                                        }
+                                    }} className='ml-2 bg-[#0077bd] h-min text-white px-2 py-1 text-[1rem] border border-blue rounded-xl'>
+                                        Guardar contacto
+                                    </button>
+                                        {loading && <p>Guardando...</p>} {/* Mensaje de carga */}
+
+                                        {successMessage && <p className="text-green-600">{successMessage}</p>} {/* Mensaje de éxito */}
+                                        {errorMessage && <p className="text-red-600">{errorMessage}</p>} {/* Mensaje de error */}
+
+                                   
+                                 
+                                </div>
+
+                                {dataDB.tipo_lead === 'Propietario' && false ? (
+                                    <div className=" row-span-4 bg-[#5da7d5c0] p-5 rounded-2xl space-y-2 h-[15rem]">
+                                        <h1 className="text-lg text-[#0077bd] font-bold">
+                                            Datos Propiedad
+                                        </h1>
+                                        <div className="grid grid-cols-2 space-x-2">
+                                            <div className=" w-full flex text-xs">
+                                                <label className="p-2 h-min w-[6rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    Precio
+                                                </label>
+                                                <input
+                                                    value={dataDB.precio}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="precio"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                            <div className=" w-full flex text-xs">
+                                                <label className="p-2 h-min w-[7rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    m2
+                                                </label>
+                                                <input
+                                                    value={dataDB.m2}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="m2"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 space-x-2">
+                                            <div className=" w-full flex text-xs">
+                                                <label className="p-2 h-min w-[6rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    Dirección
+                                                </label>
+                                                <input
+                                                    value={dataDB.direccion}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="direccion"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                            <div className=" w-full flex text-xs">
+                                                <label className="p-2 h-min w-[7rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    Nro edificio
+                                                </label>
+                                                <input
+                                                    value={dataDB.nro_edificio}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="nro_edificio"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 space-x-2">
+                                            <div className=" w-full flex text-xs">
+                                                <label className="p-2 h-min w-[6rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    Nro piso
+                                                </label>
+                                                <input
+                                                    value={dataDB.nro_piso}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="nro_piso"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                            <div className=" w-full flex text-xs">
+                                                <label className="p-2 h-min w-[7rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    C. Postal
+                                                </label>
+                                                <input
+                                                    value={dataDB.codigo_postal}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    name="codigo_postal"
+                                                    className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className=" w-full flex text-xs">
+                                            <label className="p-2 h-min w-[5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                Localidad
+                                            </label>
+                                            <select
+                                                value={dataDB.localidad}
+                                                onChange={handleChange}
+                                                name="localidad"
+                                                className="rounded-r-full p-2 w-[100%] col-span-6"
+                                            >
+                                                {drawListOnSelect(
+                                                    CITIES,
+                                                    'loc',
+                                                    'Seleccionar localidad'
+                                                )}
+                                            </select>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    ''
+                                )}
+
+                                <div className="bg-[#5da7d5c0] rounded-2xl p-5 space-y-2 h-full">
+                                    <h1 className="text-lg text-[#0077bd] font-bold">
+                                        Datos Leads
+                                    </h1>
+                                    <div className="grid grid-cols-1 space-x-2">
+                                        <div className=" w-full flex text-xs">
+                                            <label className="px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                <BsFillPersonCheckFill
+                                                    title="Perfil responsable" 
+                                                    size={'1.2rem'}
+                                                />
+                                            </label>
+                                            <select
+                                                value={dataDB.idresponsable}
+                                                onChange={handleChange}
+                                                name="idresponsable"
+                                                className="rounded-r-full p-2 w-[100%] col-span-6"
+                                            >
+                                                {drawListOnSelect(
+                                                    listResponsable,
+                                                    'lresp',
+                                                    'Seleccionar Perfil Responsable'
+                                                )}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {dataDB.tipo_lead === 'Propietario' ? (
+                                        <div className="grid grid-cols-2 space-x-2">
+                                            <div className="w-full flex text-xs">
+                                                <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    <AiFillEuroCircle
+                                                        title="Precio"
+                                                        size={'1.2rem'}
+                                                    />
+                                                </label>
+                                                <input
+                                                    placeholder="Precio"
+                                                    ref={refTelefono}
+                                                    value={dataDB.precio}
+                                                    onChange={handleChange}
+                                                    type="number"
+                                                    name="precio"
+                                                    className="p-2 w-[100%] rounded-r-full outline-blue-800"
+                                                />
+                                            </div>
+                                            <div className="w-full flex text-xs">
+                                                <label className="px-2 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                                    <AreaMMIcon
+                                                        title="Área m2"
+                                                        color={'white'}
+                                                        className="w-[1.2rem] h-[1.2rem]"
+                                                    />
+                                                </label>
+                                                <input
+                                                    placeholder="Área m2"
+                                                    ref={refCorreo}
+                                                    value={dataDB.m2}
+                                                    onChange={handleChange}
+                                                    type="number"
+                                                    name="m2"
+                                                    className="p-2 w-[100%] rounded-r-full outline-blue-800"
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
+
+                                    <div className="w-min grid space-x-2">
+                                        <div className="flex text-sm">
+                                            <EnumButtons
+                                                txtSize="sm"
+                                                values={[
+                                                    ...listInteresa.map(
+                                                        (el) => el.name
+                                                    ),
+                                                ]}
+                                                selected={flagInteresa}
+                                                setSelected={setFlagInteresa}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {dataDB.tipo_lead === 'Propietario' ? (
+                                        <div className="grid space-x-2">
+                                            <div className="flex text-sm">
+                                                <EnumButtons
+                                                    txtSize="sm"
+                                                    values={[
+                                                        ...listOcupacion.map(
+                                                            (el) => el.name
+                                                        ),
+                                                    ]}
+                                                    selected={flagOcupacion}
+                                                    setSelected={setFlagOcupacion}
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
+
+                                    <div className="w-min grid space-x-2">
+                                        <div className="flex text-sm">
+                                            <EnumButtons
+                                                txtSize="sm"
+                                                values={[
+                                                    ...listAvance.map(
+                                                        (el) => el.name
+                                                    ),
+                                                ]}
+                                                selected={flagAvance}
+                                                setSelected={setFlagAvance}
+                                            />
+                                        </div>
+                                    </div>
+                                    {flagAvance === 3 ? (
+                                        <div className=" w-full flex text-sm">
+                                            <label className="px-1 py-1 h-auto w-full col-span-2 text-sm">
+                                                <b className="txt-red-c62608">
+                                                    Importante:
+                                                </b>{' '}
+                                                {flagAvance === 3
+                                                    ? `Se procederá a contratar al ${
+                                                          dataDB.tipo_lead ===
+                                                          'Propietario'
+                                                              ? '"Propietario"'
+                                                              : dataDB.tipo_lead ===
+                                                                'Colaborador'
+                                                              ? '"Prescriptor"'
+                                                              : '"XXX"'
+                                                      }`
+                                                    : '"XXX"'}
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="bg-[#ffffff5f] rounded-2xl p-5 space-y-2 h-full">
+                                <h1 className="text-lg text-[#0077bd] font-bold">
+                                    Historial
+                                </h1>
+                                <div className="grid grid-cols-2 space-x-2">
+                                    <div className=" w-full flex text-xs">
+                                        <label className="p-2 h-min w-[8rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                            Last step{' '}
+                                            <span
+                                                style={{ color: 'red' }}
+                                                className="field-required"
+                                            >
+                                                *
+                                            </span>
+                                        </label>
+                                        <input
+                                            readOnly
+                                            value={dataDB.last_step}
+                                            onChange={handleChange}
+                                            type="date"
+                                            name="last_step"
+                                            className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                        />
+                                    </div>
+                                    <div className=" w-full flex text-xs">
+                                        <label className="p-2 h-min w-[8rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                            Next step{' '}
+                                            <span
+                                                style={{ color: 'red' }}
+                                                className="field-required"
+                                            >
+                                                *
+                                            </span>
+                                        </label>
+                                        <input
+                                            value={dataDB.next_step}
+                                            onChange={handleChange}
+                                            type="date"
+                                            name="next_step"
+                                            className="rounded-r-full p-2 w-[100%] outline-blue-800"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="w-full flex text-sm">
+                                    <label className="px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-white rounded-l-full col-span-2">
+                                        <span className="display-icon-error">
+                                            <AiOutlineComment
+                                                title="Comentario"
+                                                size={'1.5rem'}
+                                            />{' '}
+                                            <span
+                                                style={{ color: 'red' }}
+                                                className="field-required"
+                                            >
+                                                *
+                                            </span>
+                                        </span>
+                                    </label>
+                                    <textarea
+                                        placeholder="Ingresar comentarios"
+                                        defaultValue={dataDB.comentario}
+                                        onChange={handleChange}
+                                        className="rounded-r-full p-3 w-[100%] outline-blue-800"
+                                        name="comentario"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ButtonContainerVertical>
+                    <FloatButton
+                        disabledEvent={true}
+                        stateDisabled={loadingBtnActions}
+                        title="Guardar"
+                        handler={handleSave}
+                        Icon={AiFillSave}
+                    />
+                    {['Propietario', 'Colaborador'].includes(
+                        dataDB.tipo_lead
+                    ) ? (
+                        <FloatButton
+                            title="Contratar"
+                            handler={handleContratarModal}
+                            Icon={FaHandshake}
+                        />
+                    ) : (
+                        ''
+                    )}
+                    <FloatButton
+                        title="Cancelar"
+                        handler={handleCancel}
+                        Icon={MdCancel}
+                    />
+                </ButtonContainerVertical>
+            </div>
+            <Modal
+                title={`Contratar ${
+                    dataDB.tipo_lead === 'Propietario'
+                        ? 'Propietario'
+                        : 'Prescriptor'
+                }`}
+                isOpen={isModalOpen}
+            >
+                <>
+                    <div className="w-[30rem] bg-[#badaed54] p-4 rounded-2xl">
+                        <div className="w-full grid max-h-[15rem] overflow-y-scroll">
+                            {listGrupo.map((el, index) => (
+                                <div
+                                    key={`grp-${index}`}
+                                    className="w-full flex text-sm"
+                                >
+                                    <div
+                                        onClick={() =>
+                                            handleChangeGrupo(parseInt(el.key))
+                                        }
+                                        className="flex items-center mr-4 py-[0.4rem] cursor-pointer"
+                                    >
+                                        <input
+                                            checked={
+                                                dataDB.grupo?.id.toString() ===
+                                                el.key
+                                            }
+                                            onChange={(e) => {}}
+                                            type="radio"
+                                            value={`${el.key}`}
+                                            name="grupo"
+                                            className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                        />
+                                        <label className="ml-2 text-sm font-medium text-gray-900 text-bold1 dark:text-gray-300 cursor-pointer">
+                                            {el.name}
+                                        </label>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <hr className="mt-3 mb-3 border-1 border-[#c7d2e7]" />
+                        <div className="w-full h-full grid">
+                            <div className="w-full flex text-sm">
+                                <div className="w-full flex items-center mr-4 py-[0.4rem]">
+                                    {newGrupo ? (
+                                        <>
+                                            <div className="w-full space-x-2">
+                                                <div className="w-[100%] flex text-black text-xs">
+                                                    <input
+                                                        placeholder="Nombre grupo"
+                                                        value={dataDB.grupo?.nombre}
+                                                        onChange={handleNewGrupo}
+                                                        type="text"
+                                                        name="grupo"
+                                                        className="p-2 w-[70%] rounded-l-full outline-blue-800"
+                                                    />
+                                                    <div
+                                                        onClick={() =>
+                                                            handleActionGrupo(
+                                                                'delete'
+                                                            )
+                                                        }
+                                                        className="bg-blue col-span-2 rounded-r-full flex items-center justify-end px-2 w-[2rem]"
+                                                    >
+                                                        <AiOutlineClose
+                                                            className="text-white cursor-pointer"
+                                                            size={'1rem'}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div
+                                            className="cursor-pointer flex"
+                                            onClick={() =>
+                                                handleActionGrupo('new')
+                                            }
+                                        >
+                                            <button
+                                                title={'Nuevo'}
+                                                className="bg-[#0077bd] text-white p-[0.3rem] text-lg border border-blue rounded-full"
+                                                type="button"
+                                            >
+                                                <AiOutlinePlus size={'1.2rem'} />
+                                            </button>
+                                            <span className="ml-2 text-sm self-center">
+                                                Nuevo grupo
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="btnContent w-full flex justify-end sticky">
+                        {validateCodeGroup() ? (
+                            <button
+                                onClick={handleContratar}
+                                disabled={
+                                    loadingScreen === undefined
+                                        ? false
+                                        : loadingScreen
+                                }
+                                className="w-[5rem] p-2 hover:text-white text-blue-700 border border-[#0077bd] rounded-full hover:bg-[#0077bd]"
+                                type="button"
+                            >
+                                {loadingScreen === undefined
+                                    ? 'Listo'
+                                    : loadingScreen
+                                    ? <SpinnerCustom msn="" />
+                                    : 'Listo'}
+                            </button>
+                        ) : (
+                            ''
+                        )}
+
+                        <button
+                            onClick={fnHidenModal}
+                            className="py-2 px-2 hover:text-white text-orange-600 border border-[#ed7233] rounded-full hover:bg-[#ed7233]"
+                            type="button"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </>
+            </Modal>
+        </Layout>
+    );
+};
+
+export default LeadNew;

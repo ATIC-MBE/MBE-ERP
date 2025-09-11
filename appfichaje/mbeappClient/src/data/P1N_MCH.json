@@ -1,0 +1,1087 @@
+[
+ {
+  "Departamento": "Dept",
+  "Tipo": "Tipo",
+  "Que ha pasado": "Que ha pasado",
+  "Solución": "Solución"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Saltan las llamadas a otros departamentos y estos no lo están cogiendo",
+  "Solución": "- RRHH instalar a todo el mundo el TELZIO en el movil en el onboarding. \n- Se asigna a una persona de CRM que esté atenta al Telzio, y el resto estamos por si acaso"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Falla la caldera y DA no hace nada, y nosostros no insistimos",
+  "Solución": "- Incluir en Proceso INCORPORACIÓN, lograr mis objetivos y compromisos elevandolo a todos los responsables si un departamento no me hace caso"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "CRM da a los inquilinos una dirección de otro piso, ha ido a mirar una documentación antinua en lugar del ERP",
+  "Solución": "Prestar más atención \nBorrar la tabla de info vivienda, "
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "general",
+  "Que ha pasado": "Se está dejando la puerta mal cerrada de la oficina y se ha colado gente que no trabaja aquí",
+  "Solución": "La solución ponerse un muelle, ya se coloco la puerta cierra bien "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "CRM no está rellenando los datos de SERVICIOS de sus huespedes, y estamos cerrando casos sin esta información",
+  "Solución": "1. Poner mas claro en el procedimiento de CRM que la etapa \"DEVOLUCIONES\" quiere también decir terminar los consumos por parte de CRM\n2. En el procedimiento de Legal al pedir los Wpp, pedir tb que comprueben si tienen todos los servicios metidos. "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez\/desacato",
+  "Que ha pasado": "No se está haciendo el correcto seguimiento de los abogados, Diego nos pide que le insistamos, no lo hacemos, al final tiene que insistir él para que nos manden la documentación",
+  "Solución": "1. Poner un checklist de cosas que nos deben los abogados\n2. Apuntarnos en el calendario para revisar el avance de los abogados. "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "El piso se quedó sin ocupación porque el inquilino no vino hasta un mes más tarde, además no estaba todo el procedimiento completo a la fecha de llegada del inquilino ",
+  "Solución": "Se coloca en sRRHH, cortar el problema "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Nos entran varias reservas a serrano1 por culpa del becario que dio de alta el piso sin seguir la guia, y sin haberlo conectado a los precios dejando un precio RIDICULAMENTE BAJO",
+  "Solución": "Estaba claro en la GUIA y no se ha seguido. lo pongo en s.RRHH, y tenemos una intervención con esta persona para que sigua las guias. No hay supervisión por parte del lider, el lider no estaba ese dia, se pone en la guia que no se puede publicar nada en portales sin aprobacion "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "A la salida de PH3 no se cuenta con una reserva",
+  "Solución": "Estaba claro en las instrucciones, desde hace más de un año pero no esta en la GUIA meter en la guia"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se están cogiendo las llamadas a interesados ni devolviéndolas",
+  "Solución": "Esta en la guia y no se ha seguido. NO hay interrupciones pero si hay que contestar a las llamadas perdidas, mensajes, etc al llegar a la etapa de manera que no quede nada pendiente. "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se está actualizando la tabla de listado de pisos y sigue disponible en el Drive",
+  "Solución": "Poner en old e inaccesible toda la información antigua. por que tiene la información por duplicado en Info pisos y en el ERP\nHemos detectado un problema que los agentes no pueden ver el ERP, dar acceso de visualización al usuario agente. con ATIC"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se informó oportunamente a todos los departamentos que se habia ido GA11",
+  "Solución": "Un aviso y se echa "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Intervención de Diego para Serrano1-Rony. Para convencerle que se quedara. Crea impacto el hablar con un \"responsable\"",
+  "Solución": "Ver como lo hizo Diego, Crear un argumentario\/ contraargumentario y aplicar la regla de subalterno responsable. "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Cancelación de la reserva cuando hay una rescisión en curso. Esto nos puede provocar que si no conseguimos echar al inquilino tengamos que cancelar las reservas que nos entran y dejar a los inquilinos en la calle. No está puesto en ninguna parte del procedimiento esta acción. ",
+  "Solución": "Esto es una cosa que se hace pero que no está incluido en ningun procedimiento, Incluir esto en el procedimiento de rescisión"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se está actualizando la tabla de listado de pisos y sigue disponible en el Drive",
+  "Solución": "Mira información donde no deberia haber mirado la información"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se esta mirando por la mirilla ni por la cámara antes de abrir la puerta",
+  "Solución": "Se mueve el cartel a encima de la manilla para que literalmente tengan que apartar fisicamente el cartel antes de abrir la puerta."
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se está leyendo la chuleta",
+  "Solución": "Revisamos los carteles puestos en la mesa de acogida intentando reducir al máximo"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Dejamos pasar a alguien sin saber quien es ni para que viene",
+  "Solución": "Se mueve el cartel a encima de la manilla para que literalmente tengan que apartar fisicamente el cartel antes de abrir la puerta."
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No siguen el procedimiento de rescisión, pasando a dejar al inquilino sin acceso y nadie tenia constancia. Se habia dicho que hay que comunicarlo en la reunion general pero no esta puesto en el procedimiento",
+  "Solución": "Se repasa el procedimiento y se incluye ahora hay que seguirlo."
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Se recoloca a un inquilino en un nuevo apartamento y no se le hace firmar un nuevo contrato.",
+  "Solución": "Añadir la coletilla en el anexo de compensaciones que cada piso tiene que firmar un nuevo contrato, tb lo cambio en control de Larga"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se escaneó el dni de las personas que vinieron a la oficina",
+  "Solución": "Poner un cartel en la puerta junto con prohibido entrada"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se comenta a los departamentos adecuados sobre incidente con la manija de casita43",
+  "Solución": "Colocarlo en grupo de Oficina para que todos esten informados al momento "
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se siguió el procedimiento de una acogida correcta a Cas43",
+  "Solución": "Incluirlo en la guia de CRM"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Se ha modificado el formato de un documento sin tener la autorización",
+  "Solución": "se bloquea de manera que solo Diego puede modificar los documentos de modificación. \nAhora para hacer versiones nuevas, hacemos una copia la colgamos en OrgInterna y hasta que no esté aprobado no se sube"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Se ha impreso mal un documento y en varias copias",
+  "Solución": "Se pego un Pos-it en la carpeta correspondiente dejando claras las siguientes instrucciones\n1. solo tener una copia a la vez\n2. cada vez que haya una versión nueva que se destruya y se imprima\n3. Siempre a doble cara"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se sigue la norma UN SEGUNDO QUE MI JEFE QUIERE HABLAR CONTIGO",
+  "Solución": "Se pego una pildora en las paredes para que lo vean; Hacer una pildora wpp y ponerlo como pregunta de concepto"
+ },
+ {
+  "Departamento": "TODOS",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se entiende que quiere decir la columna tipo, ",
+  "Solución": "se incluyen instrucciones"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No esta completa la hora de entregas",
+  "Solución": "Repasar las hojas de entrega de todos los compañeros y poner un cartel alerta en los articulos más comunmente dados para no dar nada sin antes apuntarlo en la hoja de entregas"
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "* Estamos a medidados de año solo 1\/17 superhost, no tienen aún definidos los objetivos",
+  "Solución": "*Realizar por nuestra cuenta el analisis de las cuentas, priorizar los que no tienen calificación, reunión con RMG para priorizar cuentas "
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "* Siguen sin hacer uso de la tabla de analisis de evaluaciones, no funciona",
+  "Solución": "Con respecto a esto ya se hablo con ATIC, mañana se gestionara el funcionamiento "
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "* No funciona el wpp (Bot)",
+  "Solución": "* Se ha solicitado la compra y ya esta enviando los mensajes el bot"
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "* No se hace el desalojo de azca8, le toman el pelo a CRM",
+  "Solución": "La orden viene de ADE, antes se habia mandado el comprobante y se hablo de una posible salida por ello se paso el proceso y se comento a DIEGO.                                                                                                                                                                       Se comienza el procesos de recisión                                                                                                                                                                                                                                                                                                                                                                               "
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "* No tienen monitoreadas las pildoras a los huespedes, ni de larga ni de corta",
+  "Solución": "Se tiene un check-list de corta y larga estancia. En el caso de LE esta en la misma tabla de control Largas estancias y para la corta se tiene una tabla aparte."
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RMG no sabe usar la tabla de Control de larga, la tiene desacutalizada y tiene inquilinos dentro con el porcentaje de avance a menos del 70%",
+  "Solución": "Se subraya en ROJO a ver si no vuelve a ocurrir"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RMG no insiste a CRM para tener 100% cuentas SUPERHOST en Airbnb ",
+  "Solución": "reu una vez al mes para ver q esta pasando \/\/ Puesto en calendar "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RMG no le preocupa que azca11, PH2, PH3, Barr3... no tenga reserva de larga y queda menos de un mes",
+  "Solución": "se añade al checklist \nLlama a colaboradores, \nasegurate de que esté colgado en las plataformas\nrevisa el precio, que esté actualizado y sea superior al anterior, revisalo con tu lider\nrevisa que el ical esté conectado\nreivsa el precio en el ERP"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RMG marca como urgente un proyecto y ATIC en lugar de aprobarlo con Diego y dejarlo reflejado en el GANTT tira para adelante y lo hace",
+  "Solución": "Que No se marco como urgente  !!"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Comprobar datos de contactos de Avales LE",
+  "Solución": "Nota en control de LE que CONTACTEN a los Avales"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se tiene reservas de LE con anticipación",
+  "Solución": "Ver anterior"
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Zayra no está escribiendo sRRHH",
+  "Solución": "Se revisa la guia de lider y se ponen tareas del dia"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "*No hay TeamBuilding desde hace ni se sabe cuando y a nadie le preocupa",
+  "Solución": "en el informe de la semana se dice cual va a ser el TeamBuilding de esa semana o si no va a haber. Tenemos una alerta en Calendar"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "*Se está generando mal ambiente por las repetidas broncas, todas ellas justificadas y a nadie parece preocuparle ni hay acciones de contingencia",
+  "Solución": "Con la segunda intervención y luego corta de raiz, no hay cabreos, incluir en la p.RRHH. (Pág 11)"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RRHH no sigue el procedimiento, Tenemos que despedir por lo tanto a 8 personas",
+  "Solución": "Esta en la guía de politica de RRHH en la pag 11:Motivos de cese inmediato "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RRHH no procede a echar a la gente, no siguiendo las instrucciones clara de Diego, y es Diego quien se tiene que exponer personalmente para echar a la gente llegando a organizar un follón dpm policia incluida",
+  "Solución": "Se ha puesto en la guia de la Politica MCH para no llegar a esto y que solo sean los involucrados los lideres (Pág 11)"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "* RRHH no acompañan a los becarios echados",
+  "Solución": "Incluirlo en la entrevista de salida"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "* RRHH no llaman a las universidades antes que los becarios",
+  "Solución": "Incluirlo en la entrevista de salida"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RRHH Sharon entrega en fisico el papel de Contrato formativo a los becarios",
+  "Solución": "Se entrega durante la entrevista del proceso de selección "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* RRHH Estan sentados dos chicos de RRHH haciendo lo mismo, cuando se les pide que queremos hablar con Rubén siguen hablando con un solo interlocutor.",
+  "Solución": "Hemos repartido las tareas "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Tenemos que recordarle a RRHH que tiene que dar de baja a los becarios, sus contraseñas y las cookies",
+  "Solución": "Se harán examenes continuos de procedimientos al dpto de rrhh"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Que hizo Diego, está vacio en todos los departamentos, según vosotros me toco los hue*os"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Nadie a contestado a Pablo",
+  "Solución": "Incluir en la guia de lider ver otras cosas de departamentos "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No se apretan los botones de YES\/NO"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Nadie se ocupa de DA ni DN"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No parece que a nadie le preocupe que haya un chico de ATIC que no se sabe las guias, y parece que a los lideres esto les da igual"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Diego dedica 79horas la semana pasada a MCH, en lugar de CERO. MBE no ha podido ver practicamente a Diego durante la semana pasada por que ha estado al 200% con MCH",
+  "Solución": "Se genera un plan de acción para ver que actividades está haciendo Diego tambien RRHH va a ir cogiendo de Trello todas las tareas que Diego está haciendo para asegurarse que no se repiten"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Se convoca la reunión General y MCH se mantiene sentado sin moverse."
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No rellenan la reunión general avisando de que hemos descontinuado a Sebastian y a Daniela y por qué"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No nos hacen un resumen de los P1Ns y las soluciones que se han buscado Habiendo un P1N que afecta a todo el mundo tiene que ser Diego quien explique el P1N de instrucciones claras del superior, por que nadie más lo explica.",
+  "Solución": "Introducir en las instrucciones de P1N que las modificaciones procedimentales hay que anunciarlas en la reunión general sino nadie se entera"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Tiene que ser Diego quien llame la atención al chico de ADE por que a nadie más parece importarle."
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Tiene que ser Diego quien monte un circo para llamar la atención de los incumplimientos por que a nadie le preocupa"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* El GANTT sigue sin estar actualizado y figura gente como Nathaly",
+  "Solución": "En el procedimiento de ATIC tiene que estar revisar el GANTT todos los dias a primera hora"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No se tiene actualizado el GANT",
+  "Solución": "en el procedimiento "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* El GANTT no mide la cantidad de recursos, según ellos solo usamos 3 de los 11 recursos que tiene ATIC"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Con 11 recursos que tienen son incapaces de hacer que el wpp funcione y nadie se queda hasta hacerlo funcionar, sune la campana y se van todos tranquilamente a casa y a nadie le preocupa",
+  "Solución": "ya funciona "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Los lideres tienen un problema clara y NINGUNO parece preocuparle ni buscan soluciones al respecto y se van puntualmente a casa por que parece que esto no es suficientemente importante",
+  "Solución": "ya se quedan hasta las 10pm "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Claramente a Diego esto no le compensa, le cuesta 200k€, mucho estrés, muchos cabreos, 79h en lugar de 10 si no hubiera nadie en MCH, y aún así no se toman medidas al respecto, por todo lo contrario hay dos lideres que en el dia de hoy y estando en la critica situación en la que estamos deciden no venir.",
+  "Solución": "ya hay un plan de accion en ejecucion"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* ATIC no cumplen con los proyectos acordados en el GANTT",
+  "Solución": "Los lideres se encargaran de darle seguimiento para que funcione cada poyecto y salga a tiempo "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Se dan P1Ns con Lucero y con Zayra y en lugar de apuntarlos se ponen a hacer otras cosas. Cómo es lógico se les olvida."
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No se acuerdan de los P1Ns por que durante la reunión no han apuntado una sola nota",
+  "Solución": "Se aclaran mejor las instrucciones Antede de hacer NADA mas, PRIMERO se apunta el P1N para asegurarnos de que no se nos olvide, por que si se nos olvida se va a repetir"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Se acerca Diego a ver por que no ha recibido aún los P1Ns y se le contesta que han priorizado otras labores antes de hacer P1Ns",
+  "Solución": "Tiene q ser en el dia, esta en las instrucciones "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Nos estamos yendo a casa sin cerrar los P1Ns",
+  "Solución": "puesto en las instrucciones de este archivo "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Tengo que gritar tres veces el nombre de debora para que la gente me diga qeu es que ha salido"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* la gente esta saliendo constantemetne ha hablar por telefono, fumar o al dia sin previo revisión aprobación o supervisión de nadie, y nadie sabe donde esta una Debora de turno por ejemplo cuando se pide la presencia"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* La app no funciona para abrir la puerta, lucero se da cuenta pero no dice nada"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* No siguen ordenes claras y ya habladas. Tampoco siguen el procedimiento que ESTA MISMA MAÑANA hemos hablado en la reunión general",
+  "Solución": "Incluido en la guia de incorporación"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* lucero no sigue la guía y contesta a un becario, sin que haya apuntado nada"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Diego expresa en varias ocasiones que no le compensa, los lideres analizan y efectivamente: \n1. No me es rentable\n2. Tengo que intervenir\n3. Cometen constantemente los mismos errores\n4. Le y nos está provocando estrés\n5. Estamos en un estado Infeliz\nSe pide un plan de acción y no se da, se tiene que insistir en varias ocasioes",
+  "Solución": "plan de accion "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "* Colaboradores sin contestar",
+  "Solución": "Cambiar la guia de lider e introducir en las tareas del dia echar un vistazo a los otros departamentos"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "* DN sin contestar"
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Llamada sin hacer por que un becario tenia un problema",
+  "Solución": "Iba a encarar a Diego, se intento detener, se hara primero lo diego pida "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* Interpreto que no habéis puesto la denuncia a Kingsly, y que no habéis cerrado el caso con Legal...",
+  "Solución": "puesto en trello "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha seguido instrucciones de DIEGO informando oportunamente a RRHH",
+  "Solución": "ya fue despedido el personal de ADE que correspondia "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se tiene actualizado en el TRELLO las intervenciones de DIEGO ",
+  "Solución": "se anotara ttan pronto se salga de la oficina de Diego "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se tiene actualizado su lista de claves y contactos",
+  "Solución": "ya la actualizaron "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se informan oportunamente los retrasos en los proyectos, ni se terminan ningún proyecto",
+  "Solución": "Esta en los procesos de incorporacion "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se toman acciones con las personas que no se saben las guías",
+  "Solución": "Ya se coloco en la politica de RRHH las acciones a tomar y ejecutar "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se dan respuestas concisas a DIEGO",
+  "Solución": "Se le respondera con pruebas de lo que pide por el whatsapp de cada area "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se tienen los contactos de las universidades",
+  "Solución": "Colocado en el procedimiento de incorporación de un becario \/\/ Ponerse una alerta en el calendar de manera que verifiquemos que tenemos todos los contactos de todos los tutores en la tabla "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Una líder no viene, ni deja preparado los pendientes",
+  "Solución": "Ya RRHH esta tomando acciones "
+ },
+ {
+  "Departamento": "LIDERES",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se meten los P1Ns dichos por Diego y tiene que meterlos él",
+  "Solución": "ya esta en las instrucciones de este archivo "
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "No se tiene actualizado el check-list de mensajes de LE",
+  "Solución": "Tenemos un check-list de LE"
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "No tenemos un control de envios de mensajes de CE",
+  "Solución": "Tenemos un check-list de CE"
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "No se ha solicitado aun la recesión de Aravaca1 cuando ya sabe que no ha entrado el dinero",
+  "Solución": "Si ha pagado Marina confirmo el dinero del mes pasado y que nos dieron la razon a nosotros para la reclamación "
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "Nos e ha solicitado la recisión de Azca8",
+  "Solución": "Ya se ha solicitado la recisión,mañana comenzamos, hoy miercoles 21\/05 fue el primer intento. Se volvera a enviar a la chica de limpieza"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Las cartas de amonestación tiene que ir Diego a firmarlas por que RRHH no lo hace",
+  "Solución": "RRHH se encarga"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Se da una instrucción clara en el que se dice que las entrevistas de salida se irán haciendo según tengamos capacidad y desobedecen nuevamente esta instruccion",
+  "Solución": "becarios ya fueron despedidos y se pone que los despidos vienen de los lideres Politica RRHH (pág 11)"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Los formularios de los procesos de seleccióne stan fuera de formato y no rellenos",
+  "Solución": "Se bloquea la capacidad de edición cada vez que queramos cambiar un procedimiento tendremos que copiarlo, añadir lo que queramos y a través de Diego colgar la nueva versión"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "RRHH no está escribiendo RRHH",
+  "Solución": "Todos los dias se esta escribiendo y esta en la guia"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se esta hablando con los tutores ",
+  "Solución": "Escribir en tareas de la semana escribir a las universidades y un calendar cada semana"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se utilizo el formato correcto de la documentación de la incorporación",
+  "Solución": "Se añadio en el calendar todo lo que debemos tener firmado "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha preparado la reunion con los abogados, les hemos hecho perder el tiempo ademas del nuestro y encima se nos han olvidado cosas que teniamos que ver con ellos y hemos tenido que volverles a llamar\/interrumpir\/convocar a otra reunión"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No seguir las instrucciones dadas",
+  "Solución": "Añadir en el procedimiento de incorporación la norma de cada vez que te pidan algo que tengas dificultad en entender o quieras asegurarte que has entendido correctamente ponerle un wpp diciendo lo que vas a hacer a la persona que te lo ha pedido"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No supervisar el trabajo de mis subalternos llegando a mi superior trabajo no revisado .",
+  "Solución": "Asegurarnos de que esto está en el procedimiento de lider"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se sigue el procedimiento, se pone DEFINITIVO en lugar de la fecha",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No uso el formato tipo de presentación. Para los objetivos anuales",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hago una reunión porque veo a Diego ocupado en lugar de avisarle que tenemos una reunión",
+  "Solución": "Es evidente pero a pesar de ello incluyamoslo en el procedimiento de incorporación"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No seguimos el procedimiento de respuesta a un requerimiento",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha avisado a Diego que no podemos asistir a la reunion organizada con él",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No nos sabemos el contrato",
+  "Solución": "Incluir en la guia de legal que el contrato hay que saberselo de memoria y hacerlo nuestro!"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Se agendaron dos reuniones, pero el departamento no asistió a ninguna.",
+  "Solución": "Asegurarnos en el ONBOARDING que la gente tiene el calendar abierto junto con otras herramientas como el ERP, el Wpp etc etc. "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No respondemos los mensajes de los chats, siendo el CEO quien responde por el departamento.",
+  "Solución": "Asegurarnos en el ONBOARDING que la gente tiene el calendar abierto junto con otras herramientas como el ERP, el Wpp etc etc. "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hemos comprobado todo lo necesario para la reunión con el CEO.",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se puso adecuadamente quién es el beneficiario al hacer una transferencia.",
+  "Solución": "Ya  esta tomando acciones,sucesos RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Hemos creado un chat con un procurador y no añadimos a Diego.",
+  "Solución": "Incluir en la guia de incorporación que todos los chats tienen que tener al responsable"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No siguieron de inmediato las instrucciones del CEO.",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se presta atención a las instrucciones cometiendo errores varios por falta de atención",
+  "Solución": "Ya se esta tomando acciones,sucesos RRHH"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Marina no ha seguido una orden directa de la reunión con su departamento para elegir a la persona que descontinuará según se acordó el viernes"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "ADE viene a la reunión semanal a las 10 en lugar de esperar a despues de RMG",
+  "Solución": "Ya se esta tomando acciones"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "La gente de ADE no sabe preparar transferencias",
+  "Solución": "Ya se esta tomando acciones"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "El chico de ADE viene andando a la reunión general y le tenemos que llamar la atención en público",
+  "Solución": "Se recordará la puntualidad y actitud adecuada en reuniones generales, reforzando la importancia del respeto al equipo."
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "ADE no sabe distinguir de lo que es una audiencia previa a lo que es una vista, a pesar de que Diego lo pone en el chat, parece que no están leyendo los chat",
+  "Solución": "Se reforzará la comunicación interna clave y se insistirá en la lectura atenta de los chats del equipo."
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Los P1Ns de ADE siguen sin revisarse, no se están anotando y no ha soluciones",
+  "Solución": "Establecer un sistema de registro y revisión periódica de P1Ns, con responsables asignados y seguimiento de acciones correctivas."
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "ADE no está leyendo los chat del telefono de ADE",
+  "Solución": "Se revisarán y responderán los mensajes y se reforzará la importancia de mantener activa la comunicación interna y externa"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "ADE no pone en copia a legal cuando escribe desde legal",
+  "Solución": "Se recordará al equipo la obligación de copiar a Legal en correos enviados desde esa cuenta para asegurar trazabilidad."
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "* ADE tenia una reunión con HOR y no ha asistido",
+  "Solución": "Ya está apuntado en la guia"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "ADE VUELVE A FALLAR A LA REUNIÓN QUE TIENE PROGRAMADA\nShaien no sabe hacer uso de organización interna\nGuarda el documento en su ordenador\nNo viene a la reunión preparada llevamos ya 10min 5 personas",
+  "Solución": "Ya se esta tomando acciones,reunióm general"
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hemos seguido instrucciones claras de Diego",
+  "Solución": "Avisar con antelación al CEO sobre el estado del proyecto "
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Se ha cometido un abuso de BBDD",
+  "Solución": "Explorar más alternativas antes de hacer la primera opción"
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hemos actualizado el GANNT",
+  "Solución": "Organizar reuniones con ceo cada 2 semanas para hacer seguimiento al programa y comprometer a los encargados de los proyectos a cumplir con las fechas y avisar retrasos a CEO "
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No tener actualizado los contactos en el Excel de Claves&ContactosATIC",
+  "Solución": "Avisar en la incorporación que todo contacto y cuenta creada debe ser registrado en el excel de claves y contactos "
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez",
+  "Que ha pasado": "La cerradura no esta preparada para un proceso de recisión en remoto",
+  "Solución": "Tenemos que encontrar la forma de reiniciar la cerradura en remoto"
+ },
+ {
+  "Departamento": "TODOS",
+  "Tipo": "dejadez",
+  "Que ha pasado": "La gente no sabe usar los filtros correctamente",
+  "Solución": "Hacer una nota en proc. incorporación"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se atendió de forma inmediata la petición del líder (por ADE)",
+  "Solución": "Se ha incluido en los examenes semanales y pildoras de RRHH"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hemos actualizado el calendario",
+  "Solución": "Introducimos en la guia de lider revisar el calendario"
+ },
+ {
+  "Departamento": "TODOS",
+  "Que ha pasado": "El procesos de sacar sus cosas tardo mucho, no habia chica de limpieza para sacar las cosas",
+  "Solución": "Si Diego sabe que tengo 2hrs ahí, al menos avisarme que esta tomando mucho tiempo "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se anota toda la información correcta en un evento en el calendario",
+  "Solución": "Creamos una nota de calendario para tenerlo mas visible. Y poderlo repasar. "
+ },
+ {
+  "Departamento": "RMG",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha hecho la entrevista al inquilino de LE",
+  "Solución": "Esta en la guía y en el control larga estancia, En el control el checklist está al lado de la entrevista, y si se activa, se activa de forma automatica en la verificación del individuo"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "CRM se ha quedado sin personal en las tardes y Fines de semana ",
+  "Solución": "Hacer una planificación correcta de RRHH e incluir una pesaña en VACACIONES"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hay seguimiento de becarios CRM",
+  "Solución": "Se le haran examenes diarios para comprobar sus conocimientos, se le llama la atencion cuando esten en otras cosas"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No están escribiendo los sucesos pisos, se le tiene que dar pedir dos veces a la oficina que llenen sucesos pisos",
+  "Solución": "Hacer una pildora, Explicado en reunion general, llamada de atencion "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se esta pareparado para la reunion del lunes",
+  "Solución": "Se ira rapido despues de ATIC "
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hemos actualizado el GANNT",
+  "Solución": "Organizar reuniones con ceo cada 2 semanas para hacer seguimiento al programa y comprometer a los encargados de los proyectos a cumplir con las fechas y avisar retrasos a CEO "
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha seguido el procedimiento de check in.No se tiene ni la tarjeta ni la fianza",
+  "Solución": "Revisar las guias para seguir el procedimiento correctamente"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Hay reservas de más de 7 días sin limpieza intermedia",
+  "Solución": "Revisar Avantio antes de hacer el cobro de la reserva "
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No estamos estudiando los anexos despues de varios dias de ingreso",
+  "Solución": "Estudiar los anexos"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Las reservas no figuran como pagadas en el avantio de huespedes que ya han ingresado",
+  "Solución": "Actualizar Avantio despues de realizar los cobros correspondientes "
+ },
+ {
+  "Departamento": "CRM",
+  "Que ha pasado": "No hay guestbook de sol7"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Hay reservas marcadas como pagadas con check in a futuro"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Hay check in asignados al personal sin autorización",
+  "Solución": "Hablar con RRHH para "
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Los becarios de CRM no estaban dentro del grupo de Whatsapp de su area",
+  "Solución": "RRHH ya nos agregaron al grupo de Whatsapp "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Se ha impreso las hojas de seleccion en color",
+  "Solución": "Configurar los ordenadores para que impriman en B&N"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha ordenado bien la documentación del proceso de seleccion",
+  "Solución": "Seguir lo que está escrito en Calendar (Hacer un check list)"
+ },
+ {
+  "Departamento": "RMG ",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Falta un procedimiento para rentas de sucesos pisos",
+  "Solución": "puesto en la guia "
+ },
+ {
+  "Departamento": "RMG ",
+  "Tipo": "dejadez",
+  "Que ha pasado": "Las rentas no estan correctas en avantio",
+  "Solución": "Colocado en la guia de LE"
+ },
+ {
+  "Departamento": "RMG ",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se ha bajado el precio de palma1",
+  "Solución": "Colocado en el calendar, se repite cada viernes de la semana hasta llegar a 300K, Invitados RMG y DN"
+ },
+ {
+  "Departamento": "RMG ",
+  "Tipo": "dejadez",
+  "Que ha pasado": "El precio de los portales no esta actualizado",
+  "Solución": "Colocado en el calendar, se repite el ultimo miercoles del mes Invitados RMG"
+ },
+ {
+  "Departamento": "RMG ",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No se tienen 3 nóminas del inquilino de LE ",
+  "Solución": "Esta en la guia, se ha puesto un check list en el control "
+ },
+ {
+  "Departamento": "RMG ",
+  "Tipo": "dejadez",
+  "Que ha pasado": "No hay tabla de control de larga estancia de una reserva ",
+  "Solución": "Esta en el proceso de LE "
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "P1N: No se ha hecho la tarea del calendario"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "dejadez",
+  "Que ha pasado": "P1N: No se han ordenado los DEHÚ en sus carpetas correpondientes",
+  "Solución": "Introducimos nota en la guia de ADE Legal"
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "dejadez ",
+  "Que ha pasado": "No esta preparada al reunion de los lunes",
+  "Solución": "Terminar el trello para los viernes a las 18:40 y ver que todos los miembros lo autorizen"
+ },
+ {
+  "Departamento": "RRHH",
+  "Que ha pasado": "Se ha olvidado el nombre de la directora de prácticas de CEF UDIMA",
+  "Solución": "Incl en el procedimiento \nPrimero intentar resolverlo de una, sino un segundo que mi jefe quiere hablar contigo y pasar la documentación con un postit y resumida a mi jefe. "
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Ha dado permiso a un Lider sin tener este derecho",
+  "Solución": "Avisar a su superior antes de aprobar"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No está priorizando las tareas urgente y importante",
+  "Solución": "Hacer una pildora de RRHH, está en la duia proceso de incorporación"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Sigue manteniendo conversación con una persona, aunque su superior se lo ha prohibido",
+  "Solución": "Dejar todo y hacer lo que pide el superior, pildora de RRHH"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No ha seguido las instrucciones del superior ",
+  "Solución": "Hacer una pildora de RRHH"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Ha entrada en la oficina con una persona quien no tenia acceso"
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No Se puede trabajar en local ",
+  "Solución": "Todo subido y actualizado en el drive "
+ },
+ {
+  "Departamento": "RMG",
+  "Que ha pasado": "Se ha modificado el control LE, solo porque el inquilino indica que cambió las fechas de entrada",
+  "Solución": "Puesto en el control LE, en la parte de la entrevista "
+ },
+ {
+  "Departamento": "RMG",
+  "Que ha pasado": "No se ha colocado el suplemento por 3ra persona",
+  "Solución": "Puesto en las instrucciones del pricing "
+ },
+ {
+  "Departamento": "RMG",
+  "Que ha pasado": "Se he tenido conversaciones con una colaboradora no contratada, esto ha terminado en guerra de malas reseñas entre el inquilino, mch y la colaboradora ",
+  "Solución": "puesto en S.rrhh y en la guia de le de RMG"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Ha cambiado el procedimiento sin el acuerdo del superior",
+  "Solución": "Los procesos de selección tienen un horario establecido; si hay modificaciones deben ser aprobadas por el CEO"
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se deben dejar solos los candidatos en proceso de selección",
+  "Solución": "Cuando se está en proceso de selección no se deben realizar otras tareas hasta que finalice el proceso."
+ },
+ {
+  "Departamento": "RRHH",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Al solicitar \"un segundo, mi jefe quiere hablar contigo\" se debe permanecer junto al CEO",
+  "Solución": "Es importante identificar los protocolos y procedimientos en las guías; no se tiene claro por gran parte del personal el funcionamiento de este procedimiento"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Error de no preguntar al momento en que un visitante ingresa"
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "Dejadez",
+  "Que ha pasado": "No saber la ubicación de la guía de Atic",
+  "Solución": "Saber la ubicación exacta "
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se deben modificar los archivos directamente en Drive",
+  "Solución": "Trabajar sobre un archivo previamente descargado y posteriormente se anexa al Drive"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se pregunto como se debe proceder a un evento desconocido",
+  "Solución": "Esperar y siempre preguntar a un lider el como hacer o actuar ante cuestiones desconocidas"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Se dejo el paso de personal no autorizado sin consultar",
+  "Solución": "Seguir siempre las instrucciones pegadas en la puerta y dichas por el CEO"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "ERROR DE NO PREGUNTAR AL MOMENTO DE QUE UN VISITANTE INGRESA",
+  "Solución": "Seguir al pie de la letra las instrucciones ´pegadas en la puerta y dichas por el CEO"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "no se deja datos para check-in.",
+  "Solución": "Dejar organuzando todo y listo para que en caso que otro departamento haga el Checkin tenga todos los datos"
+ },
+ {
+  "Departamento": "DN",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se esta colocando correctamente las direcciones para acceder a un documento",
+  "Solución": "Tomar la dirección correctamente de los documentos para facilitar el acceso a los mismos"
+ },
+ {
+  "Departamento": "ATIC",
+  "Tipo": "Dejadez",
+  "Que ha pasado": "No le dimos acceso al jefe a los proyectos en AppSheet",
+  "Solución": "Cuando hacemos proyectos siempre tenemos que tener acceso al jefe"
+ },
+ {
+  "Departamento": "ADE",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Se comparten archivos unos con otros",
+  "Solución": "Si no tenemos acceso a un documento, hablar con la persona autorizada para que nos de acceso"
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "No se han dividido las reservas con el precio correcto",
+  "Solución": "Cuando se tiene reserva de mas de 7 días, el precio total de la reserva se debe dividir en relación con el número-precio de los diás correspondientes. "
+ },
+ {
+  "Departamento": "CRM",
+  "Tipo": "Procedimiento",
+  "Que ha pasado": "Se ha retenido una fianza de la reserva de CE de mas de dos semanas, y se ha liberado el dinero antes de la salida del inquilino",
+  "Solución": "Al ser una reserva de mas de 10 dias se debe cobrar la fianza, mas no usar una Preautorización."
+ }
+]

@@ -1,0 +1,13 @@
+npm warn using --force Recommended protections disabled.
+
+> mycityapp@0.1.0 dev
+> next dev -p 3006
+
+[32mready[39m - started server on 0.0.0.0:3006, url: http://localhost:3006
+[36minfo[39m  - Loaded env from /home/aticmbe/appfichaje/mchApi/.env
+[33mwarn[39m  - Your project has `@next/font` installed as a dependency, please use the built-in `next/font` instead. The `@next/font` package will be removed in Next.js 14. You can migrate by running `npx @next/codemod@latest built-in-next-font .`. Read more: https://nextjs.org/docs/messages/built-in-next-font
+npm warn using --force Recommended protections disabled.
+[35mevent[39m - compiled client and server successfully in 6.6s (173 modules)
+[36mwait[39m  - compiling / (client and server)...
+[35mevent[39m - compiled client and server successfully in 299 ms (176 modules)
+[?25h

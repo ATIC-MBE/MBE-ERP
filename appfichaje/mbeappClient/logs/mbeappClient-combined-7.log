@@ -1,0 +1,5 @@
+2025-09-11T13:46:35: npm warn using --force Recommended protections disabled.
+2025-09-11T13:46:35: 
+> mycityapp@0.1.0 dev
+> next dev -p 6969
+

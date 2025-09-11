@@ -1,0 +1,560 @@
+/* Overlay background with blur and opacity for contrast */
+.c-bg-blur-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 32, 64, 0.45); /* dark blue with opacity */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+/* stylelint-disable */
+.login-arrow-btn img, .c-btnLogin img, .c-btnLogin {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind utilities;
+
+/* Base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  background: url('/img/bg/fondo.png') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #005360;
+}
+
+/* Brand text color */
+.c-text-primary, .text-primary, .text-main, .text-hero, .text-contrast {
+  color: #005360 !important;
+  text-shadow: 0 2px 8px rgba(201,172,126,0.15), 0 1px 0 #fff;
+}
+
+
+
+/* Brand button styles */
+.c-btn-primary, .c-btn, .btn, button, .c-btnLogin {
+  background-color: #005360 !important;
+  color: #fff !important;
+  border: none;
+  box-shadow: 0 2px 8px 0 rgba(0,83,96,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+
+.c-btn-primary:hover, .c-btn:hover, .btn:hover, button:hover, .c-btnLogin:hover {
+  background-color: #005360 !important;
+  color: #005360 !important;
+}
+
+.c-link, a, .link, .text-link {
+  color: #c9ac7e !important;
+  text-decoration: underline;
+  text-shadow: 0 2px 8px rgba(0,83,96,0.10);
+}
+
+
+.login-claim {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  color: #c9ac7e;
+  text-shadow: 0 2px 8px rgba(0,83,96,0.18), 0 1px 0 #fff;
+}
+
+.login-claim span {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove border and background on hover for login arrow button */
+.login-arrow-btn, .login-arrow-btn:active, .login-arrow-btn:focus {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  transition: border-color 0.2s;
+}
+.login-arrow-btn:hover {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.background-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  /* Puedes agregar detalles geométricos translúcidos si lo deseas */
+  /* background: ... */
+  opacity: 0.9;
+}
+
+
+
+#__next {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Background and container styles */
+.c-bg-main-100 {
+  background-image: url('/img/backgrounds/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.c-bg-main-opac {
+  background-image: url(/img/bg/mBgOpac100.svg);
+  background-attachment: fixed;
+}
+
+.c-bg-main {
+  background-image: url(/img/bg/mBg.svg);
+  background-attachment: fixed;
+}
+
+.c-bg-main-100 {
+  background-image: url(/img/bg/mBg100.svg);
+  background-attachment: fixed;
+}
+
+.c-rounded-large {
+  border-radius: 0.8rem;
+}
+
+.c-text-primary {
+  color: #015e93 !important;
+}
+
+.c-h-100 {
+  height: 100vh;
+}
+
+.c-h-85 {
+  height: 85vh;
+}
+
+.c-h-15 {
+  height: 15vh;
+}
+
+.c-hp-98 {
+  height: 98%;
+}
+
+.c-mx-100 {
+  margin-left: 200px;
+}
+
+/* Login form styles */
+.c-login-form {
+  background: #005360;
+  width: 90%;
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem 1.5rem;
+  position: relative;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .c-login-form {
+    width: 95%;
+    padding: 1.5rem 1rem;
+    margin: 1rem auto;
+  }
+  
+  .c-login-form input {
+    font-size: 16px; /* Prevents zoom on mobile */
+  }
+}
+
+.c-form-input {
+  width: 80%;
+  margin-left: 10%;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+
+}
+
+.c-w-100 {
+  width: 100%;
+}
+
+.c-mt-2_5 {
+  margin-top: 1rem;
+}
+
+.c-mt-4_5 {
+  margin-top: 1.5rem !important;
+}
+
+.c-bg-0 {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+
+.c-bg-primary {
+  background-color: #005360;
+}
+
+
+.c-btn-primary {
+  background-color: #005360;
+  color: #fff;
+}
+
+
+.c-btn-primary:hover {
+  background-color: #c9ac7e;
+  color: #005360;
+}
+
+
+.c-bg-secondary {
+  --bs-bg-opacity: 1;
+  background-color: #60d3ef7c !important;
+  color: #005360;
+}
+
+.c-shadow-large {
+  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.20);
+}
+
+.c-bg-opacity {
+  background-color: rgba(255, 255, 255, 0.09)
+}
+
+.nav-item:hover {
+  color: black;
+  scale: 105%;
+  transition: 100ms;
+}
+
+.c-btnLogin {
+  transform: rotate(0deg);
+  transition: 300ms;
+}
+
+.c-btnLogin:hover {
+  transform: rotate(90deg);
+  
+}
+
+.c-logo-login {
+  margin-top: 2.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.c-scale-105:hover {
+  scale: 105%;
+}
+
+.c-w-10 {
+  width: 6rem;
+}
+
+.c-pl-2 {
+  padding-left: 1rem;
+}
+
+.c-rounded-left {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+.tbl-btn-action {
+  cursor: pointer;
+}
+
+.acordion {
+  cursor: pointer;
+}
+
+.style-pointer {
+  cursor: pointer;
+}
+
+.card-action {
+  cursor: pointer;
+}
+
+.btnContent button {
+  margin-right: 15px;
+}
+
+div.tbl-body > div:nth-child(even) {
+  background-color: #ffffff;
+}
+div.tbl-body > div:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+
+div.tbl-body div.content-actions a:hover {
+  color: black;
+}
+
+.text-blue {
+  color: #005360;
+}
+
+.txt-green {
+  color: #198754;
+}
+
+.txt-red {
+  color: #dc3545;
+}
+
+.txt-red-c62608 {
+  color: #c62608
+}
+
+.txt-orange-f3bb6d {
+  color: #bb7616fa
+}
+
+.txt-orange-ef8221 {
+  color: #ef8221;
+}
+
+.bg-red {
+  background-color: #dc3545;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.bg-blue {
+  background-color: #005360;
+}
+
+a.link-menu {
+  padding: 8px;
+  font-size: 14px;
+}
+
+.border-blue {
+  border-color: #c9ac7e;
+}
+
+.border-red {
+  border-color: #dc3545;
+}
+
+.field-required, span.field-required {
+  font-weight: bold !important;
+  color: 'red' !important;
+}
+
+.text-wraper-tbl {
+  overflow-wrap: anywhere;
+}
+
+.text-wraper {
+  overflow-wrap: anywhere;
+}
+
+.data-table-row:hover {
+  /* border: 1px solid #0077BD; */
+  background-color: rgb(248, 242, 231);
+  cursor: pointer;
+}
+
+.data-table-row-nopointer:hover {
+  /* border: 1px solid #0077BD; */
+  background-color: rgb(248, 242, 231);
+  /* cursor: pointer; */
+}
+
+.icon-table-row:hover {
+  /* background-color: #0077BD; */
+  background-color: #fbe0c9;
+  /* background-color: #bb7616fa; */
+  /* color: white; */
+  color:#ef8221
+}
+
+.link-reports:hover {
+  color: #ef8221
+}
+
+/* Works for Chrome, Safari, Edge, Opera */
+.noArrows::-webkit-outer-spin-button,
+.noArrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Works for Firefox */
+.noArrows[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+::-webkit-input-placeholder {
+    font-style: italic;
+}
+:-moz-placeholder {
+    font-style: italic;  
+}
+::-moz-placeholder {
+    font-style: italic;  
+}
+:-ms-input-placeholder {  
+    font-style: italic; 
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.display-icon-error {
+    display: inline-flex;
+}
+
+/* Pagination custom */
+.item {
+    align-items: center;
+    /* color: #FFF; */
+    color:#4e6979;
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    height: 35px;
+    justify-content: center;
+    width: 35px;
+  }
+  
+  .disabled-page {
+    color: #808e9b;
+  }
+  
+  .active {
+    border-radius: 40px;
+    color: #fff;
+    background-color: #005360;
+  }
+  
+
+  
+  .next {
+    color: #005360;
+    font-size: 20px;
+    height: 50px;
+    right: 0;
+    width: 50px;
+    font-weight: bold;
+  }
+  
+  .pagination {
+    align-items: center;
+    /* background-color: #0077BD; */
+    /* background-color: #badaed; */
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    justify-content: center;
+    list-style-type: none;
+    position: relative;
+    /* width: 700px; */
+  }
+  
+  .pagination-page {
+    font-weight: 700;
+  }
+  
+  .previous {
+    color: #005360;
+    font-size: 20px;
+    height: 50px;
+    left: 0;
+    width: 50px;
+    font-weight: bold;
+  }
+  /* Fin pagination custom */
+
+  /*#edefef  --- #e8edef -- #badaed */
+
+  /* div.table-filter { position:fixed; } */
+
+  div.table-content > div:nth-child(even) {
+    background-color: #ffffff;
+  }
+  fieldset > div.card-user-suceso:nth-child(even) {
+    background-color: #ffffff;
+  }
+  fieldset > div.card-user-suceso:nth-child(odd) {
+    background-color: #f5f5f5;
+  }
+
+  /*#f7f7f7*/
+  div.pagination-content {
+    padding: 8px;
+    border-top: 1px solid #c9ac7e;
+  }
+
+  div.table-empty {
+    border-left: 1px solid #0078bd45;
+    border-right: 1px solid #0078bd45;
+  }
+
+
+  .card-acceso-directo {
+    cursor: pointer;
+    background: rgba(255,255,255,0.92) !important;
+    box-shadow: 0 6px 24px 0 rgba(0,83,96,0.18), 0 1.5px 8px 0 rgba(0,83,96,0.10);
+    border-radius: 1.2rem !important;
+    border: 2px solid #005360 !important;
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .card-acceso-directo:hover {
+      border-color: #ef8221 !important;
+      box-shadow: 0 8px 32px 0 rgba(239,130,33,0.18), 0 2px 12px 0 rgba(0,83,96,0.15);
+  }
+
+  .card-acceso-directo:hover h1 {
+    color: #c9ac7e !important;
+    text-shadow: 0 2px 8px #00536099, 0 1px 0 #fff;
+  }
+
+  .card-ad-icon:hover {
+    color: #ef8221;
+  }

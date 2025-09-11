@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Check-In - MCH</title>
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: #4a9db0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .qr-container {
+            background: #2d6a75;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .logo {
+            width: 60%;
+            margin-bottom: 30px;
+        }
+
+        .qr-code {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .qr-code img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .countdown {
+            background: #2d6a75;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .loading {
+            display: none;
+            color: #a8dae6;
+            font-style: italic;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .qr-code.refreshing {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        .title {
+            color: white;
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #a8dae6;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-container">
+        <div class="qr-code" id="qrContainer">
+            <div class="loading" id="loading">Generando nuevo código...</div>
+        </div>
+        
+        <div class="countdown" id="countdown">
+            <span id="timer">5</span>s
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+        let countdown = 5;
+        let countdownInterval;
+        let refreshInterval;
+        
+        function generateToken() {
+            // Generate a random token for security
+            return 'qr_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        }
+        
+        function generateQRCode() {
+            const token = generateToken();
+            const baseUrl = 'http://185.252.233.57:3005'; // Production IP and port
+            const qrUrl = `${baseUrl}/login?qr=${encodeURIComponent(token)}`;
+            
+            const qrContainer = document.getElementById('qrContainer');
+            const loading = document.getElementById('loading');
+            
+            // Show loading
+            loading.style.display = 'block';
+            qrContainer.classList.add('refreshing');
+            
+            // Clear previous QR code
+            const existingImg = qrContainer.querySelector('img');
+            if (existingImg) {
+                existingImg.remove();
+            }
+            
+            console.log('Generating QR for URL:', qrUrl);
+            
+            // Check if QRCode library is loaded
+            if (typeof QRCode === 'undefined') {
+                console.error('QRCode library not loaded, using fallback');
+                // Fallback to Google Charts API
+                const googleQRUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}`;
+                
+                loading.style.display = 'none';
+                qrContainer.classList.remove('refreshing');
+                
+                const img = document.createElement('img');
+                img.src = googleQRUrl;
+                img.alt = 'QR Code for Check-In';
+                img.style.maxWidth = '200px';
+                img.style.maxHeight = '200px';
+                img.style.border = '3px solid #f0f0f0';
+                img.style.borderRadius = '10px';
+                qrContainer.appendChild(img);
+                
+                console.log('QR Code generated using fallback for:', qrUrl);
+                return;
+            }
+            
+            // Generate new QR code with QRCode library
+            QRCode.toDataURL(qrUrl, {
+                width: 200,
+                height: 200,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                },
+                errorCorrectionLevel: 'M'
+            }, function (err, url) {
+                if (err) {
+                    console.error('Error generating QR code:', err);
+                    // Fallback to Google Charts API
+                    const googleQRUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}`;
+                    
+                    loading.style.display = 'none';
+                    qrContainer.classList.remove('refreshing');
+                    
+                    const img = document.createElement('img');
+                    img.src = googleQRUrl;
+                    img.alt = 'QR Code for Check-In';
+                    img.style.maxWidth = '200px';
+                    img.style.maxHeight = '200px';
+                    img.style.border = '3px solid #f0f0f0';
+                    img.style.borderRadius = '10px';
+                    qrContainer.appendChild(img);
+                    
+                    console.log('QR Code generated using fallback after error for:', qrUrl);
+                    return;
+                }
+                
+                // Hide loading
+                loading.style.display = 'none';
+                qrContainer.classList.remove('refreshing');
+                
+                // Create and add new QR image
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'QR Code for Check-In';
+                qrContainer.appendChild(img);
+                
+                console.log('QR Code generated successfully for:', qrUrl);
+            });
+        }
+        
+        function updateCountdown() {
+            const timerElement = document.getElementById('timer');
+            timerElement.textContent = countdown;
+            
+            if (countdown <= 0) {
+                countdown = 5;
+                generateQRCode();
+            } else {
+                countdown--;
+            }
+        }
+        
+        function startCountdown() {
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            console.log('Page loaded, starting QR generation...');
+            setTimeout(function() {
+                generateQRCode();
+                startCountdown();
+            }, 100); // Small delay to ensure everything is ready
+        });
+        
+        // Fallback initialization if window.onload doesn't fire
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, starting QR generation...');
+            setTimeout(function() {
+                if (!document.getElementById('qrContainer').querySelector('img')) {
+                    generateQRCode();
+                    startCountdown();
+                }
+            }, 500);
+        });
+        
+        // Handle page visibility changes to prevent unnecessary updates when page is hidden
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearInterval(countdownInterval);
+            } else {
+                startCountdown();
+            }
+        });
+    </script>
+</body>
+</html>

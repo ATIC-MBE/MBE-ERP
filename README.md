@@ -36,7 +36,7 @@ ERP a medida para la gestión académica, operativa y administrativa del máster
 
 ### 1. Clona el repositorio
 ```bash
-git clone https://github.com/tu_usuario/erp-mbe-madrid.git
+git clone https://github.com/ATIC-MBE/MBE-ERP.git
 ```
 
 ### 2. Backend

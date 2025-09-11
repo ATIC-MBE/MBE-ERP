@@ -1,0 +1,328 @@
+<style>
+      h5{
+            color: #f18420;
+            font-weight: bold;
+      }
+
+      .show {
+            display: block;
+      }
+
+      .hide {
+            display: none;
+      }
+
+      button.btn-enviar {
+            margin-top: 0;
+            margin-left: 1%;
+      }
+
+      button {
+            margin-top: 0%;
+      }
+
+      #accion, #location, #typecard, #typecode {
+            width: 100%;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            padding-left: 0.5rem;
+            font-size: 1rem;
+      }
+
+      div.txt-left {
+            text-align: left;
+      }
+
+      span.not-exist {
+            font-size: 1.8rem;
+            font-weight: normal;
+      }
+
+      .mt-2 {
+            padding-bottom: 20px;
+      }
+
+      .sincronzarTimeStamp {
+            margin-top: 10px;
+      }
+
+      .btns-cp {
+            margin-bottom: 5px;
+      }
+      img.link-luz {
+            width: 70px;
+            cursor: pointer;
+            top: -10px;
+            position: relative;
+      }
+
+      span.txt-link-luz {
+            font-size: 14px;
+            margin-left: -20px;
+            margin-top: 35px;
+            position: absolute;
+      }
+      @media screen and (max-width: 600px) {
+            h1.head-title {
+                  margin-top: 25px;
+                  font-size: 20px;
+            }
+            span.txt-link-luz {
+                  font-size: 12px;
+            }
+      }
+</style>
+
+
+<div class="container">
+
+      <img src="https://i.ibb.co/FxhfMzh/Logo-4.png" width="50%" class="mx-auto d-block" id="icon" alt="MyCityHome" />
+
+      {{#if existDevice }}
+            <h1 class="text-center pb-3 head-title">{{etiqueta}}</h1>
+      {{else}}
+            <h1 class="text-center pb-3 head-title">{{etiqueta}} <span class="not-exist text-danger">(No esta disponible!!)</span></h1>
+      {{/if}}
+
+      <div class="row d-flex justify-content-around ">
+
+            <!--       Control card       -->
+
+            <div class="col-md shadow card rounded m-2">
+
+                  <div class="card-tittle p-2 m-2 text-center">
+                        <h5>Control del piso</h5>
+                  </div>
+
+                  <div id="alertOK" class="alert alert-success alert-dismissible fade hide" role="alert">
+                        <b id="msgOK">Su sugerencia ha sido registrada con éxito!.</b>
+                        <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+                        <button type="button" class="btn-close" onclick="Util.closeAlert('alertOK');" aria-label="Close"></button>
+                  </div>
+                  <div id="alertKO" class="alert alert-danger alert-dismissible fade hide" role="alert">
+                        <b id="msgKO">Error al registrar su sugerencia, por favor inténtelo de nuevo más tarde.</b>
+                        <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+                        <button type="button" class="btn-close" onclick="Util.closeAlert('alertKO');" aria-label="Close"></button>
+                  </div>
+                  <div class="mb-3 text-center">
+                        <!-- Feedback server-->
+                        <div id="alertOK_CP" class="alert alert-success alert-dismissible fade hide" role="alert">
+                              <b id="msgOK_CP">OK.</b>
+                              <button type="button" class="btn-close" onclick="Util.closeAlert('alertOK_CP');" aria-label="Close"></button>
+                        </div>
+                        <div id="alertKO_CP" class="alert alert-danger alert-dismissible fade hide" role="alert">
+                              <b id="msgKO_CP">Error.</b>
+                              <button type="button" class="btn-close" onclick="Util.closeAlert('alertKO_CP');" aria-label="Close"></button>
+                        </div>
+                        <div class="alert txt-left fst-italic text-muted" role="alert">
+                              Aquí verá las opciones disponibles dependiendo del piso seleccionado
+                        </div>
+                        <div>
+                              {{#if sonoffExist}}
+                                    {{!-- <div id="btn-sonoff" class="hide">
+                                          <img id="link-luz" class="link-luz" onclick="GestionPiso.actionToggleDevice('{{stateSONOFF}}', {{idDeviceSonoff}});" src="/img/{{imgStateSONOFF}}" />
+                                          <span id="txt-link-luz" class="txt-link-luz">[ {{nameStateSONOFF}} ]</span>
+                                    </div>
+                                    <div id="wait-sonoff" class="show">
+                                          <span class="spinner-border spinner-border" role="status" aria-hidden="true"></span>
+                                    </div>
+                                    <br /> --}}
+                                    {{#each lDevicesSonoff}}
+                                          <div id="btn-sonoff-{{id}}" class="hide">
+                                          <img id="link-luz-{{id}}" class="link-luz" onclick="GestionPiso.actionToggleDevice('{{stateSONOFF}}', {{id}});" src="/img/{{imgStateSONOFF}}" />
+                                          <span id="txt-link-luz-{{id}}" class="txt-link-luz">[ {{nameStateSONOFF}} ]</span>
+                                          </div>
+                                          <div id="wait-sonoff-{{id}}" class="show">
+                                                <span class="spinner-border spinner-border" role="status" aria-hidden="true"></span>
+                                          </div>
+                                          <br />
+                                    {{/each}}
+                              {{/if}}
+
+                        </div>
+                        {{#if isWelock }}
+                              <button type="button" class="btn btn-primary btn-enviar btns-cp"
+                                    onclick="GestionPiso.actionOpenLock({{idDeviceLock}});">Abrir
+                                    puerta</button>
+                              <div class="mb-3 text-center sincronzarTimeStamp">
+                                    <button type="button" id="btnSyncTime" class="btn btn-primary btn-enviar btns-cp"
+                                          onclick="GestionPiso.actionSyncTime({{idDeviceLock}});">Sincronizar hora</button>
+                              </div>
+                        {{/if}}
+                        {{#if isPortal }}
+                              <button type="button" class="btn btn-success btn-enviar btns-cp"
+                                    onclick="GestionPiso.actionOpenPortal({{idDevicePortal}});">Abrir
+                                    portal</button>
+                        {{/if}}
+                        <!-- Solo para usuario con role root: ATIC-->
+                        {{#if isRoot }}
+                              {{#if isWelock }}
+                              {{!-- <div class="mb-3 text-center sincronzarTimeStamp">
+                                    <button type="button" id="btnSyncTime" class="btn btn-primary btn-enviar btns-cp"
+                                          onclick="GestionPiso.actionSyncTime({{idDeviceLock}});">Sincronizar hora</button>
+                              </div> --}}
+                              {{/if}}
+                        {{/if}}
+                  </div>
+            </div>
+
+            <!--       Agregar Codigo card       -->
+
+            <div class="col-md shadow card rounded m-2">
+
+                  <div class="card-tittle p-2 m-2 text-center">
+                        <h5 class="text">Cambiar código</h5>
+                  </div>
+
+                  <form method="POST" action="javascript:void(0);" class="form">
+                        <!-- Feedback server-->
+                        <div id="alertOK_CC" class="alert alert-success alert-dismissible fade hide" role="alert">
+                              <b id="msgOK_CC">OK.</b>
+                              <button type="button" class="btn-close" onclick="Util.closeAlert('alertOK_CC');" aria-label="Close"></button>
+                        </div>
+                        <div id="alertKO_CC" class="alert alert-danger alert-dismissible fade hide" role="alert">
+                              <b id="msgKO_CC">Error.</b>
+                              <button type="button" class="btn-close" onclick="Util.closeAlert('alertKO_CC');" aria-label="Close"></button>
+                        </div>
+                        <div class="alert txt-left fst-italic text-muted" role="alert">
+                              Para <b>AGREGAR</b> un nuevo código puede generarlo automáticamente
+                        </div>
+                        <label for="codigo" class="form-label font-weight-bold fw-bold">Código <span class="text-danger">*</span></label>
+                        <div class="input-group mb-3">
+                              <input type="number" class="form-control" id="codigo"
+                                    placeholder="Código de 6 dígitos" aria-label="Código de 6 digitos"
+                                    aria-describedby="button-addon2">
+                              <button class="btn btn-outline-secondary1 btn-secondary" type="button" id="btn_obtener_codigo"
+                                    onclick="GestionPiso.generateCode();">Generar código</button>
+                        </div>
+                        {{#if showFieldTypeCode }}
+                              {{!-- <div class="mb-3"> --}}
+                                    <label for="typecode" class="form-label fw-bold">Tipo Código <span class="text-danger">*</span></label>
+                                    <div class="mb-3">
+                                          <select id="typecode" class="form-select form-select-lg mb-3"
+                                                aria-label="Default select type code">
+                                                <option value="NA">Seleccionar</option>
+                                                {{#each lTypesCodesDB}}
+                                                      <option value="{{id}}">{{nombre}}</option>
+                                                {{/each}}
+                                          </select>
+                                    </div>
+                              {{!-- </div> --}}
+                        {{/if}}
+                        <div class="mb-3">
+                              <label for="vigencia" class="form-label font-weight-bold fw-bold">Vigencia en días <span class="text-danger">*</span></label>
+                              <input type="number" class="form-control" id="vigencia"
+                                    placeholder="Mínimo 1 día" />
+                        </div>
+                        <div class="mb-3 text-center">
+                              {{#if isWelock }}
+                                    <button type="submit" class="btn btn-primary btn-enviar"
+                                          onclick="GestionPiso.actionNewCode({{idDeviceLock}});">Crear
+                                          Código</button>
+                              {{/if}}
+                        </div>
+                  </form>
+            </div>
+
+            <!--       Tarjetas card       -->
+
+            <div class="col-md shadow card rounded m-2">
+                  <div class="card-tittle p-2 m-2 text-center">
+                        <h5>Llaves Magnéticas</h5>
+                  </div>
+
+                  <!-- Feedback server-->
+                  <div id="alertOK_LLM" class="alert alert-success alert-dismissible fade hide" role="alert">
+                        <b id="msgOK_LLM">OK.</b>
+                        <button type="button" class="btn-close" onclick="Util.closeAlert('alertOK_LLM');" aria-label="Close"></button>
+                  </div>
+                  <div id="alertKO_LLM" class="alert alert-danger alert-dismissible fade hide" role="alert">
+                        <b id="msgKO_LLM">Error.</b>
+                        <button type="button" class="btn-close" onclick="Util.closeAlert('alertKO_LLM');" aria-label="Close"></button>
+                  </div>
+
+                  <form method="POST" action="javascript:void(0);" class="form">
+                        <input type="hidden" class="form-control" id="idKey" value="0" />
+                        <div class="alert txt-left fst-italic text-muted" role="alert">
+                              Elija una operación para <b>AGREGAR</b> o <b>ELIMINAR</b> llave magnética
+                        </div>
+                        <label for="accion" class="form-label font-weight-bold fw-bold">Operación <span class="text-danger">*</span></label>
+                        <div class="mb-3">
+                              <select id="accion" class="form-select form-select-lg mb-3"
+                                    aria-label="Default select example" onchange="GestionPiso.actionOnOperacion();">
+                                    <option value="0">Seleccionar</option>
+                                    {{#each lactionsCard}}
+                                    <option value="{{value}}">{{label}}</option>
+                                    {{/each}}
+                              </select>
+                        </div>
+                        <div class="mb-3">
+                              <label for="idQr" class="form-label font-weight-bold fw-bold text-start">ID tarjeta <span class="text-danger">*</span></label>
+                              <div class="input-group mb-3">
+                                    <span class="input-group-text"><b>M</b></span>
+                                    <input type="text" readonly="true" onchange="GestionPiso.actionOnIdQr();" class="form-control" id="idQr" placeholder="Ingresar ID tarjeta (12 dígitos)" />
+                                    <button id="spinnerSearch" class="btn hide" type="button">
+                                          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    </button>
+                              </div>
+                              <label for="idQr" id="msgIdQr" class="form-label text-danger fw-bold text-start hide">No existe tarjeta para este piso!!</label>
+                        </div>
+                        {{#if showFieldTypeCard }}
+                              <label for="typecard" class="form-label fw-bold">Tipo <span class="text-danger">*</span></label>
+                              <div class="mb-3">
+                                    <select id="typecard" disabled="true" class="form-select form-select-lg mb-3"
+                                          aria-label="Default select example">
+                                          <option value="NA">Seleccionar</option>
+                                          {{#each ltypeCard}}
+                                                <option value="{{value}}">{{label}}</option>
+                                          {{/each}}
+                                    </select>
+                              </div>
+                        {{/if}}
+                        <label for="location" class="form-label fw-bold">Ubicación <span class="text-danger">*</span></label>
+                        <div class="mb-3">
+                              <select id="location" disabled="true" class="form-select form-select-lg mb-3"
+                                    aria-label="Default select example">
+                                    <option value="NA">Seleccionar</option>
+                                    {{#each llocationCard}}
+                                          <option value="{{value}}">{{label}}</option>
+                                    {{/each}}
+                              </select>
+                        </div>
+                        <div class="mb-3">
+                              <label for="qr" class="form-label font-weight-bold fw-bold">Qr <span class="text-danger">*</span></label>
+                              <input type="text" readonly="true" class="form-control" id="qr" placeholder="Ingresar url de QR" />
+                        </div>
+                        <div class="mb-3 text-center">
+                              {{#if isWelock }}
+                                    <button type="button" disabled="true" id="btnTarget" class="btn btn-primary btn-enviar"
+                                          onclick="GestionPiso.actionSetCard({{idDeviceLock}});">Procesar
+                                          tarjeta</button>
+                              {{/if}}
+                        </div>
+                  </form>
+            </div>
+      </div>
+      <div class="mt-2">
+            <button type="button" class="btn btn-secondary btn-enviar" onclick="GestionPiso.back('{{pathBack}}');">
+                  < Atrás</button>
+      </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalEspera" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                  <div class="modal-body text-center">
+                        <div class="spinner-border" role="status">
+                              <span class="visually-hidden"></span>
+                        </div>
+                        &nbsp;Espere...
+                  </div>
+            </div>
+      </div>
+</div>
+<script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+<script>
+      GestionPiso.init("{{codeDevice}}", "{{urlServer}}", "{{user}}", "{{rolUser}}", {{idPiso}}, {{lIdsDevices}});
+</script>
