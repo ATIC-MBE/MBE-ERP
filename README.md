@@ -1,4 +1,4 @@
-# ERP Interno – MBE Madrid
+# ERP Interno – MBE Madrid 
 
 ERP a medida para la gestión académica, operativa y administrativa del máster **MBE Madrid**. Este sistema centraliza todos los procesos internos del programa, sin depender de integraciones externas.
 
