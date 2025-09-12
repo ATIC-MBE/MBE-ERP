@@ -10,6 +10,11 @@
         font-weight: bold;
     }
 
+    h6 {
+        color: #fa0202;
+        font-weight: bold;
+    }
+
     #logout {
         color: white !important;
     }
@@ -118,7 +123,7 @@
 <div class="m-2">
     <img src="https://mbe.madrid/wp-content/uploads/2025/05/MBE_horizontal-logo.png" width="50%" class="mx-auto d-block" id="icon" alt="MyCityHome" />
 
-    <div class="container">
+    <div class="container" style="display: flex; gap: 1rem;">
         <div class="row d-flex justify-content-around">
         </div>
     </div>
@@ -142,6 +147,11 @@
             </button>
         </form>
     </div>
+
+    <div class="alert alert-warning text-center" role="alert" style="display: flex; align-items: center; justify-content: center; padding: 1rem; max-width: 150px;">
+        <h6 style="margin: 0;">Recuerda pulsar LOGOUT.</h6>
+    </div>
+
 </div>
 
 <script>
@@ -166,7 +176,7 @@
                 }
                 
                 // Show additional details if available
-                if (result.user || result.timestamp) {
+                if (result.user || result.timestamp || result.action) {
                     const details = document.createElement('div');
                     details.style.fontSize = '0.9rem';
                     details.style.marginTop = '5px';
@@ -174,9 +184,10 @@
                     
                     let detailText = '';
                     if (result.user) detailText += `Usuario: ${result.user} `;
-                    if (result.timestamp) detailText += `Hora: ${result.timestamp}`;
+                    if (result.timestamp) detailText += `Hora: ${result.timestamp} `;
+                    if (result.action) detailText += `Tipo: ${result.action.charAt(0).toUpperCase() + result.action.slice(1)}`;
                     
-                    details.textContent = detailText;
+                    details.textContent = detailText.trim();
                     statusDiv.appendChild(details);
                 }
                 
