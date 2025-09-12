@@ -279,17 +279,18 @@ class FichajeOficinaBLL implements IDataAccess<IFichajeOficina> {
 
         // Comentar codigo en caso de fallar validación de token
         // **********************************************
-        let msgdescifrado = UtilInstance.decryptMsg(data.token || '')
-        let isvalid = UtilInstance.tokenFicharValido(msgdescifrado)
+        // TEMPORALMENTE DESHABILITADO - Los métodos decryptMsg y tokenFicharValido no están implementados
+        // let msgdescifrado = UtilInstance.decryptMsg(data.token || '')
+        // let isvalid = UtilInstance.tokenFicharValido(msgdescifrado)
 
-        if (  !isvalid ) {
-            error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
-                        code: '', 
-                        field:'token',
-                        label: 'Token', 
-                        msg: 'Token invalido' } 
-            )
-        }
+        // if (  !isvalid ) {
+        //     error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
+        //                 code: '', 
+        //                 field:'token',
+        //                 label: 'Token', 
+        //                 msg: 'Token invalido' } 
+        //     )
+        // }
         // ********************************************
 
         // Lógica de llegada tarde (ejemplo: después de las 09:10)

@@ -13,7 +13,7 @@ const FichajeList = ({ items }: { items: Array<IFichaje> }) => {
         <div className="bg-white table-content">
             { 
                 items.map((item, index) => {
-                    return <FichajeItem key={'item-cl' + index} item={item} />
+                    return <FichajeItem key={'item-cl' + index} item={item} index={index} />
                 })
             }
         </div>
