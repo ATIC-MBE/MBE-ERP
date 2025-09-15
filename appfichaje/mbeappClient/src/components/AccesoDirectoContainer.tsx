@@ -61,7 +61,7 @@ const getIcon = (value: string, lblIcon?: string) => {
             return <AiOutlineKey title={_titleIcon} color='#005360' size={'5rem'} />
         case 'bot':
             return <MdSmartToy title={_titleIcon} color='#005360' size={'5rem'} />
-            case 'airbnb':
+        case 'airbnb':
             return <TbBrandAirbnb title={_titleIcon} color='#005360' size={'5rem'} />
         case 'booking':
             return <TbBrandBooking title={_titleIcon} color='#005360' size={'5rem'} />
