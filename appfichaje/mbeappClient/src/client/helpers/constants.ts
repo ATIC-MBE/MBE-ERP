@@ -1,3 +1,9 @@
+// Menú lateral CEO
+export const menu_ceo: Array<MenuLeftType> = [
+	{ key: 'share_office', isActive: false, propID: 'Oficinas', order: 1, menuPath: '/ceo/office', codeIcon: 'office' },
+	{ key: 'share_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ceo/users', codeIcon: 'user' },
+	{ key: 'share_reports', isActive: false, propID: 'Reportes', order: 3, menuPath: '/ceo/reports', codeIcon: 'report' }
+];
 export const menu_aca: Array<MenuLeftType> = [
 	{ key: 'aca_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aca', codeIcon: 'home' },
 	// { key: 'aca_contactos', isActive: false, propID: 'Contactos', order: 2, menuPath: '/aca/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
@@ -92,7 +98,7 @@ import type { MenuLeftType } from '@/client/types/globalTypes';
 // === VISIBILIDAD DE PDF POR RUTA ===
 // Define qué roles pueden ver PDFs en cada ruta. Ejemplo: { '/rrhhmaster': ['rrhh', 'admin'] }
 export const pdfVisibility: Record<string, string[]> = {};
-// === ACCESOS DIRECTOS POR ROL ===
+// === ACCESOS DIRECTOS POR ROL === avances de jaqui
 // Puedes personalizar los accesos directos por rol aquí. Cada clave es un rol y su valor es un array de accesos.
 // Estructura de acceso: { label: string, link: string, codeIcon: string, orden: number }
 export type AccesoDirecto = {

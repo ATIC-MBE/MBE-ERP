@@ -19,36 +19,35 @@ const handler = nc(
         }
     })
     .use(MiddlewareInstance.verifyToken)
-    // SIN USO
-    // .post(async (req, res: NextApiResponse<IResponse | IErrorResponse>) => { 
-    //     const {idUserLogin, filterState, usernameLogin} = UtilInstance.getDataRequest(req)
-    //     let el: FichajeOficinaBLL = new FichajeOficinaBLL(idUserLogin, filterState, true)
+    .post(async (req, res: NextApiResponse<IResponse | IErrorResponse>) => { 
+        const {idUserLogin, filterState, usernameLogin} = UtilInstance.getDataRequest(req)
+        let el: FichajeOficinaBLL = new FichajeOficinaBLL(idUserLogin, filterState, true)
         
-    //     // Data save on DB
-    //     let data: IFichajeOficina = {
-    //         usuario: usernameLogin,
-    //         token: req.body.qr || UtilInstance.getUUID(),
-    //         ip: req.body.ip || undefined,
-    //         tipo_ejecucion: 'automatico',
-    //         estado: 1,
-    //         observacion: '',
-    //         idusuario: idUserLogin,
-    //         idusuario_ultimo_cambio: idUserLogin
-    //     }
+        // Data save on DB
+        let data: IFichajeOficina = {
+            usuario: usernameLogin,
+            token: req.body.qr || UtilInstance.getUUID(),
+            ip: req.body.ip || undefined,
+            tipo_ejecucion: 'automatico',
+            estado: 1,
+            observacion: '',
+            idusuario: idUserLogin,
+            idusuario_ultimo_cambio: idUserLogin
+        }
 
-    //     let dataDB: IFichajeOficina | IErrorResponse = await el.fichar(data)
+        let dataDB: IFichajeOficina | IErrorResponse = await el.fichar(data)
         
-    //     if ( !dataDB ) {
-    //             res.status(404).json({ error: 'data not found' })
-    //             return
-    //     }
-    //     if ( ({ ...dataDB } as IErrorResponse).error ) {
-    //             // 409: conflicto con los datos enviados
-    //             res.status(409).json(dataDB as IErrorResponse)
-    //             return
-    //     }
+        if ( !dataDB ) {
+                res.status(404).json({ error: 'data not found' })
+                return
+        }
+        if ( ({ ...dataDB } as IErrorResponse).error ) {
+                // 409: conflicto con los datos enviados
+                res.status(409).json(dataDB as IErrorResponse)
+                return
+        }
         
-    //     res.json({ data: dataDB })
-    // })
+        res.json({ data: dataDB })
+    })
 
 export default handler

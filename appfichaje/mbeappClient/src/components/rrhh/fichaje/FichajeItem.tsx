@@ -6,9 +6,10 @@ import useFichajeItem from '@/client/hooks/rrhhmaster/fichaje/useFichajeItem'
 
 import { FaSadTear, FaSmile } from 'react-icons/fa'
 
-const FichajeItem = ({ item } : 
+const FichajeItem = ({ item, index } : 
                             {
-                                item: IFichaje
+                                item: IFichaje,
+                                index: number
                             }) => {
 
     const router = useRouter()
@@ -37,9 +38,12 @@ const FichajeItem = ({ item } :
         }
     };
 
+    // Alternar colores de fondo: custom turquesa (pares) y blanco (impares) - matching app theme
+    const rowBgColor = index % 2 === 0 ? 'bg-[#005360]/15' : 'bg-white';
+
     return (
         <div className={`w-full h-auto`}>
-            <div className={`data-table-row-nopointer grid grid-cols-7 p-1 pl-2`}>
+            <div className={`data-table-row-nopointer grid grid-cols-7 p-1 pl-2 ${rowBgColor}`}>
                 {/* Departamento en mayúsculas */}
                 <div>
                     <span className='flex'>
@@ -72,8 +76,8 @@ const FichajeItem = ({ item } :
                 </div>
                 {/* Editar */}
                 <div className='grid justify-end'>
-                    <div onClick={() => goEditData(itemContent.id!)} className='icon-table-row grid justify-end rounded-full w-[1.8rem] h-[1.6rem] card-action'>
-                        <BsPencilFill className='mt-1' title='Editar' />
+                    <div onClick={() => goEditData(itemContent.id!)} className='icon-table-row flex items-center justify-center rounded-full w-[1.8rem] h-[1.8rem] card-action'>
+                        <BsPencilFill title='Editar' />
                     </div>
                 </div>
             </div>

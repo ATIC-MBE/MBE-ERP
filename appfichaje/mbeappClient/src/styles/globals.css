@@ -558,3 +558,8 @@ a.link-menu {
   .card-ad-icon:hover {
     color: #ef8221;
   }
+
+  /* Custom row background for alternating table rows */
+  .bg-custom-teal {
+    background-color: rgba(0, 83, 96, 0.08); /* #005360 with 8% opacity for subtle effect */
+  }
