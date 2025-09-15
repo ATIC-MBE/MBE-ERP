@@ -1,3 +1,9 @@
+// Menú lateral CEO
+export const menu_ceo: Array<MenuLeftType> = [
+	{ key: 'share_office', isActive: false, propID: 'Oficinas', order: 1, menuPath: '/ceo/office', codeIcon: 'office' },
+	{ key: 'share_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ceo/users', codeIcon: 'user' },
+	{ key: 'share_reports', isActive: false, propID: 'Reportes', order: 3, menuPath: '/ceo/reports', codeIcon: 'report' }
+];
 export const menu_aca: Array<MenuLeftType> = [
 	{ key: 'aca_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aca', codeIcon: 'home' },
 	// { key: 'aca_contactos', isActive: false, propID: 'Contactos', order: 2, menuPath: '/aca/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
@@ -92,7 +98,7 @@ import type { MenuLeftType } from '@/client/types/globalTypes';
 // === VISIBILIDAD DE PDF POR RUTA ===
 // Define qué roles pueden ver PDFs en cada ruta. Ejemplo: { '/rrhhmaster': ['rrhh', 'admin'] }
 export const pdfVisibility: Record<string, string[]> = {};
-// === ACCESOS DIRECTOS POR ROL ===
+// === ACCESOS DIRECTOS POR ROL === avances de jaqui
 // Puedes personalizar los accesos directos por rol aquí. Cada clave es un rol y su valor es un array de accesos.
 // Estructura de acceso: { label: string, link: string, codeIcon: string, orden: number }
 export type AccesoDirecto = {
@@ -102,31 +108,79 @@ export type AccesoDirecto = {
 	orden: number;
 };
 export const acceso_directos: Record<string, AccesoDirecto[]> = {
-	share: [],
-	admin: [],
-	rrhh: [
+	share: [
 		{
 			orden: 1,
+			label: 'SUCESOS RRHH',
+			codeIcon: 'tareas',
+			link: 'https://docs.google.com/forms/d/e/1FAIpQLScKWrPiQ8f_H6kXt-zDs4892CpTqOiN2E5ro8RWGXSrFlM5Aw/viewform'
+		},
+		{
+			orden: 2,
 			label: 'PINS',
 			codeIcon: 'exclamacion',
 			link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'
+		},
+		
+	],
+	admin: [],
+	rrhh: [
+        {
+			orden: 1,
+			label: 'Vacaciones',
+			codeIcon: 'contactos',
+			link: 'https://mbemadrid.short.gy/vacaciones'
 		},
         {
 			orden: 2,
 			label: 'Claves y Contactos',
 			codeIcon: 'contactos',
-			link: 'https://docs.google.com/spreadsheets/d/1_tWh4nGZ9qwl_Ns6AfTunQ2_MhQtZ4778qCrkpU3ZzU/edit?gid=1508133306#gid=1508133306'
+			link: 'https://mbemadrid.short.gy/claves&contactos'
 		},
 		{
 			orden: 3,
 			label: 'JAIME',
 			codeIcon: 'bot',
 			link: 'https://mbemadrid.short.gy/JaimeBot'
+		},
+		{
+			orden: 4,
+			label: 'CRM CANDIDATOS',
+			codeIcon: 'contactos',
+			link: 'https://www.appsheet.com/start/7675f76e-58aa-483a-a232-22b033e67b42'
 		}
+
 	],
 	rrhhmaster: [
 		{
 			orden: 1,
+			label: 'Vacaciones',
+			codeIcon: 'contactos',
+			link: 'https://mbemadrid.short.gy/vacaciones'
+		},
+        {
+			orden: 2,
+			label: 'Claves y Contactos',
+			codeIcon: 'contactos',
+			link: 'https://mbemadrid.short.gy/claves&contactos'
+		},
+		{
+			orden: 3,
+			label: 'JAIME',
+			codeIcon: 'bot',
+			link: 'https://mbemadrid.short.gy/JaimeBot'
+		},
+						{
+			orden: 4,
+			label: 'CRM CANDIDATOS',
+			codeIcon: 'contactos',
+			link: 'https://www.appsheet.com/start/7675f76e-58aa-483a-a232-22b033e67b42'
+		}
+
+	],
+	ade: [
+		{
+			orden: 1,
 			label: 'PINS',
 			codeIcon: 'exclamacion',
 			link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'
@@ -135,28 +189,84 @@ export const acceso_directos: Record<string, AccesoDirecto[]> = {
 			orden: 2,
 			label: 'Claves y Contactos',
 			codeIcon: 'contactos',
-			link: 'https://docs.google.com/spreadsheets/d/1_tWh4nGZ9qwl_Ns6AfTunQ2_MhQtZ4778qCrkpU3ZzU/edit?gid=1508133306#gid=1508133306'
+			link: ''
 		},
 		{
 			orden: 3,
-			label: 'JAIME',
+			label: 'JORGE',
 			codeIcon: 'bot',
-			link: 'https://mbemadrid.short.gy/JaimeBot'
+			link: 'https://chatgpt.com/g/g-68821fe9fd248191bc7d9419c5ec6dd1-jorge'
 		}
 	],
-	ade: [],
 	atic: [
 		{ orden: 1, label: 'Gantt', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
 		{ orden: 2, label: 'Claves & Contactos', codeIcon: 'contactos', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 3, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
+		{ orden: 3, label: 'JUAN', codeIcon: 'bot', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
 	],
 	aticmaster: [
 		{ orden: 1, label: 'Gantt', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
 		{ orden: 2, label: 'Claves & Contactos', codeIcon: 'contactos', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 3, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
+		{ orden: 3, label: 'JUAN', codeIcon: 'bot', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
 	],
-	aca: [],
-	myd: [],
+	aca: [
+	{
+			orden: 1,
+			label: 'PINS',
+			codeIcon: 'exclamacion',
+			link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'
+		},
+        {
+			orden: 2,
+			label: 'Claves y Contactos',
+			codeIcon: 'contactos',
+			link: ''
+		},
+		{
+			orden: 3,
+			label: 'JAVIER',
+			codeIcon: 'bot',
+			link: 'https://chatgpt.com/g/g-68821e2b8b8c8191a7f1f9ea7f574936-javier'
+		}
+	],
+	myd: [
+		{
+			orden: 1,
+			label: 'PINS',
+			codeIcon: 'exclamacion',
+			link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'
+		},
+        {
+			orden: 2,
+			label: 'Claves y Contactos',
+			codeIcon: 'contactos',
+			link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768'
+		},
+		{
+			orden: 3,
+			label: 'JOAQUIN',
+			codeIcon: 'bot',
+			link: 'https://chatgpt.com/g/g-67f7ec0226788191815022a5d005fdb2-joaquin'
+		},
+		{
+			orden: 4,
+			label: 'CRM Candidatos',
+			codeIcon: 'contactos',
+			link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados'
+		},
+		{
+			orden: 5,
+			label: 'CRM Ponentes',
+			codeIcon: 'contactos',
+			link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form'
+		},
+			{
+			orden: 6,
+			label: 'META',
+			codeIcon: 'contactos',
+			link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776'
+		},
+
+	],
 	superadmin: [],
 	// Agrega más roles según necesidad
 };

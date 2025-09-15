@@ -28,13 +28,13 @@ const UsersEsquemaContainer = (
 
     return (
         <div className="w-[80rem] h-auto grid1 grid-flow-row1">
-            <div className="w-[80rem] h-auto bg-[#badaed] border border-blue rounded-t-3xl grid table-filter">
+            <div className="w-[80rem] h-auto bg-[#005360]/10 border border-[#005360] rounded-t-3xl grid table-filter">
                 <div className="w-full pt-4 pl-2 pr-1 flex">
                     <div className="w-full flex">
                         <h1 className="w-full text-bold text-blue" style={{fontSize:'22px'}}>{ `Usuarios` }</h1>
                     </div>
                     <div className="w-min flex justify-end">
-                        <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#0077bd] border border-blue text-white" href={`${pathAdd}`}>Nuevo</Link>
+                        <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#005360] border border-[#005360] text-white" href={`${pathAdd}`}>Nuevo</Link>
                     </div>
                 </div>
 
@@ -48,12 +48,12 @@ const UsersEsquemaContainer = (
                                 onChange={changeSearch} 
                                 onKeyDown={handleKeyDown}
                         />
-                        <button onClick={handleActionSearch} className='ml-2 bg-[#0077bd] h-min text-white px-2 py-1 text-[1rem] border border-blue rounded-xl' type='submit'>Buscar</button>
+                        <button onClick={handleActionSearch} className='ml-2 bg-[#005360] h-min text-white px-2 py-1 text-[1rem] border border-[#005360] rounded-xl' type='submit'>Buscar</button>
                     </div>
                 </div>
 
                 <div className={`w-full h-auto table-header`}>
-                    <div className="grid grid-cols-8 p-2 pl-2 text-bold text-white bg-[#0077BD]">
+                    <div className="grid grid-cols-8 p-2 pl-2 text-bold text-white bg-[#005360]">
                         <div className=""><span className='grid'>Usuario</span></div>
                         <div className="grid col-span-2"><span className='grid'>Nombres</span></div>
                         <div className="grid col-span-2"><span className='grid'>Jornada</span></div>

@@ -7,7 +7,7 @@ const UsersList = ({ items, pathEdit }: { items: Array<user>, pathEdit: string }
         <div className="bg-white table-content">
             { 
                 items.map((item, index) => {
-                    return <UserItem key={'item-l' + index} item={item} pathEdit={pathEdit} />
+                    return <UserItem key={'item-l' + index} item={item} pathEdit={pathEdit} index={index} />
                 })
             }
         </div>
