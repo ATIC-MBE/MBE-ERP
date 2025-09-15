@@ -28,7 +28,8 @@ const UserItem = ({ item, pathEdit, index } :
     return (
         <div className={`w-full h-auto`}>
             <div
-                className={`data-table-row-nopointer grid grid-cols-8 p-1 pl-2 ${rowBgColor} ${itemContent.estado === 0 ? 'text-[red]':'text-[#005360]'}`}>
+                style={{ backgroundColor: index % 2 === 0 ? 'rgba(0, 83, 96, 0.15)' : 'white' }}
+                className={`data-table-row-nopointer grid grid-cols-8 p-1 pl-2 ${itemContent.estado === 0 ? 'text-[red]':'text-[#005360]'}`}>
             
                 <div className='grid col-span-2'>
                     <span className='flex'>
