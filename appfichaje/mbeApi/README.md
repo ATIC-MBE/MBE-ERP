@@ -1,6 +1,6 @@
 # 🏢 MCH API - Management Control Hub API 🚀
 
-![MCH Logo](/public/web_MCH-05.svg)
+![MBE Logo](/mbeappClien/public/img/ico/logo_mbe.png)
 
 ## 📋 Table of Contents
 - [👋 Introduction](#introduction)

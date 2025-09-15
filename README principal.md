@@ -57,6 +57,8 @@ MBE-ERP/
 │   │   │   └── img/
 │   │   ├── src/
 │   │   │   ├── client/
+│   │   │   │   ├── Helpers/
+│   │   │   │   │   ├── Constants       **BARRA LATERAL y BOTONES por su ROL**
 │   │   │   ├── components/             **Cada carpeta se accede por su ROL**
 │   │   │   ├── data/
 │   │   │   ├── pages/

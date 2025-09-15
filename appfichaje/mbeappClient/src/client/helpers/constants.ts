@@ -105,58 +105,71 @@ export const acceso_directos: Record<string, AccesoDirecto[]> = {
 	share: [],
 	admin: [],
 	rrhh: [
-		{
-			orden: 1,
-			label: 'PINS',
-			codeIcon: 'exclamacion',
-			link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'
-		},
-        {
-			orden: 2,
-			label: 'Claves y Contactos',
-			codeIcon: 'contactos',
-			link: 'https://docs.google.com/spreadsheets/d/1_tWh4nGZ9qwl_Ns6AfTunQ2_MhQtZ4778qCrkpU3ZzU/edit?gid=1508133306#gid=1508133306'
-		},
-		{
-			orden: 3,
-			label: 'JAIME',
-			codeIcon: 'bot',
-			link: 'https://mbemadrid.short.gy/JaimeBot'
-		}
+		{ orden: 1, label: 'PINS', codeIcon: 'exclamacion',	link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'},
+    	{ orden: 2, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 3, label: 'JAIME', codeIcon: 'bot', link: 'https://mbemadrid.short.gy/JaimeBot'}, // pon aquí tu link
+		{ orden: 4, label: 'Guía RRHH', codeIcon: 'contactos', link: 'https://mbemadrid.short.gy/JaimeBot'}, // pon aquí tu link
+		{ orden: 5, label: 'Proceso de incorporación', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1yKSvYaMG6QUOorV5wEMUoe9Yh3akUvzU/edit?tab=t.0'}, // pon aquí tu link
 	],
 	rrhhmaster: [
-		{
-			orden: 1,
-			label: 'PINS',
-			codeIcon: 'exclamacion',
-			link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0'
-		},
-        {
-			orden: 2,
-			label: 'Claves y Contactos',
-			codeIcon: 'contactos',
-			link: 'https://docs.google.com/spreadsheets/d/1_tWh4nGZ9qwl_Ns6AfTunQ2_MhQtZ4778qCrkpU3ZzU/edit?gid=1508133306#gid=1508133306'
-		},
-		{
-			orden: 3,
-			label: 'JAIME',
-			codeIcon: 'bot',
-			link: 'https://mbemadrid.short.gy/JaimeBot'
-		}
+		{ orden: 1, label: 'PINS', codeIcon: 'exclamacion', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' },
+    	{ orden: 2, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 3, label: 'JAIME', codeIcon: 'bot', link: 'https://mbemadrid.short.gy/JaimeBot' }, // pon aquí tu link
+		{ orden: 4, label: 'Guía RRHH', codeIcon: 'contactos', link: 'https://mbemadrid.short.gy/JaimeBot'}, // pon aquí tu link
+		{ orden: 5, label: 'Proceso de incorporación', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1yKSvYaMG6QUOorV5wEMUoe9Yh3akUvzU/edit?tab=t.0'}, // pon aquí tu link
 	],
-	ade: [],
+	ade: [
+		{ orden: 1, label: 'PINS', codeIcon: 'exclamacion', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' },
+        { orden: 2, label: 'Claves y Contactos', codeIcon: 'contactos', link: '' },
+		{ orden: 3, label: 'JORGE', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-68821fe9fd248191bc7d9419c5ec6dd1-jorge' }
+	],
 	atic: [
 		{ orden: 1, label: 'Gantt', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
 		{ orden: 2, label: 'Claves & Contactos', codeIcon: 'contactos', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 3, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
+		{ orden: 4, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 5, label: 'Trello', codeIcon: 'contactos', link: 'https://trello.com/b/s1bNvxqx/2atic-mbe' }, // pon aquí tu link
+		{ orden: 6, label: 'Guía', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1HYQXh6aB0ehNmPTM8BcNj1XLgn98Ih0D/edit' }, // pon aquí tu link
+		{ orden: 7, label: 'JUAN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-6882163412e881918a994800750a9a16-juan' },
+		{ orden: 8, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 3, label: 'Proyectos ATIC', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1B6ibT-KnmCmRUXxlc63lInB-lZceU2PCdKwOMBvj8ts/edit?gid=0#gid=0' } // pon aquí tu link
 	],
 	aticmaster: [
 		{ orden: 1, label: 'Gantt', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
 		{ orden: 2, label: 'Claves & Contactos', codeIcon: 'contactos', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 3, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
+		{ orden: 4, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 5, label: 'Trello', codeIcon: 'contactos', link: 'https://trello.com/b/s1bNvxqx/2atic-mbe' }, // pon aquí tu link
+		{ orden: 6, label: 'Guía', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1HYQXh6aB0ehNmPTM8BcNj1XLgn98Ih0D/edit' }, // pon aquí tu link
+		{ orden: 7, label: 'JUAN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-6882163412e881918a994800750a9a16-juan' },
+		{ orden: 8, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 3, label: 'Proyectos ATIC', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1B6ibT-KnmCmRUXxlc63lInB-lZceU2PCdKwOMBvj8ts/edit?gid=0#gid=0' } // pon aquí tu link
 	],
-	aca: [],
-	myd: [],
+	aca: [
+	{ orden: 1, label: 'PINS', codeIcon: 'exclamacion', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' },
+        { orden: 2, label: 'Claves y Contactos', codeIcon: 'contactos', link: '' },
+		{ orden: 3, label: 'JAVIER', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-68821e2b8b8c8191a7f1f9ea7f574936-javier' }
+	],
+	myd: [
+		{ orden: 1, label: 'CRM Candidatos', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados' }, // pon aquí tu link
+		{ orden: 2, label: 'CRM Ponentes', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form' }, // pon aquí tu link
+		{ orden: 3, label: 'META', codeIcon: 'contactos', link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776' }, // pon aquí tu link
+		{ orden: 4, label: 'Claves & Contactos', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768' }, // pon aquí tu link
+		{ orden: 8, label: 'JOAQUIN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-67f7ec0226788191815022a5d005fdb2-joaquin' },
+		{ orden: 7, label: 'Guía MYD', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1t9sKr_Bi1J_pcaIYcflh_PgIhXMBoRIn/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 6, label: 'Guía Profesor/Ponente', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1YvL1MGYxqGZ4r-GJu3OS9IWXhLyQb9Xz/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 9, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 5, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
+	],
+	mydmaster: [
+		{ orden: 1, label: 'CRM Candidatos', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados' }, // pon aquí tu link
+		{ orden: 2, label: 'CRM Ponentes', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form' }, // pon aquí tu link
+		{ orden: 3, label: 'META', codeIcon: 'contactos', link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776' }, // pon aquí tu link
+		{ orden: 4, label: 'Claves & Contactos', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768' }, // pon aquí tu link
+		{ orden: 8, label: 'JOAQUIN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-67f7ec0226788191815022a5d005fdb2-joaquin' },
+		{ orden: 7, label: 'Guía MYD', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1t9sKr_Bi1J_pcaIYcflh_PgIhXMBoRIn/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 6, label: 'Guía Profesor/Ponente', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1YvL1MGYxqGZ4r-GJu3OS9IWXhLyQb9Xz/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 9, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 5, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
+	],
 	superadmin: [],
 	// Agrega más roles según necesidad
 };
