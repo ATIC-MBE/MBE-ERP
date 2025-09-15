@@ -57,7 +57,7 @@ MBE-ERP/
 │   │   │   └── img/
 │   │   ├── src/
 │   │   │   ├── client/
-│   │   │   ├── components/
+│   │   │   ├── components/             **Cada carpeta se accede por su ROL**
 │   │   │   ├── data/
 │   │   │   ├── pages/
 │   │   │   └── styles/
