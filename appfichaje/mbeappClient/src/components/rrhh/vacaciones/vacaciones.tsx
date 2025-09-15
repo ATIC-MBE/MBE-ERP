@@ -32,10 +32,10 @@ const VacacionesContainer = (
 
     return (
         <div className="w-full max-w-[80rem] mx-auto px-2">
-            <div className="w-[80rem] h-auto bg-[#badaed] border border-blue rounded-t-3xl grid table-filter">
+            <div className="w-[80rem] h-auto bg-[#005360]/10 border border-[#005360] rounded-t-3xl grid table-filter">
                 <div className="w-full pt-4 pl-2 pr-1 flex">
                     <div className="w-full flex">
-                        <h1 className="w-full text-bold text-blue" style={{fontSize:'22px'}}>{ `Vacaciones` }</h1>
+                        <h1 className="w-full text-bold text-[#005360]" style={{fontSize:'22px'}}>{ `Vacaciones` }</h1>
                     </div>
                     {/* <div className="w-min flex justify-end">
                         <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#0077bd] border border-blue text-white" href={`${pathAdd}`}>Nuevo</Link>
@@ -45,7 +45,7 @@ const VacacionesContainer = (
                 <div className="flex justify-end w-full h-[5rem] p-1">
                 <div className="flex justify-end w-full h-[5rem] p-1">    
                     <div className="flex w-auto items-center justify-center h-full text-sm mr-3">                        
-                        <label className='px-3 py-2 h-[2.2rem] w-[2.5rem] bg-[#0077bd] border border-[#0077bd] text-red rounded-l-full col-span-2'>
+                        <label className='px-3 py-2 h-[2.2rem] w-[2.5rem] bg-[#005360] border border-[#005360] text-red rounded-l-full col-span-2'>
                             <BsCalendar3 title='Fecha inicio' color='white' size={'1.2rem'} />
                         </label>
 
@@ -55,7 +55,7 @@ const VacacionesContainer = (
                                 onKeyDown={handleKeyDown}
                                 value={filterFields.m_start} 
                                 type="date" name='m_start' />
-                        <label className='p-2 h-min w-[2rem] bg-[#0077bd] text-white col-span-2'>a</label>
+                        <label className='p-2 h-min w-[2rem] bg-[#005360] text-white col-span-2'>a</label>
 
 
                         <input  className="h-min rounded-r-full p-2 w-[8.5rem] outline-blue-800" 
@@ -68,14 +68,14 @@ const VacacionesContainer = (
 
                     <div className="flex items-center justify-end h-full">
                         <input  placeholder='Buscar...' 
-                                className='rounded-full text-sm text-black border border1-[#212529] px-2 py-1 w-[15rem] h-[2.2rem]' 
+                                className='rounded-full text-sm text-black border border-[#005360] px-2 py-1 w-[15rem] h-[2.2rem]' 
                                 type="text"
                                 name='search_all' 
                                 value={filterFields.search_all} 
                                 onChange={changeSearch} 
                                 onKeyDown={handleKeyDown}
                         />
-                        <button onClick={handleActionSearch} className='ml-2 bg-[#0077bd] h-min text-white px-2 py-1 text-[1rem] border border-blue rounded-xl' type='submit'>Buscar</button>
+                        <button onClick={handleActionSearch} className='ml-2 bg-[#005360] h-min text-white px-2 py-1 text-[1rem] border border-[#005360] rounded-xl' type='submit'>Buscar</button>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@ const VacacionesContainer = (
                 </div>
 
                 <div className={`w-full h-auto table-header`}>
-                    <div className="grid grid-cols-8 p-2 pl-2 text-bold text-white bg-[#0077BD]">
+                    <div className="grid grid-cols-8 p-2 pl-2 text-bold text-white bg-[#005360]">
                         <div className="grid col-span-2"><span className='grid'>Nombres</span></div>
                         <div className="grid col-span-2"><span className='grid'>Fecha Inico</span></div>
                         <div className="grid col-span-2"><span className='grid'>Fecha Fin</span></div>

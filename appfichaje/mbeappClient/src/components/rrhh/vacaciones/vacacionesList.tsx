@@ -8,7 +8,7 @@ const VacacionesList = ({ items, pathEdit }: { items: Array<IVacaciones>, pathEd
             { 
                 items.map((item, index) => {
                     // return <vacacionesItem key={'item-l' + index} item={item} pathEdit={pathEdit} />
-                    return <VacacionesItem key={'item-l' + index} item={item} pathEdit={pathEdit} />
+                    return <VacacionesItem key={'item-l' + index} item={item} pathEdit={pathEdit} index={index} />
 
                 })
             }
