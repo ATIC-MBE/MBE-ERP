@@ -14,23 +14,10 @@ export const MYD_APARTMENT_PATH = '/api/myd/apartments/';
 // Alias y constantes para MYD (Marketing y Desarrollo)
 // ...existing code...
 // Estados comerciales genéricos para MYD
-export const STATES_PISO_COMERCIAL = [
-	{ key: '1', name: 'Disponible' },
-	{ key: '2', name: 'Ocupado' },
-	{ key: '3', name: 'Mantenimiento' }
-];
-export const STATES_APLICA_COMERCIAL = [
-	{ key: '1', name: 'Sí aplica' },
-	{ key: '0', name: 'No aplica' }
-];
-export const STATES_ESTADO_MYD_COMERCIAL = [
-	{ key: '1', name: 'Activo' },
-	{ key: '0', name: 'Inactivo' }
-];
 export const menu_myd_master: Array<MenuLeftType> = [
 	{ key: 'myd_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/mydmaster', codeIcon: 'home' },
-	{ key: 'myd_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/mydmaster/users/', codeIcon: 'user' },
-	{ key: 'myd_master_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/mydmaster/contactos', codeIcon: 'contactos' },
+//	{ key: 'myd_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/mydmaster/users/', codeIcon: 'user' },
+//	{ key: 'myd_master_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/mydmaster/contactos', codeIcon: 'contactos' },
 	{ key: 'myd_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/mydmaster/solicitudes', codeIcon: 'solicitudes' },
 ];
 export const menu_myd: Array<MenuLeftType> = [
@@ -155,25 +142,25 @@ export const acceso_directos: Record<string, AccesoDirecto[]> = {
 		{ orden: 3, label: 'JAVIER', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-68821e2b8b8c8191a7f1f9ea7f574936-javier' }
 	],
 	myd: [
-		{ orden: 1, label: 'CRM Candidatos', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados' }, // pon aquí tu link
-		{ orden: 2, label: 'CRM Ponentes', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form' }, // pon aquí tu link
-		{ orden: 3, label: 'META', codeIcon: 'contactos', link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776' }, // pon aquí tu link
-		{ orden: 4, label: 'Claves & Contactos', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768' }, // pon aquí tu link
+		{ orden: 1, label: 'CRM Candidatos', codeIcon: 'person', link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados' }, // pon aquí tu link
+		{ orden: 2, label: 'CRM Ponentes', codeIcon: 'file_user', link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form' }, // pon aquí tu link
+		{ orden: 3, label: 'META', codeIcon: 'phonesell', link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776' }, // pon aquí tu link
+		{ orden: 4, label: 'Claves & Contactos', codeIcon: 'excel', link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768' }, // pon aquí tu link
 		{ orden: 8, label: 'JOAQUIN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-67f7ec0226788191815022a5d005fdb2-joaquin' },
-		{ orden: 7, label: 'Guía MYD', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1t9sKr_Bi1J_pcaIYcflh_PgIhXMBoRIn/edit?tab=t.0' }, // pon aquí tu link
-		{ orden: 6, label: 'Guía Profesor/Ponente', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1YvL1MGYxqGZ4r-GJu3OS9IWXhLyQb9Xz/edit?tab=t.0' }, // pon aquí tu link
-		{ orden: 9, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 7, label: 'Guía MYD', codeIcon: 'key', link: 'https://docs.google.com/document/d/1t9sKr_Bi1J_pcaIYcflh_PgIhXMBoRIn/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 6, label: 'Guía Profesor/Ponente', codeIcon: 'key', link: 'https://docs.google.com/document/d/1YvL1MGYxqGZ4r-GJu3OS9IWXhLyQb9Xz/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 9, label: 'Documento vacaciones', codeIcon: 'time', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
 		{ orden: 5, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
 	],
 	mydmaster: [
-		{ orden: 1, label: 'CRM Candidatos', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados' }, // pon aquí tu link
-		{ orden: 2, label: 'CRM Ponentes', codeIcon: 'contactos', link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form' }, // pon aquí tu link
-		{ orden: 3, label: 'META', codeIcon: 'contactos', link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776' }, // pon aquí tu link
-		{ orden: 4, label: 'Claves & Contactos', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768' }, // pon aquí tu link
+		{ orden: 1, label: 'CRM Candidatos', codeIcon: 'person', link: 'https://www.appsheet.com/start/e415a987-ebc8-4c5b-90a2-82433959892d#appName=Candidatos_MBE-3416711-24-08-15-2&group=%5B%5D&page=fastTable&sort=%5B%5D&table=Candidatos_filtrados&view=Candidatos+filtrados' }, // pon aquí tu link
+		{ orden: 2, label: 'CRM Ponentes', codeIcon: 'file_user', link: 'https://www.appsheet.com/start/65d94e9d-d51c-4070-8a1a-0a445ab76871#_restore=true&appName=Ponentes_MBE-3416711&defaults=%5B%5D&page=form&row=&table=Candidatos_filtrados&view=Candidatos_filtrados_Form' }, // pon aquí tu link
+		{ orden: 3, label: 'META', codeIcon: 'phonesell', link: 'https://business.facebook.com/latest/home?business_id=1674953022918228&asset_id=120161077741776' }, // pon aquí tu link
+		{ orden: 4, label: 'Claves & Contactos', codeIcon: 'excel', link: 'https://docs.google.com/spreadsheets/d/16-4SEt-83PHv6s5MjSXmgXDbe3hLBPOzZ6WD75XIuZw/edit?gid=1016037768#gid=1016037768' }, // pon aquí tu link
 		{ orden: 8, label: 'JOAQUIN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-67f7ec0226788191815022a5d005fdb2-joaquin' },
-		{ orden: 7, label: 'Guía MYD', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1t9sKr_Bi1J_pcaIYcflh_PgIhXMBoRIn/edit?tab=t.0' }, // pon aquí tu link
-		{ orden: 6, label: 'Guía Profesor/Ponente', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1YvL1MGYxqGZ4r-GJu3OS9IWXhLyQb9Xz/edit?tab=t.0' }, // pon aquí tu link
-		{ orden: 9, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 7, label: 'Guía MYD', codeIcon: 'key', link: 'https://docs.google.com/document/d/1t9sKr_Bi1J_pcaIYcflh_PgIhXMBoRIn/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 6, label: 'Guía Profesor/Ponente', codeIcon: 'key', link: 'https://docs.google.com/document/d/1YvL1MGYxqGZ4r-GJu3OS9IWXhLyQb9Xz/edit?tab=t.0' }, // pon aquí tu link
+		{ orden: 9, label: 'Documento vacaciones', codeIcon: 'time', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
 		{ orden: 5, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' } // pon aquí tu link
 	],
 	superadmin: [],

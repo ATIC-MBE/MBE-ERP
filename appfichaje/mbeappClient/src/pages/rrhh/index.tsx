@@ -21,7 +21,7 @@ const RRHH = () => {
     ];
     // Cuando montamos la página, aseguramos que el modal aparece
     useEffect(() => {
-        const seen = JSON.parse(localStorage.getItem('rrhh_modals_seen') || 'null');
+        const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
         if (Array.isArray(seen) && seen.length === modals.length) {
             // todos marcados como vistos
             setCurrentModalIndex(modals.length);
@@ -31,9 +31,9 @@ const RRHH = () => {
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto
-        // const seen = JSON.parse(localStorage.getItem('rrhh_modals_seen') || '[]');
+        // const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || '[]');
         // seen.push(currentModalIndex);
-        // localStorage.setItem('rrhh_modals_seen', JSON.stringify(seen));
+        // localStorage.setItem('atic_modals_seen', JSON.stringify(seen));
 
         setCurrentModalIndex(next);
     };

@@ -51,7 +51,7 @@ const MenuLeftContainer = ({ data, itemSelected }: { data: Array<MenuLeftType>, 
                 transform transition-transform duration-300 ease-in-out
                 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                 shadow-lg overflow-hidden
-            `}>
+                `}>
                 <div className="h-full overflow-y-auto py-2">
                     <div className="grid grid-cols-1 lg:grid-cols-1 gap-1">
                         {(data || [])

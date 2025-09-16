@@ -8,6 +8,7 @@ import { Layout } from '@/components/Layout'
 import MenuLeftContainer from '@/components/MenuLeftContainer'
 import React, { useContext, useEffect, useState } from 'react'
 import BlockingModal from '@/components/BlockingModal';
+
 const Myd = () => {
     const _itemSelected = 'myd_home'
     const [currentModalIndex, setCurrentModalIndex] = useState(0);
@@ -15,6 +16,7 @@ const Myd = () => {
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
         { title: 'Atención', message: 'Leer mensajes.' },
+        { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // { title: 'Atención', message: 'Ocupados.' },
         // puedes añadir tantos objetos como quieras
     ];
@@ -27,13 +29,6 @@ const Myd = () => {
         }
     }, []);
     // // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
-    // useEffect(() => {
-    //     const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
-    //     if (Array.isArray(seen) && seen.length === modals.length) {
-    //         // todos marcados como vistos
-    //         setCurrentModalIndex(modals.length);
-    //     }
-    // }, []);
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto
@@ -43,6 +38,7 @@ const Myd = () => {
 
         setCurrentModalIndex(next);
     };
+
     // Mientras haya un modal pendiente, lo mostramos. Una vez currentModalIndex >= modals.length, desaparece.
     const showModal = currentModalIndex < modals.length;
     return (

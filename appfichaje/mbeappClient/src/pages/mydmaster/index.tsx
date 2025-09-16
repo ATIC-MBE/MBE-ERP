@@ -12,6 +12,7 @@ const MydMaster = () => {
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
         { title: 'Atención', message: 'Leer mensajes.' },
+        { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // { title: 'Atención', message: 'Ocupados.' },
         // puedes añadir tantos objetos como quieras
     ];
