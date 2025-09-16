@@ -1,3 +1,8 @@
+/*Ejecuta los tres programas necesarios:
+frontend mbeappClient 6969
+backend mbeApi QR API 3006
+BBDD mbeapp 3005
+*/
 module.exports = {
   apps: [
     {
