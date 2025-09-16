@@ -8,7 +8,7 @@ MBE-ERP/
 │
 ├── appfichaje/
 │   ├── database-setup-fichaje.sql
-│   ├── ecosystem.config.js
+│   ├── ecosystem.config.js            **Ejecuta los tres programas necesarios: frontend, backend, BBDD**
 │   ├── logs/
 │   │
 │   ├── mbeApi/                         **API DEL PROYECTO**
