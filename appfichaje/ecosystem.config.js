@@ -1,3 +1,8 @@
+/*Ejecuta los tres programas necesarios:
+frontend 6969
+backend QR API 3006
+BBDD
+*/
 module.exports = {
   apps: [
     {
