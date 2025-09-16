@@ -84,25 +84,25 @@ const HomeContainer = ( { data, children }: { data?:user, children?: any } ) => 
             >
                 <div className=" row-span-2 grid">
                     <div className=" flex flex-col items-center mt-10">
-                                                                        <h1
-                                                                            className="text-2xl font-bold flex items-center justify-center px-8 py-4 rounded-2xl shadow-lg border-2 border-secondary bg-white/80 text-primary drop-shadow-lg transition-all"
-                                                                            style={{
-                                                                                background: 'linear-gradient(90deg, #c9ac7e22 0%, #ffffffcc 100%)',
-                                                                                boxShadow: '0 4px 24px 0 rgba(0,83,96,0.10), 0 1.5px 0 #c9ac7e',
-                                                                                border: '2.5px solid #c9ac7e',
-                                                                                letterSpacing: '0.03em',
-                                                                            }}
-                                                                        >
-                                                                            Bienvenido&nbsp;<b className="ml-2 text-primary drop-shadow">{userLogin.nombre_completo}</b>
-                                                                        </h1>
+                        <h1
+                            className="text-2xl font-bold flex items-center justify-center px-8 py-4 rounded-2xl shadow-lg border-2 border-secondary bg-white/80 text-primary drop-shadow-lg transition-all"
+                            style={{
+                                background: 'linear-gradient(90deg, #c9ac7e22 0%, #ffffffcc 100%)',
+                                boxShadow: '0 4px 24px 0 rgba(0,83,96,0.10), 0 1.5px 0 #c9ac7e',
+                                border: '2.5px solid #c9ac7e',
+                                letterSpacing: '0.03em',
+                            }}
+                        >
+                            Bienvenido&nbsp;<b className="ml-2 text-primary drop-shadow">{userLogin.nombre_completo}</b>
+                        </h1>
                     </div>
-                                                                        <div className=" flex flex-col items-center mt-2 mb-10">
-                                                                                <div className="flex items-center justify-center mb-4">
-                                                                                    <span className="text-lg font-semibold text-primary" style={{letterSpacing: '0.01em'}}>
-                                                                                        {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                                                                    </span>
-                                                                                </div>
-                                                        <div className="w-[80%] grid items-centermm xl:grid-cols-6 justify-center grid-col-1 justify-items-center">
+                    <div className=" flex flex-col items-center mt-2 mb-10">
+                        <div className="flex items-center justify-center mb-4">
+                            <span className="text-lg font-semibold text-primary" style={{letterSpacing: '0.01em'}}>
+                                {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </span>
+                        </div>
+                        <div className="w-[80%] grid items-centermm xl:grid-cols-6 justify-center grid-col-1 justify-items-center">
                             {/* Cosas en comun con otros perfiles */}
                             {
                                 Array.isArray(userLogin.roles) && userLogin.multilogin && userLogin.roles.length > 0 ? (

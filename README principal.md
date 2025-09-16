@@ -60,8 +60,12 @@ MBE-ERP/
 │   │   │   │   ├── Helpers/
 │   │   │   │   │   ├── Constants       **BARRA LATERAL y BOTONES por su ROL**
 │   │   │   ├── components/             **Cada carpeta se accede por su ROL**
+│   │   │   │   ├── components/
+│   │   │   │   │   ├── AccesoDirectoContainer.tsx   **Iconos de los botones**
 │   │   │   ├── data/
 │   │   │   ├── pages/
+│   │   │   │   ├── atic/
+│   │   │   │   │   ├── index.tsx       **Cuerpo principal y avisos de Inicio**
 │   │   │   └── styles/
 │   │   ├── tailwind.config.js
 │   │   ├── package.json

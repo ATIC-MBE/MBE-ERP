@@ -15,7 +15,8 @@ const Atic = () => {
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
-        { title: 'Atención', message: 'Diario de abordo.' },
+        //MCH { title: 'Atención', message: 'Diario de abordo.' },
+        { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // puedes añadir tantos objetos como quieras
     ];
     // Cuando montamos la página, aseguramos que el modal aparece
@@ -26,14 +27,7 @@ const Atic = () => {
             setCurrentModalIndex(modals.length);
         }
     }, []);
-    // // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
-    // useEffect(() => {
-    //     const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
-    //     if (Array.isArray(seen) && seen.length === modals.length) {
-    //         // todos marcados como vistos
-    //         setCurrentModalIndex(modals.length);
-    //     }
-    // }, []);
+    // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto
@@ -59,7 +53,7 @@ const Atic = () => {
                             onConfirm={handleConfirm}
                         />
                     )}
-                    <span>ATIC &#128526; &#128526;</span>
+                    <span>&#128526; ATIC &#128526;</span>
                     <HomeContainer data={userData()}>
                     </HomeContainer>
                 </ContentContainer>

@@ -12,7 +12,7 @@ const BlockingModal = ({
   link?: string;
 }) => {
   const links: { [key: string]: string } = {
-  'Diario de abordo.': 'https://docs.google.com/spreadsheets/d/12cecywigTKUXEvZxPsmK7-RDCy9M0GHMkCGrcmRhbbg/edit?gid=2138230868#gid=2138230868',
+  //MCH 'Diario de abordo.': 'https://docs.google.com/spreadsheets/d/12cecywigTKUXEvZxPsmK7-RDCy9M0GHMkCGrcmRhbbg/edit?gid=2138230868#gid=2138230868',
   'RRHH.': 'https://docs.google.com/forms/d/e/1FAIpQLSfML6SSeCQ90qkDKs3GQAbvoNlJFnK7Koh2KUt_ndbXyxNgFg/viewform?usp=sf_link',
   'S. RRHH.': 'https://docs.google.com/forms/d/e/1FAIpQLScKWrPiQ8f_H6kXt-zDs4892CpTqOiN2E5ro8RWGXSrFlM5Aw/viewform',
   'Sucesos RRHH.': 'https://docs.google.com/forms/d/e/1FAIpQLScKWrPiQ8f_H6kXt-zDs4892CpTqOiN2E5ro8RWGXSrFlM5Aw/viewform',
