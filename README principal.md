@@ -63,8 +63,7 @@ MBE-ERP/
 │   │   ├── package.json                //Lista de dependencias, scripts(npm run dev...), metadatos del proyecto.
 │   │   ├── .env                        //define puertos y URLs de servicios externos (TCP y API REST) para distintos entornos (desarrollo/producción).
 │   │   ├── .dockerignore               //archivos o carpetas se excluyen al crear la imagen de Docker
-│   │   ├── .gitignore                  //archivos/carpetas que Git debe ignorar
-
+│   │   └── .gitignore                  //archivos/carpetas que Git debe ignorar
 │   │
 │   │
 │   │
