@@ -87,7 +87,7 @@ const HomeContainer = ( { data, children }: { data?:user, children?: any } ) => 
                         <h1
                             className="text-2xl font-bold flex items-center justify-center px-8 py-4 rounded-2xl shadow-lg border-2 border-secondary bg-white/80 text-primary drop-shadow-lg transition-all"
                             style={{
-                                background: 'linear-gradient(90deg, #c9ac7e22 0%, #ffffffcc 100%)',
+                                background: 'linear-gradient(90deg, #ffffffcc 0%, #c9ac7e22 100%)',
                                 boxShadow: '0 4px 24px 0 rgba(0,83,96,0.10), 0 1.5px 0 #c9ac7e',
                                 border: '2.5px solid #c9ac7e',
                                 letterSpacing: '0.03em',

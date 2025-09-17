@@ -1,3 +1,5 @@
+import type { MenuLeftType } from '@/client/types/globalTypes';
+
 // Menú lateral CEO
 export const menu_ceo: Array<MenuLeftType> = [
 	{ key: 'share_office', isActive: false, propID: 'Oficinas', order: 1, menuPath: '/ceo/office', codeIcon: 'office' },
@@ -6,6 +8,11 @@ export const menu_ceo: Array<MenuLeftType> = [
 ];
 export const menu_aca: Array<MenuLeftType> = [
 	{ key: 'aca_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aca', codeIcon: 'home' },
+	// { key: 'aca_contactos', isActive: false, propID: 'Contactos', order: 2, menuPath: '/aca/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
+	{ key: 'aca_solicitudes', isActive: false, propID: 'Solicitudes', order: 3, menuPath: '/aca/solicitudes', codeIcon: 'solicitudes' },
+];
+export const menu_aca_master: Array<MenuLeftType> = [
+	{ key: 'aca_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aca', codeIcon: 'home' },
 	// { key: 'aca_contactos', isActive: false, propID: 'Contactos', order: 2, menuPath: '/aca/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
 	{ key: 'aca_solicitudes', isActive: false, propID: 'Solicitudes', order: 3, menuPath: '/aca/solicitudes', codeIcon: 'solicitudes' },
 ];
@@ -28,9 +35,16 @@ export const menu_myd: Array<MenuLeftType> = [
 // Menú lateral ADE Master
 export const menu_ade_master: Array<MenuLeftType> = [
 	{ key: 'ade_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/ademaster', codeIcon: 'home' },
-	{ key: 'ade_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ademaster/users/', codeIcon: 'user' },
-	{ key: 'ade_master_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/ademaster/contactos', codeIcon: 'contactos' },
+//	{ key: 'ade_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ademaster/users/', codeIcon: 'user' },
+//	{ key: 'ade_master_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/ademaster/contactos', codeIcon: 'contactos' },
 	{ key: 'ade_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/ademaster/solicitudes', codeIcon: 'solicitudes' },
+];
+// Menú lateral ADE
+export const menu_ade: Array<MenuLeftType> = [
+	{ key: 'ade_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/ademaster', codeIcon: 'home' },
+//	{ key: 'ade_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ademaster/users/', codeIcon: 'user' },
+//	{ key: 'ade_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/ademaster/contactos', codeIcon: 'contactos' },
+	{ key: 'ade_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/ademaster/solicitudes', codeIcon: 'solicitudes' },
 ];
 // Estados administrativos
 export const STATES_ADMIN = [
@@ -80,7 +94,6 @@ export const menu_superadmin: Array<MenuLeftType> = [
 	{ key: 'superadmin_users', isActive: false, propID: 'Usuarios', order: 3, menuPath: '/superadmin/users/', codeIcon: 'user' },
 	{ key: 'superadmin_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/superadmin/solicitudes', codeIcon: 'solicitudes' },
 ];
-import type { MenuLeftType } from '@/client/types/globalTypes';
 
 // === VISIBILIDAD DE PDF POR RUTA ===
 // Define qué roles pueden ver PDFs en cada ruta. Ejemplo: { '/rrhhmaster': ['rrhh', 'admin'] }
@@ -232,7 +245,6 @@ export const MSG_DELETED = 'Registro eliminado correctamente.';
 export const MSG_ERROR_GENERIC = 'Ha ocurrido un error inesperado.';
 
 // === MENÚS LATERALES ===
-
 
 export const menu_rrhh_master: Array<MenuLeftType> = [
 	{ key: 'rrhh_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhhmaster', codeIcon: 'home' },

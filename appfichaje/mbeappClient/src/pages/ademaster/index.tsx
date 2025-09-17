@@ -30,13 +30,7 @@ const Ade = () => {
         }
     }, []);
     // // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
-    // useEffect(() => {
-    //     const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
-    //     if (Array.isArray(seen) && seen.length === modals.length) {
-    //         // todos marcados como vistos
-    //         setCurrentModalIndex(modals.length);
-    //     }
-    // }, []);
+
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto

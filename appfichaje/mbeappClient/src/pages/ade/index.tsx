@@ -1,6 +1,5 @@
 import UserContext from '@/client/context/UserContext'
-// TODO: Ensure 'menu_ade_master' is exported from '@/client/helpers/constants'
-import { menu_ade_master } from '@/client/helpers/constants'
+import { menu_ade} from '@/client/helpers/constants'
 import ContentContainer from '@/components/ContentContainer'
 import HomeContainer from '@/components/HomeContainer'
 import { Layout } from '@/components/Layout'
@@ -27,13 +26,6 @@ const Ade = () => {
         }
     }, []);
     // // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
-    // useEffect(() => {
-    //     const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
-    //     if (Array.isArray(seen) && seen.length === modals.length) {
-    //         // todos marcados como vistos
-    //         setCurrentModalIndex(modals.length);
-    //     }
-    // }, []);
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto
@@ -49,7 +41,7 @@ const Ade = () => {
 
         <Layout>
             <div className="h-100 bg-image p-5 pt-2 flex ">
-                <MenuLeftContainer data={menu_ade_master} itemSelected={_itemSelected} />
+                <MenuLeftContainer data={menu_ade} itemSelected={_itemSelected} />
                 <ContentContainer>
                     {/* Si aún quedan pop-ups pendientes, bloquea la pantalla */}
                     {showModal && (

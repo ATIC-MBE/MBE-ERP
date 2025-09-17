@@ -9,9 +9,7 @@ import FloatButton from '@/components/FloatButton'
 import { AiFillSave, AiOutlineBars, AiOutlineCalendar, AiOutlineComment, AiOutlineContacts, AiOutlineFileText, AiOutlineLock, AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
 import { MdCancel, MdEmail } from 'react-icons/md'
 import SemaforoIcon from '@/components/Iconos/SemaforoIcon'
-import { BsCalendar2Date } from "react-icons/bs";
-import { BsCalendar2Month } from "react-icons/bs";
-import { BsCalendar2Minus } from "react-icons/bs";
+import { BsCalendar2Date, BsCalendar2Month, BsCalendar2Minus } from "react-icons/bs";
 import { FaTrashAlt } from 'react-icons/fa'
 import useVacacionesIdd from '@/client/hooks/rrhhmaster/vacaciones/useVacacionesId'
 import useVacacionesIddShare from '@/client/hooks/share/vacaciones/useVacacionesIdShare'

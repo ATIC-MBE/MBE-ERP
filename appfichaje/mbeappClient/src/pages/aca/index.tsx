@@ -17,11 +17,11 @@ const Aca = () => {
         { title: 'Atención', message: 'Sucesos pisos.' },
         { title: 'Atención', message: 'Cobros.' },
         { title: 'Atención', message: 'Organización.' },
-        {  title: 'Atención', message: 'Leer mensajes.'},
+        { title: 'Atención', message: 'Leer mensajes.'},
         // puedes añadir tantos objetos como quieras
     ];
     useEffect(() => {
-        const seen = JSON.parse(localStorage.getItem('aca_modals_seen') || 'null');
+        const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
         if (Array.isArray(seen) && seen.length === modals.length) {
             setCurrentModalIndex(modals.length);
         }

@@ -14,8 +14,9 @@ import { FaTrashAlt } from 'react-icons/fa'
 import useVacacionesIdd from '@/client/hooks/rrhhmaster/vacaciones/useVacacionesId'
 import useVacacionesIddShare from '@/client/hooks/share/vacaciones/useVacacionesIdShare'
 
+
 const SolicitudNew = () => {
-    const _pathGoToBack = '/ade/solicitudes'
+    const _pathGoToBack = '/aca/solicitudes'
     const { dataDB, 
             handleChange, 
             handleSave,
@@ -65,6 +66,7 @@ const SolicitudNew = () => {
                                                         </span>
                                                     </label>
                                                     <input  placeholder='Fecha final' 
+                                                                
                                                                 type="date" 
                                                                 onChange={handleChange}
                                                                 name='fecha_final' 
