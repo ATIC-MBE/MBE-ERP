@@ -1,0 +1,13 @@
+MBE-ERP/appfichaje/mbeApi/src/api/business
+
+GrupoPropietarioBusiness.ts
+InfoPisoComercialBusiness.ts
+
+--------------------------------------------
+
+MBE-ERP/appfichaje/mbeApi/src/api/models
+
+IGrupoPropietario.ts
+IInfoPisoComercial.ts
+
+
