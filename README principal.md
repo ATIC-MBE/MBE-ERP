@@ -46,10 +46,10 @@ MBE-ERP/
 │   │
 │   ├── mbeapp/                         **APP DE FICHAJE**
 │   │   ├── modules/                    //funciones, controladores, servicios, etc.
-│   │   │   ├── credentials/            //
-│   │   │   ├── data/                   //
-│   │   │   ├── js/                     //
-│   │   │   └── services/               //
+│   │   │   ├── credentials/            //Credenciales o llaves que el proyecto necesita: certificados, archivos JSON con claves de servicio, tokens...
+│   │   │   ├── data/                   //datos de la aplicación: por ejemplo, archivos JSON, CSV, BD en formato local
+│   │   │   ├── js/                     //código JavaScript del lado del cliente
+│   │   │   └── services/               //Módulos de lógica de servicios que se encargan de tareas: Centraliza configuración de la API, keys, autenticación
 │   │   ├── public/                     //Archivos estáticos que se sirven tal cual al navegador: imágenes, CSS, JS del lado cliente, fuentes...
 │   │   │   ├── img/                    //
 │   │   │   └── js/                     //
