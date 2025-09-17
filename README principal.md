@@ -17,7 +17,7 @@ MBE-ERP/
 │   │   ├── public/                      //imagen, logos...
 │   │   │   └── img/
 │   │   ├── src/
-│   │   │   ├── api/
+│   │   │   ├── api/                    //Carpeta donde se definen las rutas de API (endpoints) de la aplicación.
 │   │   │   │   ├── business/
 │   │   │   │   ├── data/
 │   │   │   │   ├── helpers/
@@ -25,7 +25,7 @@ MBE-ERP/
 │   │   │   │   ├── modelsextra/
 │   │   │   │   ├── pages/
 │   │   │   │   └── types/
-│   │   │   ├── pages/
+│   │   │   ├── pages/                  //páginas del frontend
 │   │   │   │   └── api/
 │   │   │   └── styles/
 │   │   │   └── db.ts                   //Archivo TypeScript que centraliza la conexión a la base de datos.
