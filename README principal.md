@@ -40,26 +40,29 @@ MBE-ERP/
 │   │   └── next.config.js              //Configuración Next.js (redirecciones, variables públicas, imágenes remotas...)
 │   │   └── package-lock.json           //Versión de las dependencia
 │   │   └── postcss.config.js           //Configuración de PostCSS, normalmente para procesar CSS (Tailwind, autoprefixer, etc.).
-
-
-
+│   │
+│   │
+│   │
 │   │
 │   ├── mbeapp/                         **APP DE FICHAJE**
-│   │   ├── modules/
-│   │   │   ├── credentials/
-│   │   │   ├── data/
-│   │   │   ├── js/
-│   │   │   └── services/
-│   │   ├── public/
-│   │   │   ├── img/
-│   │   │   └── js/
+│   │   ├── modules/                    //
+│   │   │   ├── credentials/            //
+│   │   │   ├── data/                   //
+│   │   │   ├── js/                     //
+│   │   │   └── services/               //
+│   │   ├── public/                     //
+│   │   │   ├── img/                    //
+│   │   │   └── js/                     //
 │   │   ├── views/                      **Páginas del fichaje**
-│   │   │   ├── layouts/
-│   │   │   └── (varias .handlebars)
-│   │   ├── logs/
-│   │   ├── app.js
-│   │   ├── package.json
-│   │   └── .env
+│   │   │   ├── layouts/                //
+│   │   │   └── (varias .handlebars)    //
+│   │   ├── logs/                       //
+│   │   ├── app.js                      //
+│   │   ├── package.json                //
+│   │   └── .env                        //
+│   │
+│   │
+│   │
 │   │
 │   ├── mbeappClient/                   **ERP**
 │   │   ├── @types/
