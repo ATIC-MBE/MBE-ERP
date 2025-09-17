@@ -13,8 +13,8 @@ MBE-ERP/
 │   │
 │   ├── mbeApi/                         **API DEL PROYECTO**
 │   │   ├── @types/
-│   │   ├── logs/
-│   │   ├── public/
+│   │   ├── logs/                        //registro errores, accesos...
+│   │   ├── public/                      //imagen, logos...
 │   │   │   └── img/
 │   │   ├── src/
 │   │   │   ├── api/
@@ -28,10 +28,20 @@ MBE-ERP/
 │   │   │   ├── pages/
 │   │   │   │   └── api/
 │   │   │   └── styles/
-│   │   ├── .env
-│   │   ├── Dockerfile
-│   │   ├── package.json
+│   │   ├── .env                        //acceso BBDD
+│   │   ├── .dockerignore               //archivos o carpetas se excluyen al crear la imagen de Docker
+│   │   ├── package.json                
 │   │   └── tsconfig.json
+        └── .gitignore                  //archivos/carpetas que Git debe ignorar
+        └── Dockerfile                  //Pasos para construir la imagen Docker de la app (inst. dependencias, compilar, exponer puerto...). En el servidor
+        └── fly.toml
+        └── next.config.js              //Configuración Next.js (redirecciones, variables públicas, imágenes remotas...)
+        └── package-lock.json           //Versión de las dependencia
+        └── package.json                //Lista de dependencias, scripts(npm run dev...), metadatos del proyecto.
+        └── postcss.config.js           //Configuración de PostCSS, normalmente para procesar CSS (Tailwind, autoprefixer, etc.).
+        └── tsconfig.json               //Configuración del compilador TypeScript: paths, strict mode, target de JS, etc.
+
+
 │   │
 │   ├── mbeapp/                         **APP DE FICHAJE**
 │   │   ├── modules/
