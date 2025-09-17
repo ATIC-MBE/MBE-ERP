@@ -69,11 +69,11 @@ export default class UserService {
 
     async getById(id: BigInt, path: string, handleError?: RequestErrorHandler): Promise<user | undefined> {
         try {
-              let _result = await getRequest(`${path}${id}`)
-              if ( !_result ) return undefined
-              return _result.data.data as user
+            let _result = await getRequest(`${path}${id}`)
+            if ( !_result ) return undefined
+            return _result.data.data as user
         } catch(err) {
-              console.log('Error al retornar datos DB!')
+            console.log('Error al retornar datos DB!')
         }
         return undefined
     }

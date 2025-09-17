@@ -140,7 +140,7 @@ export const Layout = (props: JSONObject) => {
             <Head>
                 <title>MBE</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-                <link rel="shortcut icon" href="/img/ico/LogoS.png" />
+                <link rel="shortcut icon" href="/img/ico/MBE_symbol.png" />
             </Head>
 
             <Disclosure as="nav" className="bg-gray-900 h-[15vh] lg:h-[15vh] h-[10vh] p-3 static top-0 c-bg-secondary">
