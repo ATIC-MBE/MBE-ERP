@@ -12,7 +12,7 @@ MBE-ERP/
 │   ├── logs/
 │   │
 │   ├── mbeApi/                         **API DEL PROYECTO**
-│   │   ├── @types/
+│   │   ├── @types/                      //definiciones de tipos TypeScript personalizadas
 │   │   ├── logs/                        //registro errores, accesos...
 │   │   ├── public/                      //imagen, logos...
 │   │   │   └── img/
@@ -28,6 +28,8 @@ MBE-ERP/
 │   │   │   ├── pages/
 │   │   │   │   └── api/
 │   │   │   └── styles/
+│   │   │   └── db.ts                   //Archivo TypeScript que centraliza la conexión a la base de datos.
+│   │   │
 │   │   ├── .env                        //acceso BBDD
 │   │   ├── .dockerignore               //archivos o carpetas se excluyen al crear la imagen de Docker
 │   │   ├── package.json                //Lista de dependencias, scripts(npm run dev...), metadatos del proyecto.
