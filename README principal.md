@@ -8,7 +8,7 @@ MBE-ERP/
 │
 ├── appfichaje/
 │   ├── database-setup-fichaje.sql
-│   ├── ecosystem.config.js            **Ejecuta los tres programas necesarios: frontend, backend, BBDD**
+│   ├── ecosystem.config.js            //Ejecuta los tres programas necesarios: frontend, backend, BBDD
 │   ├── logs/
 │   │
 │   ├── mbeApi/                         **API DEL PROYECTO**
@@ -30,16 +30,14 @@ MBE-ERP/
 │   │   │   └── styles/
 │   │   ├── .env                        //acceso BBDD
 │   │   ├── .dockerignore               //archivos o carpetas se excluyen al crear la imagen de Docker
-│   │   ├── package.json                
-│   │   └── tsconfig.json
+│   │   ├── package.json                //Lista de dependencias, scripts(npm run dev...), metadatos del proyecto.
+│   │   └── tsconfig.json               //Configuración del compilador TypeScript: paths, strict mode, target de JS, etc.
         └── .gitignore                  //archivos/carpetas que Git debe ignorar
         └── Dockerfile                  //Pasos para construir la imagen Docker de la app (inst. dependencias, compilar, exponer puerto...). En el servidor
-        └── fly.toml
+        └── fly.toml                    //Configuración para despliegue en Fly.io: nombre de la app, regiones, puertos, etc.
         └── next.config.js              //Configuración Next.js (redirecciones, variables públicas, imágenes remotas...)
         └── package-lock.json           //Versión de las dependencia
-        └── package.json                //Lista de dependencias, scripts(npm run dev...), metadatos del proyecto.
         └── postcss.config.js           //Configuración de PostCSS, normalmente para procesar CSS (Tailwind, autoprefixer, etc.).
-        └── tsconfig.json               //Configuración del compilador TypeScript: paths, strict mode, target de JS, etc.
 
 
 │   │
