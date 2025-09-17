@@ -18,13 +18,13 @@ MBE-ERP/
 │   │   │   └── img/
 │   │   ├── src/
 │   │   │   ├── api/                    //Carpeta donde se definen las rutas de API (endpoints) de la aplicación.
-│   │   │   │   ├── business/
-│   │   │   │   ├── data/
-│   │   │   │   ├── helpers/
-│   │   │   │   ├── models/
-│   │   │   │   ├── modelsextra/
-│   │   │   │   ├── pages/
-│   │   │   │   └── types/
+│   │   │   │   ├── business/           //Clases o servicios que aplican reglas propias del dominio de la app (validaciones, cálculos, flujos).
+│   │   │   │   ├── data/               //Funciones o clases que se conectan a la base de datos: consultas SQL, ORMs (Prisma, TypeORM, etc.).
+│   │   │   │   ├── helpers/            //Funciones pequeñas y reutilizables (formatear fechas, generar tokens, validar correos, etc.).
+│   │   │   │   ├── models/             //Interfaces o clases TypeScript que describen las entidades de la base de datos (por ejemplo IUser, IContact, etc.).
+│   │   │   │   ├── modelsextra/        //
+│   │   │   │   ├── pages/              //Archivos .ts que exportan funciones (req/res) para manejar rutas como /api/usuarios...
+│   │   │   │   └── types/              //Archivos *.d.ts o .ts con definiciones de tipos que se usan en varias capas,
 │   │   │   ├── pages/                  //páginas del frontend
 │   │   │   │   └── api/
 │   │   │   └── styles/
@@ -40,6 +40,7 @@ MBE-ERP/
 │   │   └── next.config.js              //Configuración Next.js (redirecciones, variables públicas, imágenes remotas...)
 │   │   └── package-lock.json           //Versión de las dependencia
 │   │   └── postcss.config.js           //Configuración de PostCSS, normalmente para procesar CSS (Tailwind, autoprefixer, etc.).
+
 
 
 │   │
