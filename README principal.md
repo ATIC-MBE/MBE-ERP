@@ -45,21 +45,26 @@ MBE-ERP/
 │   │
 │   │
 │   ├── mbeapp/                         **APP DE FICHAJE**
-│   │   ├── modules/                    //
+│   │   ├── modules/                    //funciones, controladores, servicios, etc.
 │   │   │   ├── credentials/            //
 │   │   │   ├── data/                   //
 │   │   │   ├── js/                     //
 │   │   │   └── services/               //
-│   │   ├── public/                     //
+│   │   ├── public/                     //Archivos estáticos que se sirven tal cual al navegador: imágenes, CSS, JS del lado cliente, fuentes...
 │   │   │   ├── img/                    //
 │   │   │   └── js/                     //
 │   │   ├── views/                      **Páginas del fichaje**
 │   │   │   ├── layouts/                //
 │   │   │   └── (varias .handlebars)    //
-│   │   ├── logs/                       //
-│   │   ├── app.js                      //
-│   │   ├── package.json                //
-│   │   └── .env                        //
+│   │   ├── logs/                       //registro errores, accesos...
+│   │   ├── app.js                      //Punto de entrada principal de la aplicación (configuración del servidor, rutas, middlewares).
+│   │   ├── app_backup.js               //Copia de seguridad del app.js
+│   │   ├── package-lock.json           //Versión de las dependencia
+│   │   ├── package.json                //Lista de dependencias, scripts(npm run dev...), metadatos del proyecto.
+│   │   ├── .env                        //define puertos y URLs de servicios externos (TCP y API REST) para distintos entornos (desarrollo/producción).
+│   │   ├── .dockerignore               //archivos o carpetas se excluyen al crear la imagen de Docker
+│   │   ├── .gitignore                  //archivos/carpetas que Git debe ignorar
+
 │   │
 │   │
 │   │
