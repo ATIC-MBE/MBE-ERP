@@ -27,21 +27,21 @@ class UserDataAccess implements IDataAccess<IUser> {
             const queryData = {
                   name: 'get-users',
                   text: `SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                         usu.telefono, usu.nombre_completo,
-                         (CASE
+                        usu.telefono, usu.nombre_completo,
+                        (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
-                         END) AS roles
-                         FROM ${Constants.tbl_usuario_sql} usu
-                         LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
+                        END) AS roles
+                        FROM ${Constants.tbl_usuario_sql} usu
+                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
                                     FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
                                     JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
                                     JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
                                     ) srol on (srol.idusuario = usu.id)
-                         WHERE usu.estado >= $1 AND usu.estado IS NOT NULL
-                         GROUP BY usu.id
-                         ORDER BY usu.nombre, usu.apellido ASC
-                         `,
+                        WHERE usu.estado >= $1 AND usu.estado IS NOT NULL
+                        GROUP BY usu.id
+                        ORDER BY usu.nombre, usu.apellido ASC
+                        `,
                   values: [this.filterStatus]
             }
 
@@ -139,8 +139,6 @@ class UserDataAccess implements IDataAccess<IUser> {
             return lData as Array<IUser>
       }
 
-
-
       /**
        * NO TOCAR METHODO
        * @param id 
@@ -222,7 +220,6 @@ class UserDataAccess implements IDataAccess<IUser> {
                         let respTmp = (await client.query(queryData)).rows as Array<IUser | IErrorResponse>
                         if ((respTmp[0] as IErrorResponse).error) lData = respTmp as Array<IErrorResponse>
                   }
-
                   return lData
             })
 
@@ -255,19 +252,10 @@ class UserDataAccess implements IDataAccess<IUser> {
             return lData[0]
       }
 
-
-
-
-
-
-
-
-
       // METODOS DE RECURSOS HUMANOS
 
       /**NO TOCAR ESTA POR REVISAR Y VER SI SE IMPLEMENTA LOS METODO PARA RECURSOS HUMANOS */
       async getAllRRHH(): Promise<Array<IUser> | IErrorResponse> {
-
             const queryData = {
                   name: 'get-usuarios-RRHH',
                   text: `SELECT us.* , ur.correo_personal , ur.jornada
@@ -289,9 +277,7 @@ class UserDataAccess implements IDataAccess<IUser> {
                         ) as us
                         LEFT JOIN ${Constants.tbl_usuario_rrhh_sql} ur ON us.id = ur.id
                         ORDER BY us.estado DESC, us.username ASC`,
-
                   values: [this.filterStatus]
-
             }
 
 
@@ -897,14 +883,14 @@ class UserDataAccess implements IDataAccess<IUser> {
             const queryData = {
                   name: 'get-users',
                   text: `SELECT u.id, u.ref_lead, u.nombre, u.apellido, u.email, u.estado, u.username, u.telefono, u.nombre_completo, u.ref_lead 
-                         FROM ${Constants.tbl_usuario_x_rol_sql} us
-                         JOIN ${Constants.tbl_usuario_sql} u on (u.id = us.idusuario)
-                         WHERE us.idrol LIKE $1 AND 
-                         u.estado >= $2 AND 
-                         u.estado IS NOT NULL AND
-                         (u.telefono LIKE $3 OR $3 = '') AND
-                         ( UNACCENT(lower(u.nombre_completo)) LIKE UNACCENT(lower($4)) OR $4 = '')
-                         ORDER BY u.nombre, u.apellido ASC`,
+                        FROM ${Constants.tbl_usuario_x_rol_sql} us
+                        JOIN ${Constants.tbl_usuario_sql} u on (u.id = us.idusuario)
+                        WHERE us.idrol LIKE $1 AND 
+                        u.estado >= $2 AND 
+                        u.estado IS NOT NULL AND
+                        (u.telefono LIKE $3 OR $3 = '') AND
+                        ( UNACCENT(lower(u.nombre_completo)) LIKE UNACCENT(lower($4)) OR $4 = '')
+                        ORDER BY u.nombre, u.apellido ASC`,
                   values: [
                         idrole,
                         this.filterStatus,
