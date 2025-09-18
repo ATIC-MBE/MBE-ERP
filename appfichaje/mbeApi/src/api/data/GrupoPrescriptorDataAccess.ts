@@ -14,10 +14,10 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
     public client: DbConnection
 
     constructor( 
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean, 
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean, 
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -34,8 +34,7 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
 
         const queryData  = {
             name: 'get-grupo-prescriptor',
-            text: ` 
-                    SELECT gp.*
+            text: ` SELECT gp.*
                     FROM (
                         SELECT gp.id,
                         gp.nombre,
@@ -70,9 +69,9 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                     ORDER BY gp.next_step_order ASC, gp.nombre ASC
                     `,
             values: [
-                        this.filterStatus,
-                        _search_all === '' ? '' : `%${_search_all}%`
-                    ]
+                    this.filterStatus,
+                    _search_all === '' ? '' : `%${_search_all}%`
+            ]
         }
 
         let lData: Array<IGrupoPrescriptor | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IGrupoPrescriptor | IErrorResponse>
@@ -85,8 +84,7 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
     async getById(id: BigInt): Promise<IGrupoPrescriptor | IErrorResponse> {
         const queryData = {
             name: 'get-grupo-prescriptor-x-id',
-            text: `
-                    SELECT gp.*,
+            text: `SELECT gp.*,
                     (CASE
                             WHEN count(gup.*) > 0 THEN jsonb_agg(json_build_object('id', gup.id, 
                                                                                 'nombre_completo', trim(gup.nombre_completo),
@@ -108,7 +106,7 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                     WHERE gp.id = $1 AND gp.estado >= $2 AND gp.estado IS NOT NULL
                     GROUP BY gp.id
                     ORDER BY gp.nombre ASC
-                   `,
+                    `,
             values: [ id, this.filterStatus ]
         }
 
@@ -139,7 +137,7 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
             // Get grupo a editar
             let queryData  = {
                 name: 'get-group-by-id',
-                text: ` SELECT gp.*
+                text: `SELECT gp.*
                         FROM ${Constants.tbl_grupo_prescriptor_dn_sql} gp
                         WHERE gp.id = $1 LIMIT 1
                         `,
@@ -180,16 +178,16 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                         acceso_intranet = $9
                         WHERE id = $10 RETURNING *`,
                 values: [   data.nombre!, 
-                            data.whatsapp!,
-                            _total_nro_visitas,
-                            _total_nro_reservas,
-                            _valor,
-                            timeStampCurrent,
-                            _total_valor_prop,
-                            data.next_step,
-                            data.acceso_intranet,
-                            id
-                        ]
+                        data.whatsapp!,
+                        _total_nro_visitas,
+                        _total_nro_reservas,
+                        _valor,
+                        timeStampCurrent,
+                        _total_valor_prop,
+                        data.next_step,
+                        data.acceso_intranet,
+                        id
+                ]
             }
             await client.query(queryDataUpdateGP)
             
@@ -197,33 +195,34 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
             let queryInsertSuceso = {
                 name: 'insert-suceso-prescriptor-dn',
                 text: `INSERT INTO ${Constants.tbl_suceso_prescriptor_dn_sql} (
-                            comentario,
-                            data,
-                            fecha_creacion, 
-                            idusuario,
-                            idgrupo,
-                            nro_visitas,
-                            nro_reservas,
-                            valor,
-                            flag_vr,
-                            ref_suceso,
-                            valor_propietario,
-                            next_step
-                            )
+                        comentario,
+                        data,
+                        fecha_creacion, 
+                        idusuario,
+                        idgrupo,
+                        nro_visitas,
+                        nro_reservas,
+                        valor,
+                        flag_vr,
+                        ref_suceso,
+                        valor_propietario,
+                        next_step
+                        )
                         VALUES( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
-                values: [   data.comentario_suceso, 
-                            _dataDB || {},
-                            timeStampCurrent, 
-                            this.idUserLogin, 
-                            id,
-                            data.nro_visitas!,
-                            data.nro_reservas!,
-                            _valor,
-                            _flagVR.toUpperCase(),
-                            _uuidSuceso,
-                            data.valor_propietario,
-                            data.next_step
-                        ]
+                values: [
+                        data.comentario_suceso, 
+                        _dataDB || {},
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        id,
+                        data.nro_visitas!,
+                        data.nro_reservas!,
+                        _valor,
+                        _flagVR.toUpperCase(),
+                        _uuidSuceso,
+                        data.valor_propietario,
+                        data.next_step
+                ]
             }
 
             await client.query(queryInsertSuceso)
@@ -242,13 +241,14 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                                 empresa = $4,
                                 idcategoria =$5
                                 WHERE id = $6 RETURNING *`,
-                        values: [   data.prescriptores![_i].nombre_completo, 
-                                    data.prescriptores![_i].telefono,
-                                    data.prescriptores![_i].email,
-                                    data.prescriptores![_i].empresa,
-                                    data.prescriptores![_i].idcategoria,
-                                    data.prescriptores![_i].id 
-                                ]
+                        values: [
+                                data.prescriptores![_i].nombre_completo, 
+                                data.prescriptores![_i].telefono,
+                                data.prescriptores![_i].email,
+                                data.prescriptores![_i].empresa,
+                                data.prescriptores![_i].idcategoria,
+                                data.prescriptores![_i].id 
+                        ]
                     }
                     await client.query(queryUpdateUserData)
                 }
@@ -289,12 +289,12 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                                     idusuario_ult_cambio = $4
                                     WHERE id = $5 RETURNING *`,
                             values: [
-                                        1,
-                                        timeStampCurrent,
-                                        timeStampCurrent,
-                                        this.idUserLogin,
-                                        _dataLead.id
-                                    ]
+                                    1,
+                                    timeStampCurrent,
+                                    timeStampCurrent,
+                                    this.idUserLogin,
+                                    _dataLead.id
+                            ]
                         }
                         await client.query(queryUpdateLeadData)
 
@@ -328,7 +328,6 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                         }
                         _dataHistoryLead = (await client.query(queryGetHistorialLead)).rows as Array<IHistoricoLead>
 
-
                         // Comparar PENDIENTE
                         if ( _dataHistorySuceso.length !== 0 ) {
                             //let _dataRefHistory = (_dataHistorySuceso.map(el => el.ref_historico_lead?.trim())) || []
@@ -343,21 +342,21 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                             const queryDataHL = {
                                 name: 'insert-history-lead',
                                 text: `INSERT INTO ${Constants.tbl_historico_lead_dn_sql} ( 
-                                    fecha_creacion,
-                                    next_step,
-                                    last_step,
-                                    data,
-                                    interesa,
-                                    avance,
-                                    ocupacion,
-                                    estatus,
-                                    comentario,
-                                    idlead,
-                                    idusuario_resp,
-                                    tipo_accion,
-                                    categoria,
-                                    ref_suceso
-                                    ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
+                                        fecha_creacion,
+                                        next_step,
+                                        last_step,
+                                        data,
+                                        interesa,
+                                        avance,
+                                        ocupacion,
+                                        estatus,
+                                        comentario,
+                                        idlead,
+                                        idusuario_resp,
+                                        tipo_accion,
+                                        categoria,
+                                        ref_suceso
+                                        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
                                 values: [
                                         _dataHistorySuceso[i].fecha_creacion,
                                         _dataLead.next_step,
@@ -449,14 +448,15 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                         next_step = $5,
                         acceso_intranet = $6
                         WHERE id = $7 RETURNING *`,
-                values: [   `${data.nombre!}_old_${timeStampCurrent}`, 
-                            data.whatsapp!,
-                            -1,
-                            timeStampCurrent,
-                            data.next_step,
-                            data.acceso_intranet,
-                            id
-                        ]
+                values: [
+                        `${data.nombre!}_old_${timeStampCurrent}`, 
+                        data.whatsapp!,
+                        -1,
+                        timeStampCurrent,
+                        data.next_step,
+                        data.acceso_intranet,
+                        id
+                ]
             }
             await client.query(queryDataUpdateGP)
             
@@ -464,32 +464,33 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
             let queryInsertSuceso = {
                 name: 'insert-suceso-prescriptor-dn',
                 text: `INSERT INTO ${Constants.tbl_suceso_prescriptor_dn_sql} (
-                            comentario,
-                            data,
-                            fecha_creacion, 
-                            idusuario,
-                            idgrupo,
-                            nro_visitas,
-                            nro_reservas,
-                            valor,
-                            flag_vr,
-                            ref_suceso,
-                            valor_propietario,
-                            next_step)
+                        comentario,
+                        data,
+                        fecha_creacion, 
+                        idusuario,
+                        idgrupo,
+                        nro_visitas,
+                        nro_reservas,
+                        valor,
+                        flag_vr,
+                        ref_suceso,
+                        valor_propietario,
+                        next_step)
                         VALUES( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
-                values: [   data.comentario_suceso, 
-                            _dataDB || {},
-                            timeStampCurrent, 
-                            this.idUserLogin, 
-                            id,
-                            _total_nro_visitas,
-                            _total_nro_reservas,
-                            _valor,
-                            _flagVR,
-                            _uuidSuceso,
-                            _total_valor_prop,
-                            data.next_step
-                        ]
+                values: [
+                        data.comentario_suceso, 
+                        _dataDB || {},
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        id,
+                        _total_nro_visitas,
+                        _total_nro_reservas,
+                        _valor,
+                        _flagVR,
+                        _uuidSuceso,
+                        _total_valor_prop,
+                        data.next_step
+                ]
             }
 
             await client.query(queryInsertSuceso)
@@ -508,13 +509,14 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                                 empresa = $4,
                                 idcategoria =$5
                                 WHERE id = $6 RETURNING *`,
-                        values: [   data.prescriptores![_i].nombre_completo, 
-                                    data.prescriptores![_i].telefono,
-                                    data.prescriptores![_i].email,
-                                    data.prescriptores![_i].empresa,
-                                    data.prescriptores![_i].idcategoria,
-                                    data.prescriptores![_i].id 
-                                ]
+                        values: [   
+                                data.prescriptores![_i].nombre_completo, 
+                                data.prescriptores![_i].telefono,
+                                data.prescriptores![_i].email,
+                                data.prescriptores![_i].empresa,
+                                data.prescriptores![_i].idcategoria,
+                                data.prescriptores![_i].id 
+                        ]
                     }
                     await client.query(queryUpdateUserData)
                 }
@@ -555,12 +557,12 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                                     idusuario_ult_cambio = $4
                                     WHERE id = $5 RETURNING *`,
                             values: [
-                                        1,
-                                        timeStampCurrent,
-                                        timeStampCurrent,
-                                        this.idUserLogin,
-                                        _dataLead.id
-                                    ]
+                                    1,
+                                    timeStampCurrent,
+                                    timeStampCurrent,
+                                    this.idUserLogin,
+                                    _dataLead.id
+                            ]
                         }
                         await client.query(queryUpdateLeadData)
 
@@ -606,21 +608,21 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                             const queryDataHL = {
                                 name: 'insert-history-lead',
                                 text: `INSERT INTO ${Constants.tbl_historico_lead_dn_sql} ( 
-                                    fecha_creacion,
-                                    next_step,
-                                    last_step,
-                                    data,
-                                    interesa,
-                                    avance,
-                                    ocupacion,
-                                    estatus,
-                                    comentario,
-                                    idlead,
-                                    idusuario_resp,
-                                    tipo_accion,
-                                    categoria,
-                                    ref_suceso
-                                    ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
+                                        fecha_creacion,
+                                        next_step,
+                                        last_step,
+                                        data,
+                                        interesa,
+                                        avance,
+                                        ocupacion,
+                                        estatus,
+                                        comentario,
+                                        idlead,
+                                        idusuario_resp,
+                                        tipo_accion,
+                                        categoria,
+                                        ref_suceso
+                                        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
                                 values: [
                                         _dataHistorySuceso[i].fecha_creacion,
                                         _dataLead.next_step,
@@ -754,11 +756,11 @@ class GrupoPrescriptorDataAccess implements IDataAccess<IGrupoPrescriptor> {
                     LIMIT $3 OFFSET $4
                     `,
             values: [
-                        1,
-                        search_all === '' ? '' : `%${search_all}%`,
-                        limit,
-                        offset,
-                    ]
+                    1,
+                    search_all === '' ? '' : `%${search_all}%`,
+                    limit,
+                    offset,
+            ]
         }
 
         let lData: Array<IGrupoPrescriptor | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IGrupoPrescriptor | IErrorResponse>

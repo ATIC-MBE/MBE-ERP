@@ -13,10 +13,10 @@ class DeviceReportDataAccess implements IDataAccess<IDeviceReport> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -27,7 +27,7 @@ class DeviceReportDataAccess implements IDataAccess<IDeviceReport> {
     async get(): Promise<Array<IDeviceReport> | IErrorResponse> {
         const queryData  = {
                 name: 'get-reporte-devices',
-                text: ` SELECT rd.*
+                text: `SELECT rd.*
                         FROM ${Constants.tbl_reporte_atic_sql} rd
                         ORDER BY rd.id DESC
                         `,
@@ -72,8 +72,8 @@ class DeviceReportDataAccess implements IDataAccess<IDeviceReport> {
                         )
                         VALUES($1,$2) RETURNING *`,
                 values: [   timeStampCurrent, 
-                            data.tipo
-                        ]
+                        data.tipo
+                ]
             }
             let lData = (await client.query(queryData)).rows as Array<IDeviceReport | IErrorResponse>
             let reportDB = lData[0]
@@ -94,12 +94,12 @@ class DeviceReportDataAccess implements IDataAccess<IDeviceReport> {
                                 )
                                 VALUES($1,$2,$3,$4,$5) RETURNING *`,
                         values: [ 
-                                    idDataDB,
-                                    data.ldetalle![i].id_piso,
-                                    data.ldetalle![i].id_device, 
-                                    data.ldetalle![i].state,
-                                    timeStampCurrent
-                                ]
+                                idDataDB,
+                                data.ldetalle![i].id_piso,
+                                data.ldetalle![i].id_device, 
+                                data.ldetalle![i].state,
+                                timeStampCurrent
+                        ]
                     }
                     let respTmp = (await client.query(queryData)).rows as Array<IDeviceReportDetails | IErrorResponse>
                     if ( (respTmp[0] as IErrorResponse).error ) {
@@ -140,11 +140,11 @@ class DeviceReportDataAccess implements IDataAccess<IDeviceReport> {
                     LIMIT $3 OFFSET $4
                     `,
             values: [
-                        filter_m_start,
-                        filter_m_end,
-                        limit,
-                        offset
-                    ]
+                    filter_m_start,
+                    filter_m_end,
+                    limit,
+                    offset
+            ]
         }
 
         let lData: Array<IDeviceReport | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IDeviceReport | IErrorResponse>
@@ -162,7 +162,7 @@ class DeviceReportDataAccess implements IDataAccess<IDeviceReport> {
     async getLastReport(): Promise<IDeviceReport | IErrorResponse> {
         const queryData  = {
                 name: 'get-last-report',
-                text: ` SELECT rd.*,
+                text: `SELECT rd.*,
                         REPLACE(REPLACE(REPLACE(REPLACE(to_char( rd.fecha, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS onlydate
                         FROM ${Constants.tbl_reporte_atic_sql} rd
                         ORDER BY rd.id DESC

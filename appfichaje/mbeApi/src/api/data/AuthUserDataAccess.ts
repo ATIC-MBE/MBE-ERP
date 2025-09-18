@@ -16,22 +16,22 @@ class AuthUserDataAccess {
             const queryData = {
                   name: 'auth-user',
                   text: `SELECT usu.id, usu.nombre, usu.apellido, usu.email, 
-                         usu.estado, usu.username, usu.nombre_completo, 
-                         usu.department, usu.multilogin,
-                         (CASE
+                        usu.estado, usu.username, usu.nombre_completo, 
+                        usu.department, usu.multilogin,
+                        (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre, 'ismain', srol.ismain))
                               WHEN count(srol.*) = 0 THEN '[]'
-                         END) AS roles
-                         FROM tbl_usuario usu
-                         LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre, uxr.ismain
+                        END) AS roles
+                        FROM tbl_usuario usu
+                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre, uxr.ismain
                                     FROM tbl_usuario_x_rol uxr 
                                     JOIN tbl_rol r on (r.id = uxr.idrol)
                                     JOIN tbl_usuario usu on (usu.id = uxr.idusuario)
                                     WHERE lower(usu.email) LIKE lower($1) OR lower(usu.username) LIKE lower($1)
                                     ORDER BY ismain DESC
                                     ) srol on (srol.idusuario = usu.id)
-                         WHERE (lower(usu.email) LIKE lower($1) OR lower(usu.username) LIKE lower($1)) AND usu.password LIKE $2
-                         GROUP BY usu.id`,
+                        WHERE (lower(usu.email) LIKE lower($1) OR lower(usu.username) LIKE lower($1)) AND usu.password LIKE $2
+                        GROUP BY usu.id`,
                   values: [email.trim(), password]
             }
 
@@ -56,12 +56,13 @@ class AuthUserDataAccess {
                         fecha_ultimo_cambio = $2, 
                         idusuario = $3
                         WHERE id = $4 AND estado >= $5 RETURNING *`,
-                  values: [   password, 
+                  values: [
+                              password, 
                               timeStampCurrent, 
                               idUserLogin,
                               id,
                               filterStatus
-                        ]
+                  ]
             }
 
             let lData: Array<IAuthUser | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IAuthUser | IErrorResponse>
@@ -86,12 +87,13 @@ class AuthUserDataAccess {
                         fecha_ultimo_cambio = $2, 
                         idusuario = $3
                         WHERE id = $4 AND password LIKE $5 RETURNING *`,
-                  values: [   passwordNew, 
+                  values: [   
+                              passwordNew, 
                               timeStampCurrent, 
                               idUserLogin,
                               id,
                               passwordCurrent
-                        ]
+                  ]
             }
 
             let lData: Array<IAuthUser | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IAuthUser | IErrorResponse>

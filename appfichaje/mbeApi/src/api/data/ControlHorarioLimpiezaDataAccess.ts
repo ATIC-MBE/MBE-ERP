@@ -11,23 +11,23 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<IControlHorarioLimpieza> | IErrorResponse> {
         // Metodo para Marina, usando una serie filtros
         const queryData  = {
-                name: 'get-control-horario-limpieza',
-                text: ` SELECT chl.*
-                        FROM ${Constants.tbl_control_horario_limpieza_sql} chl
-                        WHERE chl.estado >= $1
-                        ORDER BY chl.fecha ASC
-                        `,
-                values: [this.filterStatus]
+            name: 'get-control-horario-limpieza',
+            text: ` SELECT chl.*
+                    FROM ${Constants.tbl_control_horario_limpieza_sql} chl
+                    WHERE chl.estado >= $1
+                    ORDER BY chl.fecha ASC
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -40,23 +40,21 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
     async getById(id: BigInt): Promise<IControlHorarioLimpieza | IErrorResponse> {
         const queryData = {
             name: 'get-apartment-x-id',
-            text: `
-                SELECT chl.id, chl.idpiso, usu.id as idusuario, 
-                usu.nombre_completo as full_name, 
-                p.etiqueta as etiqueta_piso,
-                chl.fecha,
-                chl.observacion,
-                REPLACE(REPLACE(REPLACE(REPLACE(to_char( chl.fecha, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS f_fecha,
-                COALESCE(to_char(chl.entrada, 'YYYY-MM-DD HH24:MI'), '') as entrada,
-                COALESCE(to_char(chl.salida, 'YYYY-MM-DD HH24:MI'), '') as salida,
-                COALESCE(to_char(chl.entrada, 'HH24:MI'), '') as h_entrada,
-                COALESCE(to_char(chl.salida, 'HH24:MI'), '') as h_salida
-                FROM ${Constants.tbl_control_horario_limpieza_sql} chl
-                INNER JOIN ${Constants.tbl_usuario_sql} usu ON (usu.id = chl.idusuario)
-                INNER JOIN ${Constants.tbl_piso_sql} p ON (p.id = chl.idpiso)
-                WHERE chl.estado >= $2 AND 
-                chl.id = $1
-                    `,
+            text: `SELECT chl.id, chl.idpiso, usu.id as idusuario, 
+                    usu.nombre_completo as full_name, 
+                    p.etiqueta as etiqueta_piso,
+                    chl.fecha,
+                    chl.observacion,
+                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( chl.fecha, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS f_fecha,
+                    COALESCE(to_char(chl.entrada, 'YYYY-MM-DD HH24:MI'), '') as entrada,
+                    COALESCE(to_char(chl.salida, 'YYYY-MM-DD HH24:MI'), '') as salida,
+                    COALESCE(to_char(chl.entrada, 'HH24:MI'), '') as h_entrada,
+                    COALESCE(to_char(chl.salida, 'HH24:MI'), '') as h_salida
+                    FROM ${Constants.tbl_control_horario_limpieza_sql} chl
+                    INNER JOIN ${Constants.tbl_usuario_sql} usu ON (usu.id = chl.idusuario)
+                    INNER JOIN ${Constants.tbl_piso_sql} p ON (p.id = chl.idpiso)
+                    WHERE chl.estado >= $2 AND 
+                    chl.id = $1`,
             values: [ id, this.filterStatus ]
         }
 
@@ -82,17 +80,18 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                         observacion,
                         tipo_ejecucion)
                         VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
-                values: [   data.fecha, 
-                            data.entrada, 
-                            data.salida, 
-                            data.idusuario, 
-                            data.idpiso,
-                            this.idUserLogin,
-                            timeStampCurrent,
-                            data.estado,
-                            data.observacion,
-                            'Manual'
-                        ]
+                values: [
+                        data.fecha, 
+                        data.entrada, 
+                        data.salida, 
+                        data.idusuario, 
+                        data.idpiso,
+                        this.idUserLogin,
+                        timeStampCurrent,
+                        data.estado,
+                        data.observacion,
+                        'Manual'
+                ]
             }
             let lData = (await client.query(queryData)).rows as Array<IControlHorarioLimpieza | IErrorResponse>
 
@@ -145,18 +144,19 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             
             const queryData = {
-                    name: 'delete-controlhorario',
-                    text: `UPDATE ${Constants.tbl_control_horario_limpieza_sql} SET
+                name: 'delete-controlhorario',
+                text: `UPDATE ${Constants.tbl_control_horario_limpieza_sql} SET
                         estado = $1,
                         idusuario_ultimo_cambio = $2,
                         fecha_ultimo_cambio = $3
                         WHERE id = $4 AND estado >= $5 RETURNING *`,
-                    values: [   Constants.code_status_delete,
-                                this.idUserLogin,
-                                timeStampCurrent, 
-                                id,
-                                this.filterStatus
-                        ]
+                values: [   
+                        Constants.code_status_delete,
+                        this.idUserLogin,
+                        timeStampCurrent, 
+                        id,
+                        this.filterStatus
+                ]
             }
 
             let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -202,9 +202,9 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                         ORDER BY chl.fecha ASC, chl.entrada ASC
                         `,
                 values: [
-                            this.filterStatus,
-                            this.idUserLogin
-                        ]
+                        this.filterStatus,
+                        this.idUserLogin
+                ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -228,9 +228,9 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                     ORDER BY chl.fecha ASC, chl.entrada ASC
                     `,
             values: [
-                        this.filterStatus,
-                        this.idUserLogin
-                    ]
+                    this.filterStatus,
+                    this.idUserLogin
+            ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -273,9 +273,9 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                     ORDER BY chl.fecha DESC, chl.entrada DESC
                     `,
             values: [
-                        this.idUserLogin,
-                        dateCurrent
-                    ]
+                    this.idUserLogin,
+                    dateCurrent
+            ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -315,12 +315,11 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                     WHERE chl.estado = 1 AND 
                     chl.idusuario = $1 AND
                     chl.fecha = $2
-                    ORDER BY chl.fecha DESC, chl.entrada DESC
-                    `,
+                    ORDER BY chl.fecha DESC, chl.entrada DESC`,
             values: [
-                        idUser,
-                        fecha
-                    ]
+                    idUser,
+                    fecha
+            ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -343,21 +342,21 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
         const queryData = {
             name: 'insert-device',
             text: `INSERT INTO ${Constants.tbl_control_horario_limpieza_sql}(
-                        fecha,
-                        entrada,
-                        idusuario,
-                        idpiso,
-                        idusuario_ultimo_cambio,
-                        fecha_ultimo_cambio
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
+                    fecha,
+                    entrada,
+                    idusuario,
+                    idpiso,
+                    idusuario_ultimo_cambio,
+                    fecha_ultimo_cambio
+                    )
+                    VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
             values: [
-                dateCurrent,
-                timeStampCurrent,
-                this.idUserLogin,
-                data.idpiso,
-                this.idUserLogin,
-                timeStampCurrent
+                    dateCurrent,
+                    timeStampCurrent,
+                    this.idUserLogin,
+                    data.idpiso,
+                    this.idUserLogin,
+                    timeStampCurrent
             ]
         }
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -391,15 +390,15 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                         estado = $9
                         RETURNING *`,
             values: [
-                timeStampCurrent,
-                0,
-                this.idUserLogin,
-                timeStampCurrent,
-                data.id,
-                dateCurrent,
-                this.idUserLogin,
-                data.idpiso,
-                1
+                    timeStampCurrent,
+                    0,
+                    this.idUserLogin,
+                    timeStampCurrent,
+                    data.id,
+                    dateCurrent,
+                    this.idUserLogin,
+                    data.idpiso,
+                    1
             ]
         }
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -443,10 +442,10 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                     ORDER BY ul.nombre_completo
                     `,
             values: [
-                        this.filterStatus,
-                        filter_m_start,
-                        filter_m_end
-                    ]
+                    this.filterStatus,
+                    filter_m_start,
+                    filter_m_end
+            ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -487,10 +486,10 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                     ORDER BY usu.nombre_completo ASC, chl.entrada ASC, p.etiqueta ASC
                     `,
             values: [
-                        filter_iduser,
-                        filter_m_start,
-                        filter_m_end
-                    ]
+                    filter_iduser,
+                    filter_m_start,
+                    filter_m_end
+            ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>
@@ -540,13 +539,13 @@ class ControlHorarioLimpiezaDataAccess implements IDataAccess<IControlHorarioLim
                     LIMIT $4 OFFSET $5
                     `,
             values: [
-                        filter_iduser,
-                        filter_m_start,
-                        filter_m_end,
-                        limit,
-                        offset,
-                        search_all === '' ? '' : `%${search_all}%`
-                    ]
+                    filter_iduser,
+                    filter_m_start,
+                    filter_m_end,
+                    limit,
+                    offset,
+                    search_all === '' ? '' : `%${search_all}%`
+            ]
         }
 
         let lData: Array<IControlHorarioLimpieza | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IControlHorarioLimpieza | IErrorResponse>

@@ -13,10 +13,10 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -68,11 +68,11 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
                         id_piso = $3
                         WHERE id = $4 AND id_reporte = $5 RETURNING *`,
                 values : [
-                    data.state, 
-                    timeStampCurrent,
-                    data.id_piso,
-                    id,
-                    id_reporte
+                        data.state, 
+                        timeStampCurrent,
+                        data.id_piso,
+                        id,
+                        id_reporte
                 ]
             }
 
@@ -86,11 +86,11 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
                             (id_reporte , id_piso , id_device , state , fecha_ultimo_cambio)
                             VALUES ($1,$2,$3,$4,$5) RETURNING *`,
                     values : [
-                        id_reporte,
-                        data.id_piso,
-                        data.id_device,
-                        data.state,
-                        timeStampCurrent
+                            id_reporte,
+                            data.id_piso,
+                            data.id_device,
+                            data.state,
+                            timeStampCurrent
                     ]
                 }
             let lData2 = (await client.query(queryInsert)).rows as Array<IDeviceReportDetails | IErrorResponse>
@@ -121,8 +121,7 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
 
         const queryData  = {
             name: 'get-devices-state-report',
-            text: ` 
-                    SELECT rd.id,
+            text: `SELECT rd.id,
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char( rd.fecha, 'DD/mon/YYYY HH24:MI:SS'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha,
                     rd.tipo
                     FROM ${Constants.tbl_reporte_atic_sql} rd
@@ -131,11 +130,11 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
                     LIMIT $3 OFFSET $4
                     `,
             values: [
-                        filter_m_start,
-                        filter_m_end,
-                        limit,
-                        offset
-                    ]
+                    filter_m_start,
+                    filter_m_end,
+                    limit,
+                    offset
+            ]
         }
 
         let lData: Array<IDeviceReport | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IDeviceReport | IErrorResponse>
@@ -155,8 +154,7 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
         
         const queryData  = {
             name: 'get-details-report-by-idreport',
-            text: ` 
-                    SELECT rdd.*
+            text: `SELECT rdd.*
                     FROM ${Constants.tbl_detalle_reporte_atic_sql} rdd
                     INNER JOIN ${Constants.tbl_piso_sql} p on p.id = rdd.id_piso AND p.estado = 1
                     INNER JOIN ${Constants.tbl_dispositivo_sql} d ON d.id = rdd.id_device AND d.estado = 1
@@ -166,10 +164,10 @@ class DeviceReportDetailsDataAccess implements IDataAccess<IDeviceReportDetails>
                     ORDER BY rdd.id
                     `,
             values: [
-                        idReport,
-                        _lTypesDevicesCodes,
-                        _lTypesDevicesCodes.length
-                    ]
+                    idReport,
+                    _lTypesDevicesCodes,
+                    _lTypesDevicesCodes.length
+            ]
         }
 
         let lData: Array<IDeviceReportDetails | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IDeviceReportDetails | IErrorResponse>

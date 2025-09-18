@@ -11,10 +11,10 @@ class SucesoPrescriptorDataAccess implements IDataAccess<ISucesoPrescriptor> {
     public client: DbConnection
 
     constructor( 
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean, 
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean, 
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 

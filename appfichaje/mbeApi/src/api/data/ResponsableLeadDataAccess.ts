@@ -10,10 +10,10 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -34,11 +34,8 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
                         `,
                 values: [this.filterStatus]
         }
-
         let lData: Array<IResponsableLead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IResponsableLead | IErrorResponse>
-        
         if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse
-
         return lData as Array<IResponsableLead>
     }
 
@@ -56,9 +53,7 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
                         ORDER BY id ASC`,
                 values: [id, this.filterStatus]
         }
-
         let lData: Array<IResponsableLead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IResponsableLead | IErrorResponse>
-
         return lData[0]
     }
 
@@ -79,9 +74,7 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
                             data.tipo_lead
                     ]
         }
-
         let lData: Array<IResponsableLead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IResponsableLead | IErrorResponse>
-
         return lData[0]
     }
 
@@ -106,9 +99,7 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
                             this.filterStatus
                     ]
         }
-
         let lData: Array<IResponsableLead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IResponsableLead | IErrorResponse>
-
         return lData[0]
     }
 
@@ -126,8 +117,7 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
 
         const queryData  = {
             name: 'get-perfiles-DN',
-            text: ` 
-                    SELECT rl.*, (CASE
+            text: ` SELECT rl.*, (CASE
                         WHEN count(usu.*) > 0 THEN usu.nombre_completo
                         ELSE 'Todos'
                     END) AS responsable,
@@ -153,11 +143,8 @@ class ResponsableLeadDataAccess implements IDataAccess<IResponsableLead> {
                         offset
                     ]
         }
-
         let lData: Array<IResponsableLead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IResponsableLead | IErrorResponse>
-        
         if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse
-
         return lData as Array<IResponsableLead>
     }
 }

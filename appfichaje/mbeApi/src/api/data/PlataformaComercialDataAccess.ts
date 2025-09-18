@@ -9,22 +9,22 @@ class PlataformaComercialDataAccess implements IDataAccess<IPlataformaComercial>
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<IPlataformaComercial> | IErrorResponse> {
         const queryData  = {
-                name: 'get-plataforma-comercial',
-                text: ` SELECT pc.*
-                        FROM ${Constants.tbl_plataforma_comercial_rmg_sql} pc
-                        WHERE pc.estado >= $1
-                        ORDER BY pc.nombre asc
-                        `,
-                values: [this.filterStatus]
+            name: 'get-plataforma-comercial',
+            text: ` SELECT pc.*
+                    FROM ${Constants.tbl_plataforma_comercial_rmg_sql} pc
+                    WHERE pc.estado >= $1
+                    ORDER BY pc.nombre asc
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<IPlataformaComercial | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IPlataformaComercial | IErrorResponse>

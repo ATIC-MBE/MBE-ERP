@@ -9,22 +9,22 @@ class TipoAvanceDataAccess implements IDataAccess<ITipoAvance> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<ITipoAvance> | IErrorResponse> {
         const queryData  = {
-                name: 'get-tipo-avance',
-                text: ` SELECT ta.*
-                        FROM ${Constants.tbl_tipo_avance_dn_sql} ta
-                        WHERE ta.estado >= $1
-                        ORDER BY ta.codigo asc
-                        `,
-                values: [this.filterStatus]
+            name: 'get-tipo-avance',
+            text: ` SELECT ta.*
+                    FROM ${Constants.tbl_tipo_avance_dn_sql} ta
+                    WHERE ta.estado >= $1
+                    ORDER BY ta.codigo asc
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<ITipoAvance | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ITipoAvance | IErrorResponse>

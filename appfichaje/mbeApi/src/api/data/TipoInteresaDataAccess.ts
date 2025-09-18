@@ -9,22 +9,22 @@ class TipoInteresaDataAccess implements IDataAccess<ITipoInteresa> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+            public idUserLogin: BigInt,
+            public filterStatus: StatusDataType,
+            public isTransactions: boolean,
+            public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<ITipoInteresa> | IErrorResponse> {
         const queryData  = {
-                name: 'get-tipo-interesa',
-                text: ` SELECT ti.*
-                        FROM ${Constants.tbl_tipo_interesa_dn_sql} ti
-                        WHERE ti.estado >= $1
-                        ORDER BY ti.codigo asc
-                        `,
-                values: [this.filterStatus]
+            name: 'get-tipo-interesa',
+            text: ` SELECT ti.*
+                    FROM ${Constants.tbl_tipo_interesa_dn_sql} ti
+                    WHERE ti.estado >= $1
+                    ORDER BY ti.codigo asc
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<ITipoInteresa | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ITipoInteresa | IErrorResponse>

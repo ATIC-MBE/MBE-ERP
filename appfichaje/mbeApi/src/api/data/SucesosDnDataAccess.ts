@@ -42,11 +42,11 @@ class SucesosDnDataAccess implements IDataAccess<ISucesosDn> {
             let queryData = {
                 name: 'insert-suceso-dn',
                 text: `INSERT INTO ${Constants.tbl_suceso_dn_sql}(
-                            descripcion, 
-                            fecha_creacion, 
-                            idusu_suceso,
-                            idrol,
-                            idusu_creacion)
+                        descripcion, 
+                        fecha_creacion, 
+                        idusu_suceso,
+                        idrol,
+                        idusu_creacion)
                         VALUES($1,$2,$3,$4,$5) RETURNING *`,
                 values: [   _data.descripcion, 
                             timeStampCurrent, 

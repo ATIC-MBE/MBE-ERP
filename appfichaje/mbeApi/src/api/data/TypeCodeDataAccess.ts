@@ -9,21 +9,21 @@ class TypeCodeDataAccess implements IDataAccess<ITypeCode> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<ITypeCode> | IErrorResponse> {
         const queryData  = {
-                name: 'get-types_code',
-                text: ` SELECT *
-                        FROM ${Constants.tbl_tipo_codigo_sql}
-                        WHERE estado = 1
-                        `,
-                values: []
+            name: 'get-types_code',
+            text: ` SELECT *
+                    FROM ${Constants.tbl_tipo_codigo_sql}
+                    WHERE estado = 1
+                    `,
+            values: []
         }
 
         let lData: Array<ITypeCode | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ITypeCode | IErrorResponse>
@@ -35,12 +35,12 @@ class TypeCodeDataAccess implements IDataAccess<ITypeCode> {
 
     async getById(id: BigInt): Promise<ITypeCode | IErrorResponse> {
         const queryData = {
-                name: 'get-types_code-x-id',
-                text: `SELECT tc.* 
-                        FROM ${Constants.tbl_tipo_codigo_sql} tc
-                        WHERE tc.id = $1 AND tc.estado = 1 
-                        ORDER BY id ASC`,
-                values: [id]
+            name: 'get-types_code-x-id',
+            text: `SELECT tc.* 
+                    FROM ${Constants.tbl_tipo_codigo_sql} tc
+                    WHERE tc.id = $1 AND tc.estado = 1 
+                    ORDER BY id ASC`,
+            values: [id]
         }
 
         let lData: Array<ITypeCode | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ITypeCode | IErrorResponse>

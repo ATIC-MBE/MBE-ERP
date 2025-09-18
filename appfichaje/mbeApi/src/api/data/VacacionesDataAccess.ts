@@ -35,19 +35,15 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
             text: `SELECT sv.id , sv.idusuario, usu.nombre_completo, sv.estado,
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char( sv.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char( sv.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
-                                (
-                            CASE 
-                                when sv.estado = 0 THEN 'En espera'
-                                when sv.estado = 1 THEN 'Aprobada'
-                                when sv.estado = 2 THEN 'Rechazada' 
-                            END
-                            ) as estado
-                            FROM tbl_solicitud_vacaciones sv
-                            LEFT JOIN tbl_usuario usu ON usu.id = sv.idusuario
-                            WHERE sv.fecha_inicio BETWEEN $1 AND $2
-                            ORDER BY sv.estado ASC
-
-                    `,
+                        (CASE 
+                            when sv.estado = 0 THEN 'En espera'
+                            when sv.estado = 1 THEN 'Aprobada'
+                            when sv.estado = 2 THEN 'Rechazada' 
+                        END) as estado
+                    FROM tbl_solicitud_vacaciones sv
+                    LEFT JOIN tbl_usuario usu ON usu.id = sv.idusuario
+                    WHERE sv.fecha_inicio BETWEEN $1 AND $2
+                    ORDER BY sv.estado ASC`,
             values : [
                 filter_m_start,
                 filter_m_end
@@ -77,21 +73,18 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
             text: `
                     SELECT sr.id , sr.idusuario, usu.nombre_completo,
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
- 					REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
-                    (
-                    CASE 
+                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
+                    (CASE 
                         when sr.estado_solicitud = 0 THEN 'En espera'
                         when sr.estado_solicitud = 1 THEN 'Aprobada'
                         when sr.estado_solicitud = 2 THEN 'Rechazada' 
-                    END
-                    ) as estado_solicitud
+                    END) as estado_solicitud
                     FROM tbl_solicitud_rrhh sr
                     INNER JOIN tbl_usuario usu ON usu.id = sr.idusuario
                     WHERE sr.fecha_inicio BETWEEN $1 AND $2
                     AND sr.estado = 1 AND
-                    (
-                    UNACCENT(lower( replace(trim(usu.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
-                    UNACCENT(lower( replace(trim(
+                        (UNACCENT(lower( replace(trim(usu.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
+                        UNACCENT(lower( replace(trim(
                                                     (
                                                         CASE 
                                                         when sr.estado_solicitud = 0 THEN 'En espera'
@@ -99,12 +92,10 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                                                         when sr.estado_solicitud = 2 THEN 'Rechazada' 
                                                         END
                                                     )
-                                                        ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
-                    $3 = ''  
-                    )
+                        ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
+                        $3 = '')
                     ORDER BY sr.estado_solicitud ASC, sr.fecha_inicio  asc
                     LIMIT $4 OFFSET $5
-
                     `,
             values : [
                 filter_m_start,
@@ -327,6 +318,6 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         let lData: Array<IVacaciones | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IVacaciones | IErrorResponse>
 
         return lData[0]   
-     }
+    }
 }
 export default VacacionesDataAccess

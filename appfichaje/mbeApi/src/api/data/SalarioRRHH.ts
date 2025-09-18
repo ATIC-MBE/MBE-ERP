@@ -40,9 +40,6 @@ class SalarioDataAccess implements IDataAccess<ISalario>{
         throw new Error("Method not implemented.")
     }
 
-
-
-
     /////////// LATES ////////////////
 
     async getLate(): Promise <Array<ILate> | IErrorResponse>{
