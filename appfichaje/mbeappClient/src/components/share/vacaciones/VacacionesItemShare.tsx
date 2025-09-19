@@ -23,8 +23,6 @@ const VacacionesItemShare = ({ item, pathEdit } :
             
         } = useVacacionesItem(item, pathEdit)
 
-  
-
     return (
         <div className={`w-full h-auto`}>
             <div
@@ -58,7 +56,6 @@ const VacacionesItemShare = ({ item, pathEdit } :
                     <div onClick={() => goEditData(itemContent.id!)} className='icon-table-row grid justify-center rounded-full w-[1.8rem] h-[1.6rem] card-action'>
                         <BsPencilFill className='mt-1' title='Editar' />
                     </div>
-                   
                 </div>
             </div>
         </div>

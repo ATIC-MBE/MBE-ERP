@@ -263,6 +263,11 @@ export const menu_rrhh: Array<MenuLeftType> = [
     { key: 'rrhh_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/rrhh/solicitudes', codeIcon: 'solicitudes' },
 ];
 
+export const menu_atic_master: Array<MenuLeftType> = [
+	{ key: 'atic_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aticmaster', codeIcon: 'home' },
+	{ key: 'atic_solicitudes', isActive: false, propID: 'Solicitudes', order: 2, menuPath: '/aticmaster/solicitudes', codeIcon: 'solicitudes' },
+];
+
 export const menu_atic: Array<MenuLeftType> = [
 	{ key: 'atic_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/atic', codeIcon: 'home' },
 	{ key: 'atic_solicitudes', isActive: false, propID: 'Solicitudes', order: 2, menuPath: '/atic/solicitudes', codeIcon: 'solicitudes' },

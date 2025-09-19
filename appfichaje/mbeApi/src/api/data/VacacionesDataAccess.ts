@@ -70,8 +70,7 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
 
         const queryData = {
             name : 'get-vacaciones',
-            text: `
-                    SELECT sr.id , sr.idusuario, usu.nombre_completo,
+            text: `SELECT sr.id , sr.idusuario, usu.nombre_completo,
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
                     (CASE 
@@ -95,8 +94,7 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                         ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
                         $3 = '')
                     ORDER BY sr.estado_solicitud ASC, sr.fecha_inicio  asc
-                    LIMIT $4 OFFSET $5
-                    `,
+                    LIMIT $4 OFFSET $5`,
             values : [
                 filter_m_start,
                 filter_m_end,
@@ -120,9 +118,9 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         const queryData = {
             name : 'get-vacaciones-x-id',
             text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final ,sv.fecha_creacion, sv.estado_solicitud
-            FROM ${Constants.tbl_solicitud_rrhh_sql} sv
-            INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
-            WHERE sv.id = $1`,
+                    FROM ${Constants.tbl_solicitud_rrhh_sql} sv
+                    INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
+                    WHERE sv.id = $1`,
             values : [
                 id
             ]
@@ -139,18 +137,18 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                 const queryData = {
                     name : 'get-vacaciones-x-id',
                     text: `SELECT sv.id, sv.idusuario, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final ,sv.fecha_creacion,
-                    (
-                    CASE 
-                        when sv.estado_solicitud = 0 THEN 'En espera'
-                        when sv.estado_solicitud = 1 THEN 'Aprobada'
-                        when sv.estado_solicitud = 2 THEN 'Rechazada' 
-                    END
-                    ) as estado_solicitud
-                    FROM ${Constants.tbl_solicitud_rrhh_sql} sv
-                    INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
-                    WHERE sv.idusuario = $1 AND sv.estado = 1`,
+                            (
+                            CASE 
+                                when sv.estado_solicitud = 0 THEN 'En espera'
+                                when sv.estado_solicitud = 1 THEN 'Aprobada'
+                                when sv.estado_solicitud = 2 THEN 'Rechazada' 
+                            END
+                            ) as estado_solicitud
+                            FROM ${Constants.tbl_solicitud_rrhh_sql} sv
+                            INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
+                            WHERE sv.idusuario = $1 AND sv.estado = 1`,
                     values : [
-                    this.idUserLogin
+                            this.idUserLogin
                     ]
                 }
 
@@ -168,11 +166,11 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         const queryData = {
             name : 'get-vacaciones-x-id',
             text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final
-            FROM ${Constants.tbl_solicitud_rrhh_sql} sv
-            INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
-            WHERE sv.id = $1`,
+                    FROM ${Constants.tbl_solicitud_rrhh_sql} sv
+                    INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
+                    WHERE sv.id = $1`,
             values : [
-                id
+                    id
             ]
         }
 
@@ -191,25 +189,25 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
             const queryData = {
                 name : 'insert-solicitud-vacaciones',
                 text: `INSERT INTO ${Constants.tbl_solicitud_rrhh_sql}(
-                    idusuario,
-                    fecha_inicio,
-                    fecha_final,
-                    estado,
-                    fecha_ultimo_cambio,
-                    descripcion,
-                    fecha_creacion,
-                    estado_solicitud
-                )
-                VALUES ($1,$2,$3,$4,$5, $6,$7 ,$8) RETURNING *`,
+                            idusuario,
+                            fecha_inicio,
+                            fecha_final,
+                            estado,
+                            fecha_ultimo_cambio,
+                            descripcion,
+                            fecha_creacion,
+                            estado_solicitud
+                        )
+                        VALUES ($1,$2,$3,$4,$5, $6,$7 ,$8) RETURNING *`,
                 values : [
-                    this.idUserLogin,
-                    data.fecha_inicio,
-                    data.fecha_final,
-                    this.filterStatus,
-                    timeStampCurrent,
-                    data.descripcion,
-                    timeStampCurrent,
-                    0
+                        this.idUserLogin,
+                        data.fecha_inicio,
+                        data.fecha_final,
+                        this.filterStatus,
+                        timeStampCurrent,
+                        data.descripcion,
+                        timeStampCurrent,
+                        0
                 ]
             }
 
@@ -230,25 +228,23 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
 
             let queryData = {
                 name : 'update-solicitud-vacaciones',
-                text: `
-                    UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
-                    fecha_inicio = $1, 
-                    fecha_final = $2,
-                    fecha_ultimo_cambio = $3,
-                    idrrhh = $4,
-                    descripcion = $5,
-                    estado_solicitud = $6
-                    WHERE id = $7
-                    RETURNING *
-                `,
+                text: `UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
+                        fecha_inicio = $1, 
+                        fecha_final = $2,
+                        fecha_ultimo_cambio = $3,
+                        idrrhh = $4,
+                        descripcion = $5,
+                        estado_solicitud = $6
+                        WHERE id = $7
+                        RETURNING *`,
                 values : [
-                    data.fecha_inicio,
-                    data.fecha_final,
-                    timeStampCurrent,
-                    this.idUserLogin,
-                    data.descripcion,
-                    data.estado_solicitud,
-                    id
+                        data.fecha_inicio,
+                        data.fecha_final,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        data.descripcion,
+                        data.estado_solicitud,
+                        id
                 ]
             }
 
@@ -269,20 +265,18 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
 
             let queryData = {
                 name : 'update-solicitud-vacaciones',
-                text: `
-                    UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
-                    fecha_inicio = $1, 
-                    fecha_final = $2,
-                    fecha_ultimo_cambio = $3,
-                    descripcion = $4
-                    WHERE id = $5
-                    RETURNING *
-                `,
+                text: `UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
+                        fecha_inicio = $1, 
+                        fecha_final = $2,
+                        fecha_ultimo_cambio = $3,
+                        descripcion = $4
+                        WHERE id = $5
+                        RETURNING *`,
                 values : [
-                    data.fecha_inicio,
-                    data.fecha_final,
-                    timeStampCurrent,
-                    data.descripcion,
+                        data.fecha_inicio,
+                        data.fecha_final,
+                        timeStampCurrent,
+                        data.descripcion,
                     id
                 ]
             }
@@ -301,17 +295,17 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
 
         const queryData = {
             name : 'delete-solicitud-vacaciones',
-            text: ` UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
+            text: `UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
                     estado = $1,
                     fecha_ultimo_cambio = $2,
                     idrrhh = $3
                     WHERE id = $4 RETURNING *`,
 
             values : [
-                Constants.code_status_delete,
-                timeStampCurrent,
-                this.idUserLogin,
-                id
+                    Constants.code_status_delete,
+                    timeStampCurrent,
+                    this.idUserLogin,
+                    id
             ]
         }
 
