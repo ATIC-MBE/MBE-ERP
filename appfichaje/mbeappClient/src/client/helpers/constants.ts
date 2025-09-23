@@ -130,24 +130,24 @@ export const acceso_directos: Record<string, AccesoDirecto[]> = {
 		{ orden: 3, label: 'JORGE', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-68821fe9fd248191bc7d9419c5ec6dd1-jorge' }
 	],
 	atic: [
-		{ orden: 1, label: 'Gantt', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
-		{ orden: 2, label: 'Claves & Contactos', codeIcon: 'contactos', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 4, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 5, label: 'Trello', codeIcon: 'contactos', link: 'https://trello.com/b/s1bNvxqx/2atic-mbe' }, // pon aquí tu link
-		{ orden: 6, label: 'Guía', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1HYQXh6aB0ehNmPTM8BcNj1XLgn98Ih0D/edit' }, // pon aquí tu link
-		{ orden: 7, label: 'JUAN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-6882163412e881918a994800750a9a16-juan' },
-		{ orden: 8, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
-		{ orden: 3, label: 'Proyectos ATIC', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1B6ibT-KnmCmRUXxlc63lInB-lZceU2PCdKwOMBvj8ts/edit?gid=0#gid=0' } // pon aquí tu link
+		{ orden: 1, label: 'Claves & Contactos', codeIcon: 'telefono', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 2, label: 'Documento vacaciones', codeIcon: 'file_user', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 3, label: 'Gantt', codeIcon: 'time', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
+		{ orden: 4, label: 'Guía', codeIcon: 'file_protected', link: 'https://docs.google.com/document/d/1HYQXh6aB0ehNmPTM8BcNj1XLgn98Ih0D/edit' }, // pon aquí tu link
+		{ orden: 5, label: 'JUAN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-6882163412e881918a994800750a9a16-juan' },
+		{ orden: 6, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 7, label: 'Proyectos ATIC', codeIcon: 'r_grafica', link: 'https://docs.google.com/spreadsheets/d/1B6ibT-KnmCmRUXxlc63lInB-lZceU2PCdKwOMBvj8ts/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 8, label: 'Trello', codeIcon: 'message_two', link: 'https://trello.com/b/s1bNvxqx/2atic-mbe' } // pon aquí tu link
 	],
 	aticmaster: [
-		{ orden: 1, label: 'Gantt', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
-		{ orden: 2, label: 'Claves & Contactos', codeIcon: 'contactos', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 4, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' }, // pon aquí tu link
-		{ orden: 5, label: 'Trello', codeIcon: 'contactos', link: 'https://trello.com/b/s1bNvxqx/2atic-mbe' }, // pon aquí tu link
-		{ orden: 6, label: 'Guía', codeIcon: 'contactos', link: 'https://docs.google.com/document/d/1HYQXh6aB0ehNmPTM8BcNj1XLgn98Ih0D/edit' }, // pon aquí tu link
-		{ orden: 7, label: 'JUAN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-6882163412e881918a994800750a9a16-juan' },
-		{ orden: 8, label: 'Documento vacaciones', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
-		{ orden: 3, label: 'Proyectos ATIC', codeIcon: 'tareas', link: 'https://docs.google.com/spreadsheets/d/1B6ibT-KnmCmRUXxlc63lInB-lZceU2PCdKwOMBvj8ts/edit?gid=0#gid=0' } // pon aquí tu link
+		{ orden: 1, label: 'Claves & Contactos', codeIcon: 'telefono', link: 'https://docs.google.com/spreadsheets/d/18sAXYbiglkx1fdG52O1RP2bSyUFWuLL6O8vC4pkZpnU/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 2, label: 'Documento vacaciones', codeIcon: 'file_user', link: 'https://docs.google.com/spreadsheets/d/1zkUYa2EIJ1Ll5Sz8QMHr97-mYpHF7NWnNCoa2Oxd4iU/edit?gid=276018956#gid=276018956' }, // pon aquí tu link
+		{ orden: 3, label: 'Gantt', codeIcon: 'time', link: 'https://docs.google.com/spreadsheets/d/1D1o3il-OINA1qW8Sgs45FrmWYg2fLJ4g4A_UfoqeVE4/edit?pli=1&gid=1115838130#gid=1115838130' }, // pon aquí tu link
+		{ orden: 4, label: 'Guía', codeIcon: 'file_protected', link: 'https://docs.google.com/document/d/1HYQXh6aB0ehNmPTM8BcNj1XLgn98Ih0D/edit' }, // pon aquí tu link
+		{ orden: 5, label: 'JUAN', codeIcon: 'bot', link: 'https://chatgpt.com/g/g-6882163412e881918a994800750a9a16-juan' },
+		{ orden: 6, label: 'P1N', codeIcon: 'alerta', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 7, label: 'Proyectos ATIC', codeIcon: 'r_grafica', link: 'https://docs.google.com/spreadsheets/d/1B6ibT-KnmCmRUXxlc63lInB-lZceU2PCdKwOMBvj8ts/edit?gid=0#gid=0' }, // pon aquí tu link
+		{ orden: 8, label: 'Trello', codeIcon: 'message_two', link: 'https://trello.com/b/s1bNvxqx/2atic-mbe' } // pon aquí tu link
 	],
 	aca: [
 	{ orden: 1, label: 'PINS', codeIcon: 'exclamacion', link: 'https://docs.google.com/spreadsheets/d/1CwzkZejBDcQ8sOCHDWEj9k9cZbYI2PjZGYSpxLHaE1Y/edit?gid=0#gid=0' },
