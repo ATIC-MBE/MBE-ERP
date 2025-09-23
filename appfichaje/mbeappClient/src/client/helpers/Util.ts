@@ -5,6 +5,9 @@ import { JSONObject, RequestCallback, RequestErrorHandler, rolenum } from '../ty
 import { PATH } from "./Path";
 import { useRouter } from 'next/router'
 
+// Configurar axios para incluir cookies en todas las peticiones
+axios.defaults.withCredentials = true;
+
 export const classNames = (...classes: Array<string>) => classes.filter(Boolean).join(' ')
 
 export const getRequest = async (path: string, errorHandler?: RequestErrorHandler) => {

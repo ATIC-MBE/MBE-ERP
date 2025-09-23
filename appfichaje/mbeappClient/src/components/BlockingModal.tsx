@@ -58,7 +58,7 @@ const BlockingModal = ({
           )}
           <button
             onClick={onConfirm}
-            className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl transition hover:bg-[#c9ac7e] hover:text-[#3e7f82]"
+            className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl transition hover:bg-[#004050] hover:!text-white"
           >
             OK
           </button>

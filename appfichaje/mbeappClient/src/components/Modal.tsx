@@ -17,7 +17,7 @@ const Modal = ({ children, title, isOpen, acceptHandler, cancelHandler }:ModalPr
                             {
                                 acceptHandler || cancelHandler ? 
                                 <div className="w-full flex space-x-3 justify-center">
-                                    {acceptHandler && <button className='p-2 hover:text-white text-primary border border-primary rounded-full hover:bg-secondary hover:text-primary' onClick={acceptHandler}>Aceptar</button>}
+                                    {acceptHandler && <button className='p-2 hover:text-white text-primary border border-primary rounded-full hover:bg-secondary' onClick={acceptHandler}>Aceptar</button>}
                                     {cancelHandler && <button className='p-2 hover:text-white text-orange-600 border border-[#ed7233] rounded-full hover:bg-[#ed7233]' onClick={cancelHandler}>Cancelar</button>}
                                 </div>
                                 :

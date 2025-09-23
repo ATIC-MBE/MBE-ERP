@@ -5,7 +5,7 @@ const Util = () => {
       const Constants = () => {
             // const URL_SERVER = "https://tcpmch2022.fly.dev/"
             //const URL_SERVER = "http://tcpmch-env.eba-5tfqg8e4.eu-west-1.elasticbeanstalk.com/"
-            // const URL_SERVER = "http://localhost:3002/"
+            // const URL_SERVER = "http://185.252.233.57:3002/"
             //  const URL_SERVER = "https://tcpmch.fly.dev/"
             args = process.argv.slice(2)
             const URL_SERVER = args[0] == "dev" ? process.env.TCP_DEV : process.env.TCP_PROD
@@ -64,6 +64,18 @@ const Util = () => {
             const typeDevice_Router = 'router'
             const typeDevice_Sonoff = 'sonoff'
 
+            // Menu constants for departments
+            const menu_atic = {
+                  notifications: true,
+                  showModals: true,
+                  department: "ATIC"
+            }
+            const menu_myd = {
+                  notifications: true,
+                  showModals: true,
+                  department: "MYD"
+            }
+
             return {    STATUS_ACTION_CORRECTO,
                         STATUS_ACTION_FALLIDO,
                         URL_SERVER, 
@@ -100,7 +112,9 @@ const Util = () => {
                         typeDevice_Telefonillo,
                         typeDevice_Movil,
                         typeDevice_Router,
-                        typeDevice_Sonoff
+                        typeDevice_Sonoff,
+                        menu_atic,
+                        menu_myd
                   }
       }
 

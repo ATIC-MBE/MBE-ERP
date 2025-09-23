@@ -1,0 +1,264 @@
+/* Estilos personalizados para el calendario */
+.calendar-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+/* Personalizar colores del calendario */
+.rbc-calendar {
+  background: white;
+  border-radius: 8px;
+}
+
+.rbc-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 12px 8px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.rbc-month-view {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rbc-day-bg {
+  border-right: 1px solid #e9ecef;
+}
+
+.rbc-day-bg:hover {
+  background-color: #f8f9fa;
+}
+
+.rbc-off-range-bg {
+  background-color: #f8f9fa;
+}
+
+.rbc-today {
+  background-color: #e3f2fd !important;
+}
+
+/* Eventos */
+.rbc-event {
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.rbc-event:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.rbc-event-label {
+  display: none;
+}
+
+.rbc-event-content {
+  font-weight: 500;
+}
+
+/* Botones de navegación */
+.rbc-btn-group button {
+  background-color: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  margin-right: 4px;
+  transition: all 0.2s ease;
+}
+
+.rbc-btn-group button:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.rbc-btn-group button.rbc-active {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.rbc-btn-group button.rbc-active:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+/* Toolbar */
+.rbc-toolbar {
+  background-color: #f8f9fa;
+  padding: 16px;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rbc-toolbar-label {
+  font-size: 24px;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 16px;
+}
+
+/* Vista de agenda */
+.rbc-agenda-view {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.rbc-agenda-view table {
+  width: 100%;
+}
+
+.rbc-agenda-date-cell {
+  background-color: #f8f9fa;
+  padding: 12px;
+  font-weight: 600;
+  border-right: 1px solid #dee2e6;
+  width: 120px;
+}
+
+.rbc-agenda-time-cell {
+  background-color: #f8f9fa;
+  padding: 12px;
+  font-weight: 500;
+  border-right: 1px solid #dee2e6;
+  width: 100px;
+  text-align: center;
+}
+
+.rbc-agenda-event-cell {
+  padding: 12px;
+}
+
+/* Vista de semana/día */
+.rbc-time-view {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.rbc-time-header {
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+}
+
+.rbc-time-content {
+  background-color: white;
+}
+
+.rbc-timeslot-group {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.rbc-time-slot {
+  border-top: 1px solid #f1f3f4;
+}
+
+.rbc-current-time-indicator {
+  background-color: #dc3545;
+  height: 2px;
+  z-index: 10;
+}
+
+/* Popup de más eventos */
+.rbc-overlay {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 1000;
+}
+
+.rbc-overlay-header {
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  margin: -8px -8px 8px -8px;
+  border-bottom: 1px solid #dee2e6;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rbc-toolbar {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rbc-toolbar-label {
+    margin: 8px 0;
+    font-size: 20px;
+  }
+
+  .rbc-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .rbc-btn-group button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .calendar-container {
+    font-size: 14px;
+  }
+
+  .rbc-event {
+    font-size: 11px;
+    padding: 2px 4px;
+  }
+}
+
+/* Estilos para estados de carga */
+.calendar-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.calendar-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Indicadores de departamento */
+.department-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.department-admin { background-color: #dc3545; }
+.department-aca { background-color: #fd7e14; }
+.department-atic { background-color: #20c997; }
+.department-rrhh { background-color: #007bff; }
+.department-ceo { background-color: #6c757d; }
+.department-ade { background-color: #28a745; }
+.department-myd { background-color: #ffc107; }
+.department-propietario { background-color: #17a2b8; }

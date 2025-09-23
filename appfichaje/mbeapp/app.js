@@ -327,15 +327,24 @@ app.get("/", auth, (req, res) => {
 })
 
 /**
+ * EndPoint: Ruta para redirigir a página departamental MYD
+ */
+app.get("/myd", auth, checkRole(["myd", "mydmaster"]), async (req, res) => {
+    // Redirigir al cliente Next.js en puerto 3000 (o puerto configurado)
+    const clientUrl = process.env.CLIENT_URL || 'http://185.252.233.57:3000';
+    res.redirect(`${clientUrl}/myd`);
+})
+
+/**
  * EndPoint: Metodo para controlar la gestión de dispositivos de la oficina
  * OLD: "Admin", "Limpieza", "Oficina", "Root"
  */
-app.get("/sender", auth, checkRole(["admin", 
-                                    "aca", "acamaster", 
-                                    "superadmin", 
-                                    "atic", "aticmaster", 
+app.get("/sender", auth, checkRole(["admin",
+                                    "aca", "acamaster",
+                                    "superadmin",
+                                    "atic", "aticmaster",
                                     "rrhh", "rrhhmaster",
-                                    "ceo", 
+                                    "ceo",
                                     "ade", "ademaster",
                                     "myd", "mydmaster"]), async (req, res) => {
     const { URL_SERVER: urlServer, deviceOficina } = Constants();
@@ -1117,7 +1126,7 @@ app.delete("/api/share/app/mch/fichar/:id", async (req, res) => {
         }
         
         // Call the external API to delete the fichaje
-        const externalApiUrl = `${process.env.MCH_API_ENDPOINT || 'http://localhost:3006'}/api/rrhh/fichajeoficina/${fichajeId}`;
+        const externalApiUrl = `${process.env.MCH_API_ENDPOINT || 'http://185.252.233.57:3006'}/api/rrhh/fichajeoficina/${fichajeId}`;
         
         console.log('Calling external delete API:', externalApiUrl);
         console.log('Token:', token);
@@ -1176,7 +1185,7 @@ app.get("/test-checkin", async (req, res) => {
         console.log('Got real token:', realToken)
         
         // Step 2: Use the real token to call the check-in API
-        const apiEndpoint = process.env.API_ENDPOINT || 'http://localhost:3000';
+        const apiEndpoint = process.env.API_ENDPOINT || 'http://185.252.233.57:3000';
         const apiUrl = `${apiEndpoint}/api/share/app/mch/fichar`;
         console.log('API Endpoint:', apiUrl);
         
@@ -1249,7 +1258,7 @@ app.get("/fichar", auth, checkRole([    "admin",
     if (_tokenQR && user) {
         try {
             console.log('Making direct API call for QR check-in:', user, _tokenQR)
-            const apiEndpoint = process.env.API_ENDPOINT || 'http://localhost:3000';
+            const apiEndpoint = process.env.API_ENDPOINT || 'http://185.252.233.57:3000';
             const apiUrl = `${apiEndpoint}/api/share/app/mch/fichar`;
             console.log('API Endpoint:', apiUrl)
             

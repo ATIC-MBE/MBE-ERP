@@ -16,12 +16,13 @@ const RRHH = () => {
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
+        { title: 'Atención', message: 'Leer mensajes.' },
         { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // puedes añadir tantos objetos como quieras
     ];
     // Cuando montamos la página, aseguramos que el modal aparece
     useEffect(() => {
-        const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
+        const seen = JSON.parse(localStorage.getItem('rrhh_modals_seen') || 'null');
         if (Array.isArray(seen) && seen.length === modals.length) {
             // todos marcados como vistos
             setCurrentModalIndex(modals.length);
@@ -31,11 +32,21 @@ const RRHH = () => {
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto
-        // const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || '[]');
+        // const seen = JSON.parse(localStorage.getItem('rrhh_modals_seen') || '[]');
         // seen.push(currentModalIndex);
-        // localStorage.setItem('atic_modals_seen', JSON.stringify(seen));
+        // localStorage.setItem('rrhh_modals_seen', JSON.stringify(seen));
 
         setCurrentModalIndex(next);
+
+        // Si hemos cerrado el último modal (Examen diario), activar tareas diarias
+        if (next >= modals.length) {
+            // Disparar evento para mostrar tareas diarias después de un breve delay
+            setTimeout(() => {
+                if (typeof window.showDailyTasksNotification === 'function') {
+                    window.showDailyTasksNotification();
+                }
+            }, 500);
+        }
     };
 
     // Mientras haya un modal pendiente, lo mostramos. Una vez currentModalIndex >= modals.length, desaparece.
