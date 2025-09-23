@@ -26,7 +26,7 @@ const handler = nc(
             let dataDB: IAuthUser | IErrorResponse = await el.authUser(user, password)
             if ( !dataDB ) {
                   // 404 No existe usuario
-                  res.status(204).json({ error: 'user not found' })
+                  res.status(404).json({ error: 'user not found' })
                   return
             } // Si hay error query
             else if ( ({ ...dataDB } as IErrorResponse).error ) {
@@ -40,7 +40,7 @@ const handler = nc(
                   return
             }else if ( (dataDB as IAuthUser).estado === Constants.code_status_delete) {
                   // 404 Usuario existe, pero eliminado
-                  res.status(204).json({ error: 'user delete' })
+                  res.status(404).json({ error: 'user delete' })
                   return
             }
             let { token, exp } = UtilInstance.createToken((dataDB as IAuthUser))

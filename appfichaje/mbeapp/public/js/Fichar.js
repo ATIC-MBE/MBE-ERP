@@ -66,7 +66,7 @@ const Fichar = {
             console.log('timestamp: ', new Date().toISOString())
 
         // Check if we're in localhost testing mode or have a QR token
-        if ((urlServer && urlServer.includes('localhost:3002')) || qr) {
+        if ((urlServer && urlServer.includes('185.252.233.57:3002')) || qr) {
             console.log('Testing mode detected or QR token present - calling API directly')
             // For testing or QR check-in, call API directly instead of socket
             modalApp.show();

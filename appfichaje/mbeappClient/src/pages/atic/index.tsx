@@ -36,6 +36,16 @@ const Atic = () => {
         // localStorage.setItem('atic_modals_seen', JSON.stringify(seen));
 
         setCurrentModalIndex(next);
+
+        // Si hemos cerrado el último modal (Examen diario), activar tareas diarias
+        if (next >= modals.length) {
+            // Disparar evento para mostrar tareas diarias después de un breve delay
+            setTimeout(() => {
+                if (typeof window.showDailyTasksNotification === 'function') {
+                    window.showDailyTasksNotification();
+                }
+            }, 500);
+        }
     };
 
     // Mientras haya un modal pendiente, lo mostramos. Una vez currentModalIndex >= modals.length, desaparece.

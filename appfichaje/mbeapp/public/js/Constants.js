@@ -15,5 +15,17 @@ const Constants = {
 
       CODE_ALERT_CP: "CP", // Control piso
       CODE_ALERT_CC: "CC", // Cambiar codigo
-      CODE_ALERT_LLM: "LLM" // Llave Magnetica
+      CODE_ALERT_LLM: "LLM", // Llave Magnetica
+
+      // Menu constants for departments
+      menu_atic: {
+            notifications: true,
+            showModals: true,
+            department: "ATIC"
+      },
+      menu_myd: {
+            notifications: true,
+            showModals: true,
+            department: "MYD"
+      }
 }

@@ -174,4 +174,24 @@ export type AsociarDevicesToPisoType = {
     etiqueta: string,
     full_direccion: string,
     dispositivos: Array<DeviceType>
-} 
+}
+
+export interface CalendarEvent {
+    id: string;
+    title: string;
+    description?: string;
+    start: {
+        dateTime: string;
+        timeZone?: string;
+    };
+    end: {
+        dateTime: string;
+        timeZone?: string;
+    };
+    location?: string;
+    attendees?: Array<{ email: string; displayName?: string }>;
+    creator?: {
+        email: string;
+        displayName?: string;
+    };
+}

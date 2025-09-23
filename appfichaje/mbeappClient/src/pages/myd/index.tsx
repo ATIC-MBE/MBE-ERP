@@ -1,42 +1,51 @@
-// Update this import to match the actual export from constants, for example:
+import UserContext from '@/client/context/UserContext'
 import { menu_myd } from '@/client/helpers/constants'
-// If the export is named differently, use the correct name.
-// If 'menu_rmg' is not exported, add it to '@/client/helpers/constants'.
 import ContentContainer from '@/components/ContentContainer'
 import HomeContainer from '@/components/HomeContainer'
 import { Layout } from '@/components/Layout'
 import MenuLeftContainer from '@/components/MenuLeftContainer'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import BlockingModal from '@/components/BlockingModal';
 
 const Myd = () => {
     const _itemSelected = 'myd_home'
+    const { userData } = useContext(UserContext)
     const [currentModalIndex, setCurrentModalIndex] = useState(0);
+
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
         { title: 'Atención', message: 'Leer mensajes.' },
         { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
-        // { title: 'Atención', message: 'Ocupados.' },
         // puedes añadir tantos objetos como quieras
     ];
     // Cuando montamos la página, aseguramos que el modal aparece
     useEffect(() => {
-        const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
+        const seen = JSON.parse(localStorage.getItem('myd_modals_seen') || 'null');
         if (Array.isArray(seen) && seen.length === modals.length) {
             // todos marcados como vistos
             setCurrentModalIndex(modals.length);
         }
     }, []);
-    // // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
+    // (Opcional) Si quieres recordar en localStorage y no repetir en nuevas sesiones:
     const handleConfirm = () => {
         const next = currentModalIndex + 1;
         // Guardar que este modal ha sido visto
-        // const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || '[]');
+        // const seen = JSON.parse(localStorage.getItem('myd_modals_seen') || '[]');
         // seen.push(currentModalIndex);
-        // localStorage.setItem('atic_modals_seen', JSON.stringify(seen));
+        // localStorage.setItem('myd_modals_seen', JSON.stringify(seen));
 
         setCurrentModalIndex(next);
+
+        // Si hemos cerrado el último modal (Examen diario), activar tareas diarias
+        if (next >= modals.length) {
+            // Disparar evento para mostrar tareas diarias después de un breve delay
+            setTimeout(() => {
+                if (typeof window.showDailyTasksNotification === 'function') {
+                    window.showDailyTasksNotification();
+                }
+            }, 500);
+        }
     };
 
     // Mientras haya un modal pendiente, lo mostramos. Una vez currentModalIndex >= modals.length, desaparece.
@@ -54,7 +63,8 @@ const Myd = () => {
                             onConfirm={handleConfirm}
                         />
                     )}
-                    <HomeContainer>
+                    <span>&#128526; MYD &#128526;</span>
+                    <HomeContainer data={userData()}>
                     </HomeContainer>
                 </ContentContainer>
             </div>

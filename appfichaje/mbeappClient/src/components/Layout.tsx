@@ -23,12 +23,13 @@ import WebMCH24 from './webMCH24'
 import WEBMCH_22_22 from './WEBMCH_22_22'
 import AgenteIcon from './Iconos/AgenteIcon'
 import PropietarioIcon from './Iconos/PropietarioIcon'
-import { FaBusinessTime, FaCalendarCheck, FaMailchimp } from "react-icons/fa";
+import { FaBusinessTime, FaCalendarCheck, FaMailchimp, FaCalendarAlt } from "react-icons/fa";
 import { GoKey } from "react-icons/go";
 import { AiOutlineClear, AiOutlineContainer, AiOutlineSnippets, AiOutlineTeam } from 'react-icons/ai'
 import { BiDevices } from 'react-icons/bi'
 import { MdMarkunreadMailbox } from 'react-icons/md'
-import ChatBot from './ChatBot'  // ← AGREGAR ESTE IMPORT
+import ChatBot from './ChatBot'
+import DailyTasksNotification from './DailyTasksNotification'
 
 
 const LangDropDown = (props: any) => {
@@ -108,6 +109,8 @@ export const Layout = (props: JSONObject) => {
     const userService = new UserService()
 
     let [userProfile, setUserProfile] = useState<profile>()
+    const [showDailyTasks, setShowDailyTasks] = useState(false)
+    const [hasShownTasks, setHasShownTasks] = useState(false)
 
     const getProfile = async () => {
 
@@ -126,14 +129,32 @@ export const Layout = (props: JSONObject) => {
         const response = await axios.get('/api/auth/logout')
         changeCurrentRol('')
         setUserData('')
+        setHasShownTasks(false)
 
         router.push('/login')
     }
 
     useAllowedEffect(router, () => {
-
         // console.log(userProfile)
     })
+
+    // Función para mostrar tareas diarias (se llamará desde el sistema de notificaciones externo)
+    useEffect(() => {
+        const handleShowDailyTasks = () => {
+            const currentRole = getCurrentRol()
+            if (currentRole && currentRole !== '' && !hasShownTasks) {
+                setShowDailyTasks(true)
+                setHasShownTasks(true)
+            }
+        }
+
+        // Escuchar evento personalizado para mostrar tareas diarias
+        window.addEventListener('showDailyTasks', handleShowDailyTasks)
+
+        return () => {
+            window.removeEventListener('showDailyTasks', handleShowDailyTasks)
+        }
+    }, [getCurrentRol, hasShownTasks])
 
     return (
         <div className='c-h-9 fixed sticky top-0 static navbar-fixed-top'>
@@ -141,6 +162,7 @@ export const Layout = (props: JSONObject) => {
                 <title>MBE</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
                 <link rel="shortcut icon" href="/img/ico/MBE_symbol.png" />
+                <script src="/js/dailyTasksTrigger.js"></script>
             </Head>
 
             <Disclosure as="nav" className="bg-gray-900 h-[15vh] lg:h-[15vh] h-[10vh] p-3 static top-0 c-bg-secondary">
@@ -190,7 +212,12 @@ export const Layout = (props: JSONObject) => {
             </div>
             
             {/* ChatBot flotante - aparece en todas las páginas */}
-            <ChatBot />  {/* ← AGREGAR ESTA LÍNEA AQUÍ */}
+            <ChatBot />
+
+            {/* Notificación de tareas diarias */}
+            {showDailyTasks && (
+                <DailyTasksNotification onClose={() => setShowDailyTasks(false)} />
+            )}
         </div>
     )
 }
@@ -230,6 +257,8 @@ export const PropBox = (props: JSONObject) => {
                 return <FaMailchimp title='Solicitudes' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
             case 'esquema':
                 return <FaBusinessTime title='Esquema' color={isActive?'#738e9eff':'white'} style={{border: 1}} size={35} />
+            case 'calendario':
+                return <FaCalendarAlt title='Calendario' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
             case 'key':
                 return  <GoKey title='Llaves' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
             default:

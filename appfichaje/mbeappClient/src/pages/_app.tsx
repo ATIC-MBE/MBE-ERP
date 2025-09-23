@@ -1,6 +1,8 @@
-// add bootstrap css 
+// add bootstrap css
 //import 'bootstrap/dist/css/bootstrap.css'
 import '@/styles/globals.css'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import '@/styles/calendar.css'
 import type { AppProps } from 'next/app'
 import { Raleway } from "next/font/google"
 import UserState from '@/client/context/UserState'

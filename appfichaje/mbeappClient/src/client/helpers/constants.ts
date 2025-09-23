@@ -4,17 +4,20 @@ import type { MenuLeftType } from '@/client/types/globalTypes';
 export const menu_ceo: Array<MenuLeftType> = [
 	{ key: 'share_office', isActive: false, propID: 'Oficinas', order: 1, menuPath: '/ceo/office', codeIcon: 'office' },
 	{ key: 'share_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ceo/users', codeIcon: 'user' },
-	{ key: 'share_reports', isActive: false, propID: 'Reportes', order: 3, menuPath: '/ceo/reports', codeIcon: 'report' }
+	{ key: 'share_reports', isActive: false, propID: 'Reportes', order: 3, menuPath: '/ceo/reports', codeIcon: 'report' },
+	{ key: 'ceo_calendario', isActive: false, propID: 'Calendario', order: 4, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 export const menu_aca: Array<MenuLeftType> = [
 	{ key: 'aca_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aca', codeIcon: 'home' },
 	// { key: 'aca_contactos', isActive: false, propID: 'Contactos', order: 2, menuPath: '/aca/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
 	{ key: 'aca_solicitudes', isActive: false, propID: 'Solicitudes', order: 3, menuPath: '/aca/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'aca_calendario', isActive: false, propID: 'Calendario', order: 4, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 export const menu_aca_master: Array<MenuLeftType> = [
 	{ key: 'aca_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/aca', codeIcon: 'home' },
 	// { key: 'aca_contactos', isActive: false, propID: 'Contactos', order: 2, menuPath: '/aca/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
 	{ key: 'aca_solicitudes', isActive: false, propID: 'Solicitudes', order: 3, menuPath: '/aca/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'aca_master_calendario', isActive: false, propID: 'Calendario', order: 4, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 // === RUTA APARTAMENTOS MYD ===
 export const MYD_APARTMENT_PATH = '/api/myd/apartments/';
@@ -26,11 +29,13 @@ export const menu_myd_master: Array<MenuLeftType> = [
 //	{ key: 'myd_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/mydmaster/users/', codeIcon: 'user' },
 //	{ key: 'myd_master_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/mydmaster/contactos', codeIcon: 'contactos' },
 	{ key: 'myd_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/mydmaster/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'myd_master_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 export const menu_myd: Array<MenuLeftType> = [
 	{ key: 'myd_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/myd', codeIcon: 'home' },
 	// { key: 'myd_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/myd/contactos', codeIcon: 'contactos' }, // Oculto temporalmente
 	{ key: 'myd_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/myd/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'myd_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 // Menú lateral ADE Master
 export const menu_ade_master: Array<MenuLeftType> = [
@@ -38,6 +43,7 @@ export const menu_ade_master: Array<MenuLeftType> = [
 //	{ key: 'ade_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ademaster/users/', codeIcon: 'user' },
 //	{ key: 'ade_master_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/ademaster/contactos', codeIcon: 'contactos' },
 	{ key: 'ade_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/ademaster/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'ade_master_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 // Menú lateral ADE
 export const menu_ade: Array<MenuLeftType> = [
@@ -45,6 +51,7 @@ export const menu_ade: Array<MenuLeftType> = [
 //	{ key: 'ade_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/ademaster/users/', codeIcon: 'user' },
 //	{ key: 'ade_contactos', isActive: false, propID: 'Contactos', order: 3, menuPath: '/ademaster/contactos', codeIcon: 'contactos' },
 	{ key: 'ade_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/ademaster/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'ade_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 // Estados administrativos
 export const STATES_ADMIN = [
@@ -93,6 +100,7 @@ export const menu_superadmin: Array<MenuLeftType> = [
 	{ key: 'superadmin_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/superadmin', codeIcon: 'home' },
 	{ key: 'superadmin_users', isActive: false, propID: 'Usuarios', order: 3, menuPath: '/superadmin/users/', codeIcon: 'user' },
 	{ key: 'superadmin_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/superadmin/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'superadmin_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
 
 // === VISIBILIDAD DE PDF POR RUTA ===
@@ -251,16 +259,18 @@ export const menu_rrhh_master: Array<MenuLeftType> = [
 	{ key: 'rrhh_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/rrhhmaster/users/', codeIcon: 'user' },
 	{ key: 'rrhh_master_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhhmaster/contactos-universidad', codeIcon: 'birrete' },
     { key: 'rrhh_master_fichaje', isActive: false, propID: 'Fichaje', order: 4, menuPath: '/rrhhmaster/fichaje', codeIcon: 'fichaje' },
-    { key: 'rrhh_master_esquema', isActive: false, propID: 'Esquema', order: 5, menuPath: '/rrhhmaster/esquema', codeIcon: 'esquema' },
-    { key: 'rrhh_master_vacaciones', isActive: false, propID: 'Vacaciones', order: 6, menuPath: '/rrhhmaster/vacaciones', codeIcon: 'vacaciones' },
-    { key: 'rrhh_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 7, menuPath: '/rrhhmaster/solicitudes', codeIcon: 'solicitudes' },
+    { key: 'rrhh_master_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/calendar', codeIcon: 'calendario' },
+    { key: 'rrhh_master_esquema', isActive: false, propID: 'Esquema', order: 6, menuPath: '/rrhhmaster/esquema', codeIcon: 'esquema' },
+    { key: 'rrhh_master_vacaciones', isActive: false, propID: 'Vacaciones', order: 7, menuPath: '/rrhhmaster/vacaciones', codeIcon: 'vacaciones' },
+    { key: 'rrhh_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 8, menuPath: '/rrhhmaster/solicitudes', codeIcon: 'solicitudes' },
 ];
 
 export const menu_rrhh: Array<MenuLeftType> = [
 	{ key: 'rrhh_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhh', codeIcon: 'home' },
 	{ key: 'rrhh_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/rrhh/users/', codeIcon: 'user' },
 	{ key: 'rrhh_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhh/contactos-universidad', codeIcon: 'birrete' },
-    { key: 'rrhh_solicitudes', isActive: false, propID: 'Solicitudes', order: 4, menuPath: '/rrhh/solicitudes', codeIcon: 'solicitudes' },
+    { key: 'rrhh_calendario', isActive: false, propID: 'Calendario', order: 4, menuPath: '/calendar', codeIcon: 'calendario' },
+    { key: 'rrhh_solicitudes', isActive: false, propID: 'Solicitudes', order: 5, menuPath: '/rrhh/solicitudes', codeIcon: 'solicitudes' },
 ];
 
 export const menu_atic_master: Array<MenuLeftType> = [
@@ -271,4 +281,5 @@ export const menu_atic_master: Array<MenuLeftType> = [
 export const menu_atic: Array<MenuLeftType> = [
 	{ key: 'atic_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/atic', codeIcon: 'home' },
 	{ key: 'atic_solicitudes', isActive: false, propID: 'Solicitudes', order: 2, menuPath: '/atic/solicitudes', codeIcon: 'solicitudes' },
+	{ key: 'atic_calendario', isActive: false, propID: 'Calendario', order: 3, menuPath: '/calendar', codeIcon: 'calendario' },
 ];
