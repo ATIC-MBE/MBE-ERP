@@ -25,14 +25,14 @@ const handler = nc({
     let dataDB : IVacaciones | IErrorResponse = await el.getById(BigInt(parseInt(req.query.id as string)))
 
     if(!dataDB){
-          res.status(404).json({ error : 'Data not found'})
-          return
+        res.status(404).json({ error : 'Data not found'})
+        return
     }
     if (({...dataDB } as IErrorResponse).error){
-          let _d = dataDB as IErrorResponse
-          if(_d.code === 403) res.status(403).json(_d)
-          else res.status(404).json(_d)
-          return
+        let _d = dataDB as IErrorResponse
+        if(_d.code === 403) res.status(403).json(_d)
+        else res.status(404).json(_d)
+        return
     }
     res.json({data : dataDB})
 })
@@ -48,7 +48,8 @@ const handler = nc({
         fecha_inicio : req.body.fecha_inicio || '',
         fecha_final : req.body.fecha_final || '', 
         descripcion : req.body.descripcion || '',
-        estado_solicitud: parseInt(req.body.estado_solicitud || undefined) || 0
+        estado_solicitud: parseInt(req.body.estado_solicitud || undefined) || 0,
+        idsolicitud: parseInt(req.body.idsolicitud || undefined) || 0
     }
 
 
@@ -71,13 +72,13 @@ const handler = nc({
     
     let dataDB: IVacaciones | IErrorResponse = await el.delete(BigInt(parseInt(req.query.id as string)))
     if ( !dataDB ) {
-          res.status(404).json({ error: 'data not found' })
-          return
+        res.status(404).json({ error: 'data not found' })
+        return
     }
     if ( ({ ...dataDB } as IErrorResponse).error ) {
-          // No conflicto, verificar el status del error y ver si el usuario puede eliminar el registro
-          res.status(409).json(dataDB as IErrorResponse)
-          return
+        // No conflicto, verificar el status del error y ver si el usuario puede eliminar el registro
+        res.status(409).json(dataDB as IErrorResponse)
+        return
     }
     res.json({ data: dataDB })
 })

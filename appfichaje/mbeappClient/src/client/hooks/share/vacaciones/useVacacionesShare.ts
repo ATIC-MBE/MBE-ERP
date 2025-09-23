@@ -163,10 +163,10 @@ const useVacacionesShare = ( typeTotalData: string, pathGetData: string) => {
         // window.addEventListener('mousemove', handleMouseMove);
     
         return () => {
-          window.removeEventListener(
-            'mousemove',
-            handleMouseMove
-          )
+            window.removeEventListener(
+                'mousemove',
+                handleMouseMove
+            )
         }
     }, [])
 

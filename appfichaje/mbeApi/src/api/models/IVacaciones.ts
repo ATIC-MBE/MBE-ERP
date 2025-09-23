@@ -12,6 +12,7 @@ export interface IVacaciones extends IModel{
     descripcion : string
     fecha_creacion ?: string
     estado_solicitud? : number
+    idsolicitud? : number
 }
 
 export default IVacaciones

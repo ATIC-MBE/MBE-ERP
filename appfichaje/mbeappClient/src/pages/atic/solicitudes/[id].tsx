@@ -7,7 +7,7 @@ import OptionsOnSelect from '@/components/OptionsOnSelect'
 import ButtonContainerVertical from '@/components/ButtonContainerVertical'
 import FloatButton from '@/components/FloatButton'
 import { AiFillSave, AiOutlineBars, AiOutlineCalendar, AiOutlineComment, AiOutlineContacts, AiOutlineFileText, AiOutlineLock, AiOutlineMail, AiOutlineUser } from 'react-icons/ai'
-import { MdCancel, MdEmail } from 'react-icons/md'
+import { MdCancel, MdEmail, MdDelete } from 'react-icons/md'
 import SemaforoIcon from '@/components/Iconos/SemaforoIcon'
 import { BsCalendar2Date, BsCalendar2Month, BsCalendar2Minus } from "react-icons/bs";
 import { FaTrashAlt } from 'react-icons/fa'
@@ -20,7 +20,8 @@ const SolicitudNew = () => {
     const { dataDB, 
             handleChange, 
             handleSave,
-            handleCancel, 
+            handleCancel,
+            handleDelete,
             errorValidate, 
             msgError,
             roles,
@@ -45,7 +46,10 @@ const SolicitudNew = () => {
                             <div className="min-h-[10rem] grid grid-cols-1n space-x-5">
                                 <div className="h-full grid space-y-2">
                                     <div className=" min-h-[16rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-3">
-                                        <h1 className='text-lg text-[#0077bd] font-bold'>Solicitud</h1>
+                                        <div className="flex justify-between items-center">
+                                            <h1 className='text-lg text-[#0077bd] font-bold'>Solicitud</h1>
+                                            <span className='text-base text-gray-700 font-medium'>Tipo de solicitud</span>
+                                        </div>
                                         <div className='grid grid-cols-2 space-x-3'>
                                             <div className=" w-full flex text-sm">
                                                 <div className=" w-full flex text-sm">
@@ -96,6 +100,7 @@ const SolicitudNew = () => {
                 <ButtonContainerVertical>
                     <FloatButton title='Guardar' handler={handleSave} Icon={AiFillSave} />
                     <FloatButton title='Cancelar' handler={handleCancel} Icon={MdCancel} />
+                    <FloatButton title='Eliminar' handler={handleDelete} Icon={MdDelete} />
                 </ButtonContainerVertical>
                 {/* </div> */}
             </div>

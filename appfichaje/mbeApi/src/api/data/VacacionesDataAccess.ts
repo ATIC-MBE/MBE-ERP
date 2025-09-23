@@ -15,7 +15,7 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         public filterStatus : StatusDataType,
         public isTransactions : boolean,
         public infoExtra? : any){
-            this.client = new DbConnection(isTransactions)
+        this.client = new DbConnection(isTransactions)
         }
 
 
@@ -33,15 +33,16 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         const queryData = {
             name : 'get-vacaciones',
             text: `SELECT sv.id , sv.idusuario, usu.nombre_completo, sv.estado,
-                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( sv.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
-                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( sv.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
-                        (CASE 
-                            when sv.estado = 0 THEN 'En espera'
-                            when sv.estado = 1 THEN 'Aprobada'
-                            when sv.estado = 2 THEN 'Rechazada' 
-                        END) as estado
+                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( sv.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
+                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( sv.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
+                            (CASE 
+                                when sv.estado = 0 THEN 'En espera'
+                                when sv.estado = 1 THEN 'Aprobada'
+                                when sv.estado = 2 THEN 'Rechazada' 
+                            END) as estado, ap.tipo_ausencia_permiso
                     FROM tbl_solicitud_vacaciones sv
                     LEFT JOIN tbl_usuario usu ON usu.id = sv.idusuario
+                    LEFT JOIN tbl_ausencia_permiso ap ON ap.id = sv.idsolicitud
                     WHERE sv.fecha_inicio BETWEEN $1 AND $2
                     ORDER BY sv.estado ASC`,
             values : [
@@ -71,15 +72,16 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         const queryData = {
             name : 'get-vacaciones',
             text: `SELECT sr.id , sr.idusuario, usu.nombre_completo,
-                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
-                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
-                    (CASE 
-                        when sr.estado_solicitud = 0 THEN 'En espera'
-                        when sr.estado_solicitud = 1 THEN 'Aprobada'
-                        when sr.estado_solicitud = 2 THEN 'Rechazada' 
-                    END) as estado_solicitud
+                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_inicio, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_inicio,
+                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( sr.fecha_final, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_final,
+                        (CASE 
+                            when sr.estado_solicitud = 0 THEN 'En espera'
+                            when sr.estado_solicitud = 1 THEN 'Aprobada'
+                            when sr.estado_solicitud = 2 THEN 'Rechazada' 
+                        END) as estado_solicitud, ap.tipo_ausencia_permiso
                     FROM tbl_solicitud_rrhh sr
                     INNER JOIN tbl_usuario usu ON usu.id = sr.idusuario
+                    LEFT JOIN tbl_ausencia_permiso ap ON ap.id = sr.idsolicitud
                     WHERE sr.fecha_inicio BETWEEN $1 AND $2
                     AND sr.estado = 1 AND
                         (UNACCENT(lower( replace(trim(usu.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
@@ -117,9 +119,10 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         
         const queryData = {
             name : 'get-vacaciones-x-id',
-            text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final ,sv.fecha_creacion, sv.estado_solicitud
+            text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final ,sv.fecha_creacion, sv.estado_solicitud, ap.tipo_ausencia_permiso
                     FROM ${Constants.tbl_solicitud_rrhh_sql} sv
                     INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
+                    LEFT JOIN ${Constants.tbl_ausencia_permiso_sql} ap ON ap.id = sv.idsolicitud
                     WHERE sv.id = $1`,
             values : [
                 id
@@ -143,9 +146,10 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                                 when sv.estado_solicitud = 1 THEN 'Aprobada'
                                 when sv.estado_solicitud = 2 THEN 'Rechazada' 
                             END
-                            ) as estado_solicitud
+                            ) as estado_solicitud, ap.tipo_ausencia_permiso
                             FROM ${Constants.tbl_solicitud_rrhh_sql} sv
                             INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
+                            LEFT JOIN ${Constants.tbl_ausencia_permiso_sql} ap ON ap.id = sv.idsolicitud
                             WHERE sv.idusuario = $1 AND sv.estado = 1`,
                     values : [
                             this.idUserLogin
@@ -165,9 +169,10 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         
         const queryData = {
             name : 'get-vacaciones-x-id',
-            text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final
+            text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final, ap.tipo_ausencia_permiso
                     FROM ${Constants.tbl_solicitud_rrhh_sql} sv
                     INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
+                    LEFT JOIN ${Constants.tbl_ausencia_permiso_sql} ap ON ap.id = sv.idsolicitud
                     WHERE sv.id = $1`,
             values : [
                     id
@@ -196,9 +201,10 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                             fecha_ultimo_cambio,
                             descripcion,
                             fecha_creacion,
-                            estado_solicitud
+                            estado_solicitud,
+                            idsolicitud
                         )
-                        VALUES ($1,$2,$3,$4,$5, $6,$7 ,$8) RETURNING *`,
+                        VALUES ($1,$2,$3,$4,$5, $6,$7 ,$8, $9) RETURNING *`,
                 values : [
                         this.idUserLogin,
                         data.fecha_inicio,
@@ -207,7 +213,8 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                         timeStampCurrent,
                         data.descripcion,
                         timeStampCurrent,
-                        0
+                        0,
+                        data.idsolicitud
                 ]
             }
 
@@ -235,7 +242,8 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                         idrrhh = $4,
                         descripcion = $5,
                         estado_solicitud = $6
-                        WHERE id = $7
+                        idsolicitud = $7
+                        WHERE id = $8
                         RETURNING *`,
                 values : [
                         data.fecha_inicio,
@@ -244,6 +252,7 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
                         this.idUserLogin,
                         data.descripcion,
                         data.estado_solicitud,
+                        data.idsolicitud,
                         id
                 ]
             }

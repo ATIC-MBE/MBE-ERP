@@ -25,7 +25,7 @@ const handler = nc(
         let el: SolicitudPrecioBLL = new SolicitudPrecioBLL(idUserLogin, filterState, false)
         
         let dataDB: ISolicitudPrecio | IErrorResponse = await el.getById(BigInt(parseInt(req.query.id as string)))
-       
+
         if ( !dataDB ) {
             res.status(204).json({ error: 'data not found' })
             return

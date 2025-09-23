@@ -111,6 +111,7 @@ const Constants = {
       tbl_etapa_usuario_rrhh_sql: 'tbl_etapa_usuario_rrhh',
       tbl_salario_rrhh_sql: 'tbl_salario_rrhh',
       tbl_solicitud_rrhh_sql: 'tbl_solicitud_rrhh',
+      tbl_ausencia_permiso_sql: 'tbl_ausencia_permiso',
       // Tablas de sucesos para el prescriptor
       tbl_prescriptor_dn_sql: 'tbl_prescriptor_dn',
       tbl_grupo_prescriptor_dn_sql: 'tbl_grupo_prescriptor_dn',

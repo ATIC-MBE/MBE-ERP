@@ -37,7 +37,8 @@ const useVacacionesIddShare = (pathGoToBack: string) => {
         descripcion : '',
         fecha_creacion : '',
         estado_solicitud : 0,
-        estado : 1
+        estado : 1,
+        idsolicitud : 0
     })
 
     const [roles, setRoles] = useState<Array<{ key:string, name: string }>>([])
@@ -64,13 +65,10 @@ const useVacacionesIddShare = (pathGoToBack: string) => {
         //Validamos (falta validar tipo fecha) y comprobamos que el data opuesto este añadido y procedemos a realizar el cálculo
 
         /*if(["fecha_inicio"].includes(e.target.name)){
-           
             
             fecha1 = e.target.value
 
             setDataDB({
-
-           
                 ...dataDB,
                 [e.target.name]: e.target.value
             })
@@ -115,7 +113,6 @@ const useVacacionesIddShare = (pathGoToBack: string) => {
         //     }else{
 
         //         dataDB.dias = '0'
-           
 
         //     }
 
@@ -213,14 +210,12 @@ const useVacacionesIddShare = (pathGoToBack: string) => {
         }).finally(()=>{})
     }, [id])
 
-
- 
-
     return {
         dataDB,
         handleChange,
         handleSave,
         handleCancel: () => handleCancel(`${pathGoToBack}`, router),
+        handleDelete: () => toggleModal(),
         errorValidate,
         msgError,
         roles,

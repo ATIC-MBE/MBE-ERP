@@ -67,7 +67,8 @@ const handler = nc (
         descripcion : req.body.descripcion || '',
         fecha_creacion : req.body.fecha_creacion || '',
         estado_solicitud : req.body.estado_solicitud || 0,
-        estado : _estado
+        estado : _estado,
+        idsolicitud : req.body.idsolicitud || 0
     }
 
     let dataDB : IVacaciones | IErrorResponse = await el.insert(data)

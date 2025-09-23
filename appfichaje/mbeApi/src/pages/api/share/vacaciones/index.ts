@@ -29,9 +29,9 @@ const handler = nc (
     let dataDB : Array <IVacaciones> | IErrorResponse = await el.getSolicitudxUser()
 
 
-      // Si es null
+    // Si es null
 
-      if(!dataDB){
+    if(!dataDB){
         res.status(204).json({error : "data not found"})
     }
 
@@ -42,12 +42,11 @@ const handler = nc (
         return
     }
 
-            
-            if((dataDB as Array <IVacaciones>).length === 0){
-                res.status(204).json({ error : 'data not found'})
-                return
-        }
-        res.json({data : dataDB})
+    if((dataDB as Array <IVacaciones>).length === 0){
+        res.status(204).json({ error : 'data not found'})
+        return
+    }
+    res.json({data : dataDB})
 
 })
 .post(async (req , res : NextApiResponse <IResponse | IErrorResponse>)=>{
@@ -59,8 +58,9 @@ const handler = nc (
     let data : IVacaciones = {
         fecha_inicio : req.body.fecha_inicio || '',
         fecha_final : req.body.fecha_final || '',
-        descripcion : req.body.descripcion || ''
-        }
+        descripcion : req.body.descripcion || '',
+        idsolicitud : req.body.idsolicitud || 0
+    }
 
     let dataDB : IVacaciones | IErrorResponse = await el.insert(data)
 

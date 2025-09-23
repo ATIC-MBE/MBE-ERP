@@ -54,8 +54,7 @@ class VacacionesBusiness implements IDataAccess<IVacaciones>{
             field: 'fecha_inicio',
             label: 'Fecha inicio',
             msg: 'Fecha incorrectas. Formato [YYYY-MM-DD]!!'
-
-                             }
+        }
         )
         }
         
@@ -66,8 +65,8 @@ class VacacionesBusiness implements IDataAccess<IVacaciones>{
             field: 'fecha_final',
             label : 'Fecha final',
             msg: 'Fecha incorrectas. Formato [YYYY-MM-DD]!!'
-                            }
-        )
+            }
+            )
         }
 
         if(data.fecha_inicio  > data.fecha_final ){
@@ -86,10 +85,9 @@ class VacacionesBusiness implements IDataAccess<IVacaciones>{
             field: 'fecha_inicio',
             label: 'Fecha Inicio',
             msg : 'La fecha inicial ha de ser superior a la fecha actual'
-         })
+            }
+            )
         }
-
-       
     }
 
     async insert(data: IVacaciones): Promise<IVacaciones | IErrorResponse> {
@@ -97,9 +95,9 @@ class VacacionesBusiness implements IDataAccess<IVacaciones>{
         let error: IErrorResponse = { error: 'Error, integridad de datos', data:[] }
 
         this.validate(data, error)
-       
+
         return (error.data?.length === 0 ) ? this.dataAcces.insert(data) :
-                                             new Promise <IErrorResponse>((resolve, reject) => {resolve(error)})
+                                            new Promise <IErrorResponse>((resolve, reject) => {resolve(error)})
     }
 
 
@@ -119,7 +117,7 @@ class VacacionesBusiness implements IDataAccess<IVacaciones>{
 
         let error : IErrorResponse = {error : "Error, integridad de datos", data : []}
 
-       this.validate(data , error)
+        this.validate(data , error)
 
         return (error.data?.length === 0) ? this.dataAcces.updateByUser(id,data) :
         new Promise <IErrorResponse>((resolve ,reject)=>{resolve(error) })

@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import FetchApiServiceInstance from '@/client/services/FetchApiService'
 import FilterInstance from '@/client/helpers/Filter'
 import { IData } from '@/client/models/IData'
-import { IDeviceReport } from '@/client/models/IDeviceReport'
 import axios, { AxiosError } from 'axios';
 
 type filterSearchAll = {
@@ -17,7 +16,6 @@ const limit = 50
 const useReportDevice = () => {
     const router = useRouter()
 
-    const [listData, setListData] = useState<Array<IDeviceReport>>([])
     const [loading, setLoading] = useState(true)
     const [total, setTotal] = useState<number>(0)
     const [pageCurrent, setPageCurrent] = useState<number>(0)
