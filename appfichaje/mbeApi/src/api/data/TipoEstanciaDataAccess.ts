@@ -9,22 +9,22 @@ class TipoEstanciaDataAccess implements IDataAccess<ITipoEstancia> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<ITipoEstancia> | IErrorResponse> {
         const queryData  = {
-                name: 'get-tipo-estancia',
-                text: ` SELECT te.*
-                        FROM ${Constants.tbl_tipo_estancia_rmg_sql} te
-                        WHERE te.estado >= $1
-                        ORDER BY te.nombre ASC
-                        `,
-                values: [this.filterStatus]
+            name: 'get-tipo-estancia',
+            text: ` SELECT te.*
+                    FROM ${Constants.tbl_tipo_estancia_rmg_sql} te
+                    WHERE te.estado >= $1
+                    ORDER BY te.nombre ASC
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<ITipoEstancia | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ITipoEstancia | IErrorResponse>

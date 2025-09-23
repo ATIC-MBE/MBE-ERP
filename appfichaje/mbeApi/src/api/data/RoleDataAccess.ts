@@ -9,10 +9,10 @@ class RoleDataAccess implements IDataAccess<IRole> {
     public client: DbConnection
 
     constructor( 
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean, 
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean, 
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -20,17 +20,14 @@ class RoleDataAccess implements IDataAccess<IRole> {
         const queryData = {
             name: 'get-roles',
             text: `SELECT r.*
-                   FROM ${Constants.tbl_rol_sql} r
-                   ORDER BY r.nombre ASC
-                   `,
+                    FROM ${Constants.tbl_rol_sql} r
+                    ORDER BY r.nombre ASC
+                    `,
             values: []
-      }
-        
-      let lData: Array<IRole | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IRole | IErrorResponse>
-
-      if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse
-
-      return lData as Array<IRole>
+        }
+        let lData: Array<IRole | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IRole | IErrorResponse>
+        if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse
+        return lData as Array<IRole>
     }
 
     getById(id: BigInt): Promise<IRole | IErrorResponse> {

@@ -16,10 +16,10 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
       public client: DbConnection
 
       constructor( 
-                        public idUserLogin: BigInt,
-                        public filterStatus: StatusDataType,
-                        public isTransactions: boolean, 
-                        public infoExtra?: any ) {
+            public idUserLogin: BigInt,
+            public filterStatus: StatusDataType,
+            public isTransactions: boolean, 
+            public infoExtra?: any ) {
             this.client = new DbConnection(isTransactions)
       }
 
@@ -55,18 +55,18 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   const queryData = {
                         name: 'insert-log-openportal',
                         text: `INSERT INTO ${Constants.tbl_logs_piso_sql}(
-                              accion,
-                              resultado, 
-                              "timestamp", 
-                              data,
-                              fecha_creacion, 
-                              iddispositivo,
-                              idpiso,
-                              idusuario,
-                              fecha,
-                              usuario,
-                              tipo_ejecucion,
-                              observacion)
+                                    accion,
+                                    resultado, 
+                                    "timestamp", 
+                                    data,
+                                    fecha_creacion, 
+                                    iddispositivo,
+                                    idpiso,
+                                    idusuario,
+                                    fecha,
+                                    usuario,
+                                    tipo_ejecucion,
+                                    observacion)
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *`,
                         values: [
                                     data.log_data.accion,
@@ -81,7 +81,7 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                                     data.log_data.usuario,
                                     data.log_data.tipo_ejecucion,
                                     data.log_data.observacion
-                              ]
+                        ]
                   }
                   let lData = (await client.query(queryData)).rows as Array<ILogsApartment | IErrorResponse>
 
@@ -114,19 +114,19 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   const queryData = {
                         name: 'insert-log-lock-sincro',
                         text: `INSERT INTO ${Constants.tbl_logs_piso_sql}(
-                              accion,
-                              resultado, 
-                              "timestamp", 
-                              data,
-                              fecha_creacion, 
-                              iddispositivo,
-                              idpiso,
-                              idusuario,
-                              fecha,
-                              usuario,
-                              tipo_ejecucion,
-                              observacion,
-                              dispositivo_ejecucion)
+                                    accion,
+                                    resultado, 
+                                    "timestamp", 
+                                    data,
+                                    fecha_creacion, 
+                                    iddispositivo,
+                                    idpiso,
+                                    idusuario,
+                                    fecha,
+                                    usuario,
+                                    tipo_ejecucion,
+                                    observacion,
+                                    dispositivo_ejecucion)
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [
                                     data.log_data.accion,
@@ -178,16 +178,16 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   let queryData = {
                         name: 'insert-codigo',
                         text: `INSERT INTO ${Constants.tbl_codigo_sql}(
-                              codigo,
-                              dias, 
-                              "timestamp_inicio",
-                              "timestamp_fin",
-                              fecha_creacion, 
-                              idmanija,
-                              idusuario,
-                              fecha_vig_inicio,
-                              fecha_vig_fin,
-                              idtipocodigo)
+                                    codigo,
+                                    dias, 
+                                    "timestamp_inicio",
+                                    "timestamp_fin",
+                                    fecha_creacion, 
+                                    idmanija,
+                                    idusuario,
+                                    fecha_vig_inicio,
+                                    fecha_vig_fin,
+                                    idtipocodigo)
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
                         values: [
                                     data.code_data!.codigo,
@@ -223,8 +223,8 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   queryData = {
                         name: 'update-codigo-estado',
                         text: `UPDATE ${Constants.tbl_codigo_sql} SET
-                               estado = 0
-                               WHERE idmanija = $1 AND idtipocodigo = $2 AND estado = 1 AND id <> $3  RETURNING *`,
+                              estado = 0
+                              WHERE idmanija = $1 AND idtipocodigo = $2 AND estado = 1 AND id <> $3  RETURNING *`,
                         values: [ data.log_data!.iddispositivo, data.code_data!.idtipocodigo, idCodeDB ]
                   }
                   await client.query(queryData)
@@ -233,8 +233,8 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   queryData = {
                         name: 'update-dispositivo',
                         text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                               fecha_ultimo_cambio = $1
-                               WHERE id = $2 RETURNING *`,
+                              fecha_ultimo_cambio = $1
+                              WHERE id = $2 RETURNING *`,
                         values: [ timeStampCurrent, data.log_data.iddispositivo ]
                   }
                   await client.query(queryData)
@@ -243,19 +243,19 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   queryData = {
                         name: 'insert-log-newcode',
                         text: `INSERT INTO ${Constants.tbl_logs_piso_sql}(
-                              accion,
-                              resultado, 
-                              "timestamp", 
-                              data,
-                              fecha_creacion, 
-                              iddispositivo,
-                              idpiso,
-                              idusuario,
-                              fecha,
-                              usuario,
-                              idcodigo,
-                              tipo_ejecucion,
-                              observacion)
+                                    accion,
+                                    resultado, 
+                                    "timestamp", 
+                                    data,
+                                    fecha_creacion, 
+                                    iddispositivo,
+                                    idpiso,
+                                    idusuario,
+                                    fecha,
+                                    usuario,
+                                    idcodigo,
+                                    tipo_ejecucion,
+                                    observacion)
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [
                                     data.log_data.accion,
@@ -271,7 +271,7 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                                     idCodeDB,
                                     data.log_data.tipo_ejecucion,
                                     data.log_data.observacion
-                              ]
+                        ]
                   }
                   let lData = (await client.query(queryData)).rows as Array<ILogsApartment | IErrorResponse>
 
@@ -305,13 +305,13 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   let queryData = {
                         name: 'insert-key',
                         text: `INSERT INTO ${Constants.tbl_llave_sql}(
-                              ubicacion,
-                              tipo_tarjeta, 
-                              idqr,
-                              qr,
-                              fecha_creacion, 
-                              fecha_ultimo_cambio,
-                              idusuario)
+                                    ubicacion,
+                                    tipo_tarjeta, 
+                                    idqr,
+                                    qr,
+                                    fecha_creacion, 
+                                    fecha_ultimo_cambio,
+                                    idusuario)
                               VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
                         values: [
                                     data.key_data!.ubicacion,
@@ -321,7 +321,7 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                                     timeStampCurrent,
                                     timeStampCurrent, 
                                     this.idUserLogin
-                              ]
+                        ]
                   }
                   let lDataCode = (await client.query(queryData)).rows as Array<IKey | IErrorResponse>
                   let keyDB = lDataCode[0] as IKey
@@ -341,19 +341,19 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   queryData = {
                         name: 'insert-log-newcard',
                         text: `INSERT INTO ${Constants.tbl_logs_piso_sql}(
-                              accion,
-                              resultado, 
-                              "timestamp", 
-                              data,
-                              fecha_creacion, 
-                              iddispositivo,
-                              idpiso,
-                              idusuario,
-                              fecha,
-                              usuario,
-                              idllave,
-                              tipo_ejecucion,
-                              observacion)
+                                    accion,
+                                    resultado, 
+                                    "timestamp", 
+                                    data,
+                                    fecha_creacion, 
+                                    iddispositivo,
+                                    idpiso,
+                                    idusuario,
+                                    fecha,
+                                    usuario,
+                                    idllave,
+                                    tipo_ejecucion,
+                                    observacion)
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [
                                     data.log_data.accion,
@@ -369,7 +369,7 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                                     idKeyDB,
                                     data.log_data.tipo_ejecucion,
                                     data.log_data.observacion
-                              ]
+                        ]
                   }
                   let lData = (await client.query(queryData)).rows as Array<ILogsApartment | IErrorResponse>
 
@@ -422,11 +422,11 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   let queryData = {
                         name: 'update-card',
                         text: `UPDATE ${Constants.tbl_llave_sql} SET
-                              ubicacion = $1,
-                              tipo_tarjeta = $2,
-                              qr = $3, 
-                              fecha_ultimo_cambio = $4,
-                              idusuario = $5
+                                    ubicacion = $1,
+                                    tipo_tarjeta = $2,
+                                    qr = $3, 
+                                    fecha_ultimo_cambio = $4,
+                                    idusuario = $5
                               WHERE id = $6 RETURNING *`,
                         values: [
                                     data.key_data!.ubicacion,
@@ -460,22 +460,22 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   }
 
                   // insert logs
-                 let queryDataLogs = {
+                  let queryDataLogs = {
                         name: 'insert-log-newkey',
                         text: `INSERT INTO ${Constants.tbl_logs_piso_sql}(
-                              accion,
-                              resultado, 
-                              "timestamp", 
-                              data,
-                              fecha_creacion, 
-                              iddispositivo,
-                              idpiso,
-                              idusuario,
-                              fecha,
-                              usuario,
-                              idllave,
-                              tipo_ejecucion,
-                              observacion)
+                                    accion,
+                                    resultado, 
+                                    "timestamp", 
+                                    data,
+                                    fecha_creacion, 
+                                    iddispositivo,
+                                    idpiso,
+                                    idusuario,
+                                    fecha,
+                                    usuario,
+                                    idllave,
+                                    tipo_ejecucion,
+                                    observacion)
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [
                                     data.log_data.accion,
@@ -491,7 +491,7 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                                     idKeyDB,
                                     data.log_data.tipo_ejecucion,
                                     data.log_data.observacion
-                              ]
+                        ]
                   }
                   let lData = (await client.query(queryDataLogs)).rows as Array<ILogsApartment | IErrorResponse>
 
@@ -564,19 +564,19 @@ class ActionsLogApartmentDataAccess implements IDataAccess<IActionsLogApartment>
                   let queryData = {
                         name: 'insert-log-newkey',
                         text: `INSERT INTO ${Constants.tbl_logs_piso_sql}(
-                              accion,
-                              resultado, 
-                              "timestamp", 
-                              data,
-                              fecha_creacion, 
-                              iddispositivo,
-                              idpiso,
-                              idusuario,
-                              fecha,
-                              usuario,
-                              idllave,
-                              tipo_ejecucion,
-                              observacion
+                                    accion,
+                                    resultado, 
+                                    "timestamp", 
+                                    data,
+                                    fecha_creacion, 
+                                    iddispositivo,
+                                    idpiso,
+                                    idusuario,
+                                    fecha,
+                                    usuario,
+                                    idllave,
+                                    tipo_ejecucion,
+                                    observacion
                               )
                               VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [

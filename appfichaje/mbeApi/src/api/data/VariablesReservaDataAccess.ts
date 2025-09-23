@@ -12,10 +12,10 @@ class VariablesReservaDataAccess implements IDataAccess<IVariablesReserva> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -40,7 +40,7 @@ class VariablesReservaDataAccess implements IDataAccess<IVariablesReserva> {
 
     async getById(id: BigInt): Promise<IVariablesReserva | IErrorResponse> {
         throw new Error("Method not implemented.")
-    }
+    }  
 
     async insert(data: IVariablesReserva): Promise<IVariablesReserva | IErrorResponse> {
         throw new Error("Method not implemented.")
@@ -191,7 +191,6 @@ class VariablesReservaDataAccess implements IDataAccess<IVariablesReserva> {
         //                 values: [ data.plataformas![i].link, timeStampCurrent, idDataDB, data.plataformas![i].id]
         //             }
         //             let respTmp = (await client.query(queryData)).rowCount
-                    
         //             // Si no actualiza, el registro no existe, por ende inserta
         //             if (respTmp === 0) {
         //                 const queryData = {
@@ -204,7 +203,6 @@ class VariablesReservaDataAccess implements IDataAccess<IVariablesReserva> {
         //             }
         //         }
         //     }
-            
         //     return lDataDB
         // })
 

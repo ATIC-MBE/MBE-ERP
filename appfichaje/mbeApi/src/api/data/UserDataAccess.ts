@@ -34,10 +34,10 @@ class UserDataAccess implements IDataAccess<IUser> {
                         END) AS roles
                         FROM ${Constants.tbl_usuario_sql} usu
                         LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
-                                    FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                                    JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                                    JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                                    ) srol on (srol.idusuario = usu.id)
+                              FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                              JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                              JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                              ) srol on (srol.idusuario = usu.id)
                         WHERE usu.estado >= $1 AND usu.estado IS NOT NULL
                         GROUP BY usu.id
                         ORDER BY usu.nombre, usu.apellido ASC
@@ -68,29 +68,8 @@ class UserDataAccess implements IDataAccess<IUser> {
             const queryData = {
                   name: 'get-users-admin',
                   text: `
-                         SELECT dt.*
-                         FROM (
-                              SELECT usu.id, usu.ref_lead, usu.email, usu.estado, usu.username,
-                              usu.nombre_completo,
-                              STRING_AGG(srol.nombre, ' | ') as nombrerol_str
-                              FROM ${Constants.tbl_usuario_sql} usu
-                              LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
-                                          FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                                          JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                                          JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                                          ) srol on (srol.idusuario = usu.id)
-                              WHERE usu.estado >= $1 AND usu.estado IS NOT NULL
-                              GROUP BY usu.id
-                         ) dt 
-                         WHERE ( 
-                              UNACCENT(lower( replace(trim(dt.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              UNACCENT(lower( replace(trim(dt.nombrerol_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              UNACCENT(lower( replace(trim(dt.username ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
-                              $2 = ''
-                        )
-                        ORDER BY dt.estado DESC, dt.nombrerol_str ASC, dt.username ASC
-                        LIMIT $3 OFFSET $4
-                         `,
+
+                        `,
                   values: [
                         this.filterStatus,
                         search_all === '' ? '' : `%${search_all}%`,
@@ -114,21 +93,21 @@ class UserDataAccess implements IDataAccess<IUser> {
             const queryData = {
                   name: 'get-users-rrhh',
                   text: `SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                         usu.telefono, usu.nombre_completo, usu.ref_lead,
-                         (CASE
+                        usu.telefono, usu.nombre_completo, usu.ref_lead,
+                        (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
-                         END) AS roles
-                         FROM ${Constants.tbl_usuario_sql} usu
-                         LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
-                                    FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                                    JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                                    JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                                    ) srol on (srol.idusuario = usu.id)
-                         WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin')
-                         GROUP BY usu.id
-                         ORDER BY usu.estado DESC, usu.username ASC
-                         `,
+                        END) AS roles
+                        FROM ${Constants.tbl_usuario_sql} usu
+                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
+                              FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                              JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                              JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                              ) srol on (srol.idusuario = usu.id)
+                        WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin')
+                        GROUP BY usu.id
+                        ORDER BY usu.estado DESC, usu.username ASC
+                        `,
                   values: [this.filterStatus]
             }
 
@@ -148,20 +127,20 @@ class UserDataAccess implements IDataAccess<IUser> {
             const queryData = {
                   name: 'get-user-x-id',
                   text: `SELECT usu.id, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                         usu.telefono, usu.nombre_completo, usu.ref_lead,
-                         (CASE
+                        usu.telefono, usu.nombre_completo, usu.ref_lead,
+                        (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
-                         END) AS roles
-                         FROM ${Constants.tbl_usuario_sql} usu
-                         LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
-                                    FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                                    JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                                    JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                                    WHERE usu.id = $1
-                                    ) srol on (srol.idusuario = usu.id)
-                         WHERE usu.id = $1 AND usu.estado >= $2 AND usu.estado IS NOT NULL
-                         GROUP BY usu.id`,
+                        END) AS roles
+                        FROM ${Constants.tbl_usuario_sql} usu
+                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
+                              FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                              JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                              JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                              WHERE usu.id = $1
+                              ) srol on (srol.idusuario = usu.id)
+                        WHERE usu.id = $1 AND usu.estado >= $2 AND usu.estado IS NOT NULL
+                        GROUP BY usu.id`,
                   values: [id, this.filterStatus]
             }
 
@@ -231,20 +210,20 @@ class UserDataAccess implements IDataAccess<IUser> {
             const queryData = {
                   name: 'get-user-x-id-rrhh',
                   text: `SELECT usu.id, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario, usu.telefono, usu.nombre_completo, usu.ref_lead,
-                  (CASE
-                       WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
-                       WHEN count(srol.*) = 0 THEN '[]'
-                  END) AS roles
-                  FROM ${Constants.tbl_usuario_sql} usu
-                  LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
-                             FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                             JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                             JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                             WHERE usu.id = $1
-                             ) srol on (srol.idusuario = usu.id)
-                  WHERE usu.id = $1 AND usu.estado >= $2 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario' , 'admin' , 'superadmin')
-                  GROUP BY usu.id`,
-                  values: [id, this.filterStatus]
+                        (CASE
+                              WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
+                              WHEN count(srol.*) = 0 THEN '[]'
+                        END) AS roles
+                        FROM ${Constants.tbl_usuario_sql} usu
+                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
+                                    FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                                    JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                                    JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                                    WHERE usu.id = $1
+                                    ) srol on (srol.idusuario = usu.id)
+                        WHERE usu.id = $1 AND usu.estado >= $2 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario' , 'admin' , 'superadmin')
+                        GROUP BY usu.id`,
+                        values: [id, this.filterStatus]
             }
 
             let lData: Array<IUser | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IUser | IErrorResponse>
@@ -260,21 +239,19 @@ class UserDataAccess implements IDataAccess<IUser> {
                   name: 'get-usuarios-RRHH',
                   text: `SELECT us.* , ur.correo_personal , ur.jornada
                         FROM
-                        (SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                        usu.nombre_completo, usu.ref_lead,
-                        (CASE
-                        WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
-                        WHEN count(srol.*) = 0 THEN '[]'
-                        END) AS roles
+                              (SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
+                              usu.nombre_completo, usu.ref_lead,
+                                    (CASE WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
+                              WHEN count(srol.*) = 0 THEN '[]' 
+                              END) AS roles
                         FROM ${Constants.tbl_usuario_sql} usu
-                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
-                        FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                        JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                        JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                        ) srol on (srol.idusuario = usu.id)
-                        WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
-                        GROUP BY usu.id							
-                        ) as us
+                              LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
+                                    FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                                    JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                                    JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                                    ) srol on (srol.idusuario = usu.id)
+                              WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
+                              GROUP BY usu.id) as us
                         LEFT JOIN ${Constants.tbl_usuario_rrhh_sql} ur ON us.id = ur.id
                         ORDER BY us.estado DESC, us.username ASC`,
                   values: [this.filterStatus]
@@ -299,8 +276,7 @@ class UserDataAccess implements IDataAccess<IUser> {
                         SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario, usu.nombre_completo,
                         (CASE
                         WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
-                        WHEN count(srol.*) = 0 THEN '[]'
-                        END) AS roles
+                        WHEN count(srol.*) = 0 THEN '[]' END) AS roles
                   FROM tbl_usuario usu
                   LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre 
                         FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
@@ -309,7 +285,7 @@ class UserDataAccess implements IDataAccess<IUser> {
                         WHERE usu.id = $1
                         ) srol on (srol.idusuario = usu.id)
                         WHERE usu.id = $1 AND usu.estado >= $2 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario' , 'admin' , 'superadmin','limpieza', 'mantenimiento')
-               GROUP BY usu.id) as us
+                  GROUP BY usu.id) as us
                         LEFT JOIN ${Constants.tbl_usuario_rrhh_sql} ur ON us.id = ur.id
                         LEFT JOIN ${Constants.tbl_etapa_usuario_rrhh_sql} exu ON us.id = exu.idusuario AND exu.estado = $2`,
 
@@ -336,8 +312,7 @@ class UserDataAccess implements IDataAccess<IUser> {
                   text: `	
                   SELECT * FROM	
                         (SELECT us.* , ur.correo_personal , ur.jornada
-                        FROM
-                        (SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario,
+                  FROM (SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario,
                         usu.nombre_completo,
                         (CASE
                         WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
@@ -345,26 +320,26 @@ class UserDataAccess implements IDataAccess<IUser> {
                         END) AS roles,
                         STRING_AGG(srol.nombre, ' | ') as nombrerol_str
                   FROM ${Constants.tbl_usuario_sql} usu
-                  LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre , uxr.ismain
-                  FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                  JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                  JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                  ) srol on (srol.idusuario = usu.id)
-                  WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
-                  AND srol.ismain = true
+                        LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre , uxr.ismain
+                        FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                              JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                              JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                              ) srol on (srol.idusuario = usu.id)
+                        WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
+                        AND srol.ismain = true
                   GROUP BY usu.id							
                   ) as us
                   LEFT JOIN tbl_usuario_rrhh ur ON us.id = ur.id) AS usp
-                              WHERE ( 
-                              UNACCENT(lower( replace(trim(usp.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              UNACCENT(lower( replace(trim(usp.nombrerol_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              UNACCENT(lower( replace(trim(usp.username ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
-                              $2 = ''
-                              ) 
-                  AND usp.id not in (select idusuario_resp from tbl_responsable_lead_dn where idusuario_resp <> 6)
-                  AND usp.username not in ('rrhh','RRHH1', 'rmg', 'rmg1', 'rmg2', 'ade', 'ADE1', 'crm', 'CRM1', 'atic','dn', 'da', 'da1','da2', 'da3', 'da4', 'da5')
+                        WHERE ( 
+                        UNACCENT(lower( replace(trim(usp.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                        UNACCENT(lower( replace(trim(usp.nombrerol_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                        UNACCENT(lower( replace(trim(usp.username ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
+                        $2 = ''
+                        ) 
+                        AND usp.id not in (select idusuario_resp from tbl_responsable_lead_dn where idusuario_resp <> 6)
+                        AND usp.username not in ('rrhh','RRHH1', 'rmg', 'rmg1', 'rmg2', 'ade', 'ADE1', 'crm', 'CRM1', 'atic','dn', 'da', 'da1','da2', 'da3', 'da4', 'da5')
                   ORDER BY  usp.nombrerol_str asc, usp.nombre_completo
-                              LIMIT $3 OFFSET $4`,
+                  LIMIT $3 OFFSET $4`,
 
                   values: [
                         1,

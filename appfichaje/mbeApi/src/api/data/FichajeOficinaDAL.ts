@@ -42,18 +42,16 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
     async getById(id: BigInt): Promise<IFichajeOficina | IErrorResponse> {
         const queryData = {
             name: 'get-fichajeoficina-x-id',
-            text: `
-                SELECT fo.id, fo.idusuario,
-                fo.fecha,
-                fo.observacion,
-                COALESCE(to_char(fo.entrada, 'YYYY-MM-DD HH24:MI'), '') as entrada,
-                COALESCE(to_char(fo.salida, 'YYYY-MM-DD HH24:MI'), '') as salida,
-                COALESCE(to_char(fo.entrada, 'HH24:MI'), '') as h_entrada,
-                COALESCE(to_char(fo.salida, 'HH24:MI'), '') as h_salida
-                FROM ${Constants.tbl_fichaje_oficina_sql} fo
-                WHERE fo.estado = 1 AND
-                fo.id = $1
-            `,
+            text: `SELECT fo.id, fo.idusuario,
+                    fo.fecha,
+                    fo.observacion,
+                    COALESCE(to_char(fo.entrada, 'YYYY-MM-DD HH24:MI'), '') as entrada,
+                    COALESCE(to_char(fo.salida, 'YYYY-MM-DD HH24:MI'), '') as salida,
+                    COALESCE(to_char(fo.entrada, 'HH24:MI'), '') as h_entrada,
+                    COALESCE(to_char(fo.salida, 'HH24:MI'), '') as h_salida
+                    FROM ${Constants.tbl_fichaje_oficina_sql} fo
+                    WHERE fo.estado = 1 AND
+                    fo.id = $1`,
             values: [id]
         };
 
@@ -80,16 +78,16 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                         idusuario_ultimo_cambio)
                         VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
                 values: [
-                    data.usuario,
-                    data.fecha,
-                    data.entrada,
-                    data.salida,
-                    data.token,
-                    data.tipo_ejecucion,
-                    data.observacion,
-                    timeStampCurrent,
-                    data.idusuario,
-                    this.idUserLogin
+                        data.usuario,
+                        data.fecha,
+                        data.entrada,
+                        data.salida,
+                        data.token,
+                        data.tipo_ejecucion,
+                        data.observacion,
+                        timeStampCurrent,
+                        data.idusuario,
+                        this.idUserLogin
                 ]
             };
             let lData = (await client.query(queryData)).rows as Array<IFichajeOficina | IErrorResponse>;
@@ -116,15 +114,15 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                         tipo_ejecucion = $8
                         WHERE id = $9 RETURNING *`,
                 values: [
-                    data.fecha,
-                    data.entrada,
-                    data.salida,
-                    data.observacion,
-                    this.idUserLogin,
-                    timeStampCurrent,
-                    data.token,
-                    data.tipo_ejecucion,
-                    id
+                        data.fecha,
+                        data.entrada,
+                        data.salida,
+                        data.observacion,
+                        this.idUserLogin,
+                        timeStampCurrent,
+                        data.token,
+                        data.tipo_ejecucion,
+                        id
                 ]
             };
             let lData = (await client.query(queryData)).rows as Array<IFichajeOficina | IErrorResponse>;
@@ -146,10 +144,10 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                         fecha_ultimo_cambio = $3
                         WHERE id = $4 RETURNING *`,
                 values: [
-                    Constants.code_status_delete,
-                    this.idUserLogin,
-                    timeStampCurrent,
-                    id
+                        Constants.code_status_delete,
+                        this.idUserLogin,
+                        timeStampCurrent,
+                        id
                 ]
             };
 
@@ -187,7 +185,7 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
             text: ` SELECT fu.id, fu.fecha, fu.entrada, fu.salida
                     FROM ${Constants.tbl_fichaje_oficina_sql} fu
                     WHERE fu.usuario LIKE $1 AND
-                          fu.fecha = $2
+                            fu.fecha = $2
                     LIMIT 1`,
             values: [data.usuario, dateCurrent]
         };
@@ -221,7 +219,7 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
             const limitTime = DateTime.fromISO(`${dateCurrent}T09:05:00`, { zone: "Europe/Madrid" });
 
             console.log("DEBUG fichar → entryTime:", entryTime.toISO(),
-                        "limitTime:", limitTime.toISO());
+                    "limitTime:", limitTime.toISO());
 
             if (entryTime > limitTime) {
                 console.log("DEBUG → LLEGADA TARDE detectada:", entryTime.toFormat("HH:mm"), ">", limitTime.toFormat("HH:mm"));
@@ -231,25 +229,25 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
             const queryDataInsert = {
                 name: 'insert-fichaje-oficina',
                 text: `INSERT INTO ${Constants.tbl_fichaje_oficina_sql}(
-                            usuario, fecha, entrada, salida, token, ip, tipo_ejecucion,
-                            observacion, fecha_ultimo_cambio, idusuario, idusuario_ultimo_cambio,
-                            jornada, horario
+                        usuario, fecha, entrada, salida, token, ip, tipo_ejecucion,
+                        observacion, fecha_ultimo_cambio, idusuario, idusuario_ultimo_cambio,
+                        jornada, horario
                         )
                         VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                 values: [
-                    data.usuario,
-                    dateCurrent,
-                    _entrada,
-                    _salida,
-                    data.token,
-                    _ip,
-                    data.tipo_ejecucion,
-                    data.observacion,
-                    timeStampCurrent,
-                    this.idUserLogin,
-                    this.idUserLogin,
-                    _userTypeJornadaDB,
-                    _userTypeHorarioDB
+                        data.usuario,
+                        dateCurrent,
+                        _entrada,
+                        _salida,
+                        data.token,
+                        _ip,
+                        data.tipo_ejecucion,
+                        data.observacion,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        this.idUserLogin,
+                        _userTypeJornadaDB,
+                        _userTypeHorarioDB
                 ]
             };
             lData = (await client.query(queryDataInsert)).rows as Array<IFichajeOficina | IErrorResponse>;
@@ -266,13 +264,11 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
             // Verificar si la tabla tbl_notificaciones existe
             const checkTableQuery = {
                 name: 'check-notifications-table',
-                text: `
-                    SELECT EXISTS (
+                text: `SELECT EXISTS (
                         SELECT FROM information_schema.tables
                         WHERE table_schema = 'public'
                         AND table_name = 'tbl_notificaciones'
-                    ) as table_exists
-                `
+                        ) as table_exists`
             };
             const tableResult = await this.client.exeQuery(checkTableQuery) as Array<{ table_exists: boolean }>;
             const tableExists = tableResult[0].table_exists;
@@ -281,17 +277,14 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
             if (!tableExists) {
                 const createTableQuery = {
                     name: 'create-notifications-table',
-                    text: `
-                        CREATE TABLE tbl_notificaciones (
+                    text: `CREATE TABLE tbl_notificaciones (
                             id SERIAL PRIMARY KEY,
                             usuario VARCHAR(255) NOT NULL,
                             mensaje TEXT NOT NULL,
                             tipo VARCHAR(50) NOT NULL,
                             fecha_creacion TIMESTAMP NOT NULL,
                             email_destinatario VARCHAR(255),
-                            estado VARCHAR(20) DEFAULT 'pendiente'
-                        )
-                    `
+                            estado VARCHAR(20) DEFAULT 'pendiente')`
                 };
                 await this.client.exeQuery(createTableQuery);
                 console.log('Tabla tbl_notificaciones creada');
@@ -310,14 +303,14 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
             const queryNotification = {
                 name: 'insert-notification',
                 text: `INSERT INTO tbl_notificaciones (
-                            usuario, mensaje, tipo, fecha_creacion, email_destinatario
+                        usuario, mensaje, tipo, fecha_creacion, email_destinatario
                         ) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
                 values: [
-                    usuario,
-                    `Has llegado tarde a la oficina a las ${entryTime.toLocaleTimeString('es-ES')} el ${entryTime.toLocaleDateString('es-ES')}.`,
-                    'late_arrival',
-                    UtilInstance.getDateCurrentForSQL(),
-                    userEmail
+                        usuario,
+                        `Has llegado tarde a la oficina a las ${entryTime.toLocaleTimeString('es-ES')} el ${entryTime.toLocaleDateString('es-ES')}.`,
+                        'late_arrival',
+                        UtilInstance.getDateCurrentForSQL(),
+                        userEmail
                 ]
             };
             await this.client.exeQuery(queryNotification);
@@ -361,11 +354,11 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                     LIMIT $3 OFFSET $4
                     `,
             values: [
-                filter_m_start,
-                filter_m_end,
-                limit,
-                offset,
-                search_all === '' ? '' : `%${search_all}%`
+                    filter_m_start,
+                    filter_m_end,
+                    limit,
+                    offset,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         };
 
@@ -388,32 +381,29 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
 
         const queryData = {
             name: 'get-jornada',
-            text: `
-                select ur.id, u.nombre_completo as fullname, count(fo.*) , SUM(fo.horas_totales_1) as total, ur.jornada, uxr.idrol,
-                (
-                    CASE
-                    WHEN ur.horario = 'HM' THEN 'Horario de Mañanas'
-                    WHEN ur.horario = 'HT' THEN 'Horario de Tardes'
-                    WHEN ur.horario = 'HC' THEN 'Horario Completo'
-                    END
-                ) AS horario
-                from tbl_usuario u
-                LEFT join tbl_usuario_rrhh ur on u.id = ur.id
-                INNER JOIN tbl_usuario_x_rol uxr on u.id = uxr.idusuario
-                left join (
-                    select fo.*,
-                    (
-                        CASE
-                            when fo.jornada = 'Jornada Completa' THEN ((COALESCE(to_char(fo.salida, 'HH24:MI'), '19:00:00')::time - COALESCE(to_char(fo.entrada, 'HH24:MI'), '09:00:00')::time)) - '02:00:00' :: time
-                            when fo.jornada = 'Media Jornada' AND fo.horario = 'HT' THEN ((COALESCE(to_char(fo.salida, 'HH24:MI'), '19:00:00')::time - COALESCE(to_char(fo.entrada, 'HH24:MI'), '14:00:00')::time))
-                            when fo.jornada = 'Media Jornada' AND fo.horario = 'HM' THEN ((COALESCE(to_char(fo.salida, 'HH24:MI'), '14:00:00')::time - COALESCE(to_char(fo.entrada, 'HH24:MI'), '09:00:00')::time))
-                        END
-                    ) as horas_totales_1
-                    from tbl_fichaje_oficina fo
-                    where fo.fecha BETWEEN $1 AND $2
-                    AND fo.estado = 1
-                ) fo on fo.idusuario = u.id
-                WHERE
+            text: `SELECT ur.id, u.nombre_completo as fullname, count(fo.*) , SUM(fo.horas_totales_1) as total, ur.jornada, uxr.idrol,
+                    (CASE
+                        WHEN ur.horario = 'HM' THEN 'Horario de Mañanas'
+                        WHEN ur.horario = 'HT' THEN 'Horario de Tardes'
+                        WHEN ur.horario = 'HC' THEN 'Horario Completo'
+                    END) AS horario
+                    
+                    FROM tbl_usuario u
+                    LEFT JOIN tbl_usuario_rrhh ur ON u.id = ur.id
+                    INNER JOIN tbl_usuario_x_rol uxr ON u.id = uxr.idusuario
+                    LEFT JOIN (
+                        SELECT fo.*,
+                        (CASE
+                                when fo.jornada = 'Jornada Completa' THEN ((COALESCE(to_char(fo.salida, 'HH24:MI'), '19:00:00')::time - COALESCE(to_char(fo.entrada, 'HH24:MI'), '09:00:00')::time)) - '02:00:00' :: time
+                                when fo.jornada = 'Media Jornada' AND fo.horario = 'HT' THEN ((COALESCE(to_char(fo.salida, 'HH24:MI'), '19:00:00')::time - COALESCE(to_char(fo.entrada, 'HH24:MI'), '14:00:00')::time))
+                                when fo.jornada = 'Media Jornada' AND fo.horario = 'HM' THEN ((COALESCE(to_char(fo.salida, 'HH24:MI'), '14:00:00')::time - COALESCE(to_char(fo.entrada, 'HH24:MI'), '09:00:00')::time))
+                        END) as horas_totales_1
+                        
+                        from tbl_fichaje_oficina fo
+                        where fo.fecha BETWEEN $1 AND $2
+                        AND fo.estado = 1
+                    ) fo on fo.idusuario = u.id
+                    WHERE
                 (
                     UNACCENT(lower( replace(trim(u.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
                     UNACCENT(lower( replace(trim(uxr.idrol ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
@@ -434,14 +424,13 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                 AND u.username not in ('rrhh','RRHH1', 'rmg', 'rmg1', 'rmg2', 'ade', 'ADE1', 'crm', 'CRM1', 'atic','dn', 'da', 'da1','da2', 'da3', 'da4', 'da5')
                 group by ur.id, u.nombre_completo, uxr.idrol
                 order by uxr.idrol , u.nombre_completo
-                LIMIT $4 OFFSET $5
-            `,
+                LIMIT $4 OFFSET $5`,
             values: [
-                filter_m_start,
-                filter_m_end,
-                search_all === '' ? '' : `%${search_all}%`,
-                limit,
-                offset
+                    filter_m_start,
+                    filter_m_end,
+                    search_all === '' ? '' : `%${search_all}%`,
+                    limit,
+                    offset
             ]
         };
         let lData: Array<IFichajeOficina | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IFichajeOficina | IErrorResponse>;
@@ -471,15 +460,15 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                         RETURNING *
                         `,
                 values: [
-                    data.email,
-                    '',
-                    '',
-                    data.estado,
-                    this.idUserLogin,
-                    data.username,
-                    `${_nombreCompleto}`,
-                    id,
-                    this.filterStatus
+                        data.email,
+                        '',
+                        '',
+                        data.estado,
+                        this.idUserLogin,
+                        data.username,
+                        `${_nombreCompleto}`,
+                        id,
+                        this.filterStatus
                 ]
             };
 
@@ -500,14 +489,14 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                         RETURNING *
                         `,
                 values: [
-                    data.cumpleanyos,
-                    data.correo_personal,
-                    data.detalles,
-                    data.alta_ss,
-                    data.jornada,
-                    timeStampCurrent,
-                    data.horario,
-                    id
+                        data.cumpleanyos,
+                        data.correo_personal,
+                        data.detalles,
+                        data.alta_ss,
+                        data.jornada,
+                        timeStampCurrent,
+                        data.horario,
+                        id
                 ]
             };
 

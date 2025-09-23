@@ -9,10 +9,10 @@ class LogsApartmentDataAccess implements IDataAccess<ILogsApartment> {
       public client: DbConnection
 
       constructor( 
-                        public idUserLogin: BigInt,
-                        public filterStatus: StatusDataType,
-                        public isTransactions: boolean, 
-                        public infoExtra?: any ) {
+            public idUserLogin: BigInt,
+            public filterStatus: StatusDataType,
+            public isTransactions: boolean, 
+            public infoExtra?: any ) {
             this.client = new DbConnection(isTransactions)
       }
 
@@ -26,7 +26,7 @@ class LogsApartmentDataAccess implements IDataAccess<ILogsApartment> {
             //              ORDER BY usu.id ASC`,
             //       values: [ this.filterStatus ]
             // }
-              
+
             // let lData: Array<ILogsApartment | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ILogsApartment | IErrorResponse>
             
             // if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse
@@ -181,15 +181,15 @@ class LogsApartmentDataAccess implements IDataAccess<ILogsApartment> {
             const queryData = {
                   name: 'get-logs-by-apartment',
                   text: `
-                         SELECT  lp.*, p.id_dispositivo_ref
-                         FROM tbl_logs_piso lp
-                         INNER JOIN tbl_piso p ON (lp.idpiso = p.id)
-                         WHERE lp.idpiso = $1
-                         ORDER BY lp.id DESC
-                         `,
+                        SELECT  lp.*, p.id_dispositivo_ref
+                        FROM tbl_logs_piso lp
+                        INNER JOIN tbl_piso p ON (lp.idpiso = p.id)
+                        WHERE lp.idpiso = $1
+                        ORDER BY lp.id DESC
+                        `,
                   values: [ idApartment ]
             }
-              
+
             let lData: Array<ILogsApartment | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ILogsApartment | IErrorResponse>
             
             if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse

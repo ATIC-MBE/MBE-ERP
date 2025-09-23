@@ -10,10 +10,11 @@ import { ISucesoPropietario } from "../models/ISucesoPropietario"
 class SucesoPropietarioDataAccess implements IDataAccess<ISucesoPropietario> {
     public client: DbConnection
     
-    constructor(      public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean, 
-                    public infoExtra?: any) {
+    constructor(
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean, 
+        public infoExtra?: any) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -150,7 +151,7 @@ class SucesoPropietarioDataAccess implements IDataAccess<ISucesoPropietario> {
         //     }
 
         //     // Pendiente actualización información [telefono | correo] en LEADS
-            
+
         //     // // Asocia varios telefonos al Lead
         //     // if ( leadDB && data.telefonos && data.telefonos.length !== 0 ) {
         //     //     for (let i = 0; i < data.telefonos!.length; i++) {

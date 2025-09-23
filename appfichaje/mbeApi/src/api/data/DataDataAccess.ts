@@ -52,8 +52,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-control-limpieza',
-            text: ` 
-                    SELECT count(chl.id) as total_data
+            text: `SELECT count(chl.id) as total_data
                     FROM ${Constants.tbl_control_horario_limpieza_sql} chl
                     INNER JOIN ${Constants.tbl_usuario_sql} usu ON (usu.id = chl.idusuario)
                     INNER JOIN ${Constants.tbl_piso_sql} p ON (p.id = chl.idpiso)
@@ -67,10 +66,10 @@ class DataDataAccess implements IDataAccess<IData> {
                     )
                     `,
             values: [
-                filter_m_start,
-                filter_m_end,
-                filter_iduser,
-                search_all === '' ? '' : `%${search_all}%`
+                    filter_m_start,
+                    filter_m_end,
+                    filter_iduser,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -101,8 +100,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-leads',
-            text: ` 
-                    SELECT count(l.id) as total_data 
+            text: `SELECT count(l.id) as total_data 
                     FROM (
                         SELECT *
                         FROM (
@@ -153,14 +151,15 @@ class DataDataAccess implements IDataAccess<IData> {
                         $6 = ''
                     )
                     `,
-            values: [filter_estatus,
-                filter_ns_start,
-                filter_ns_end,
-                filter_idresponsable,
-                filter_tipo_lead,
-                filter_search_all === '' ? '' : `%${filter_search_all}%`,
-                _dateCurrent,
-                _dateLastWeek
+            values: [
+                    filter_estatus,
+                    filter_ns_start,
+                    filter_ns_end,
+                    filter_idresponsable,
+                    filter_tipo_lead,
+                    filter_search_all === '' ? '' : `%${filter_search_all}%`,
+                    _dateCurrent,
+                    _dateLastWeek
             ]
         }
 
@@ -190,8 +189,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-my-leads',
-            text: ` 
-                    SELECT count(l.id) as total_data
+            text: `SELECT count(l.id) as total_data
                     FROM (
                         SELECT *
                         FROM (
@@ -250,15 +248,15 @@ class DataDataAccess implements IDataAccess<IData> {
                     )
                     `,
             values: [
-                1,
-                filter_idresponsable,
-                filter_ns_start,
-                filter_ns_end,
-                this.idUserLogin,
-                filter_tipo_lead,
-                filter_search_all === '' ? '' : `%${filter_search_all}%`,
-                _dateCurrent,
-                _dateLastWeek
+                    1,
+                    filter_idresponsable,
+                    filter_ns_start,
+                    filter_ns_end,
+                    this.idUserLogin,
+                    filter_tipo_lead,
+                    filter_search_all === '' ? '' : `%${filter_search_all}%`,
+                    _dateCurrent,
+                    _dateLastWeek
             ]
         }
 
@@ -276,27 +274,26 @@ class DataDataAccess implements IDataAccess<IData> {
     async getNroLeads(): Promise<IData | IErrorResponse> {
         const queryData = {
             name: 'get-nro-leads',
-            text: ` 
-                        SELECT count(l.*) as total_data
-                        FROM (
-                            SELECT l.id
-                            FROM ${Constants.tbl_lead_dn_sql} l
-                            LEFT JOIN ${Constants.tbl_responsable_lead_dn_sql} rsp ON (rsp.id = l.idresponsable)
-                            LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
-                            WHERE l.estatus >= $1 AND 
-                            (l.idresponsable = $2) AND 
-                            (l.next_step BETWEEN $3 AND $4) AND
-                            (l.tipo_lead = $5) AND
-                            (l.idtipointeresa = $6 OR $6 = -2)
-                            ORDER BY COALESCE(ti.codigo, 0) DESC, l.next_step DESC, l.id DESC
-                        ) l
-                        `,
-            values: [1,
-                this.infoExtra.filter.idresponsable_source,
-                this.infoExtra.filter.ns_start,
-                this.infoExtra.filter.ns_end,
-                this.infoExtra.filter.tipo_lead,
-                this.infoExtra.filter.idtipointeres
+            text: `SELECT count(l.*) as total_data
+                    FROM (
+                        SELECT l.id
+                        FROM ${Constants.tbl_lead_dn_sql} l
+                        LEFT JOIN ${Constants.tbl_responsable_lead_dn_sql} rsp ON (rsp.id = l.idresponsable)
+                        LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
+                        WHERE l.estatus >= $1 AND 
+                        (l.idresponsable = $2) AND 
+                        (l.next_step BETWEEN $3 AND $4) AND
+                        (l.tipo_lead = $5) AND
+                        (l.idtipointeresa = $6 OR $6 = -2)
+                        ORDER BY COALESCE(ti.codigo, 0) DESC, l.next_step DESC, l.id DESC
+                    ) l`,
+            values: [
+                    1,
+                    this.infoExtra.filter.idresponsable_source,
+                    this.infoExtra.filter.ns_start,
+                    this.infoExtra.filter.ns_end,
+                    this.infoExtra.filter.tipo_lead,
+                    this.infoExtra.filter.idtipointeres
             ]
         }
 
@@ -310,29 +307,28 @@ class DataDataAccess implements IDataAccess<IData> {
     async moverLeads(): Promise<IData | IErrorResponse> {
         const queryData = {
             name: 'mover-leads',
-            text: ` 
-                        UPDATE ${Constants.tbl_lead_dn_sql} SET idresponsable = $7
-                        WHERE id IN (	SELECT l.id
-                                        FROM ${Constants.tbl_lead_dn_sql} l
-                                        LEFT JOIN ${Constants.tbl_responsable_lead_dn_sql} rsp ON (rsp.id = l.idresponsable)
-                                        LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
-                                        WHERE l.estatus >= $1 AND 
-                                        (l.idresponsable = $2) AND 
-                                        (l.next_step BETWEEN $3 AND $4) AND
-                                        (l.tipo_lead = $5) AND
-                                        (l.idtipointeresa = $6 OR $6 = -2)
-                                        ORDER BY COALESCE(ti.codigo, 0) DESC, l.next_step DESC, l.id DESC
-                                        LIMIT $8
-                        )
-                        `,
-            values: [1,
-                this.infoExtra.filter.idresponsable_source,
-                this.infoExtra.filter.ns_start,
-                this.infoExtra.filter.ns_end,
-                this.infoExtra.filter.tipo_lead,
-                this.infoExtra.filter.idtipointeres,
-                this.infoExtra.filter.idresponsable_target,
-                this.infoExtra.filter.nro_datos_mover
+            text: `UPDATE ${Constants.tbl_lead_dn_sql} SET idresponsable = $7
+                    WHERE id IN (	SELECT l.id
+                                    FROM ${Constants.tbl_lead_dn_sql} l
+                                    LEFT JOIN ${Constants.tbl_responsable_lead_dn_sql} rsp ON (rsp.id = l.idresponsable)
+                                    LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
+                                    WHERE l.estatus >= $1 AND 
+                                    (l.idresponsable = $2) AND 
+                                    (l.next_step BETWEEN $3 AND $4) AND
+                                    (l.tipo_lead = $5) AND
+                                    (l.idtipointeresa = $6 OR $6 = -2)
+                                    ORDER BY COALESCE(ti.codigo, 0) DESC, l.next_step DESC, l.id DESC
+                                    LIMIT $8
+                    )`,
+            values: [
+                    1,
+                    this.infoExtra.filter.idresponsable_source,
+                    this.infoExtra.filter.ns_start,
+                    this.infoExtra.filter.ns_end,
+                    this.infoExtra.filter.tipo_lead,
+                    this.infoExtra.filter.idtipointeres,
+                    this.infoExtra.filter.idresponsable_target,
+                    this.infoExtra.filter.nro_datos_mover
             ]
         }
 
@@ -354,8 +350,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-users-rrhh',
-            text: ` 
-                    SELECT count(dt.*) as total_data
+            text: `SELECT count(dt.*) as total_data
                     FROM (
                         SELECT usu.id, usu.nombre_completo, usu.username,
                         STRING_AGG(srol.nombre, ' | ') as nombrerol_str
@@ -377,8 +372,8 @@ class DataDataAccess implements IDataAccess<IData> {
                     )
                     `,
             values: [
-                this.filterStatus,
-                search_all === '' ? '' : `%${search_all}%`
+                    this.filterStatus,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -406,8 +401,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-pisos-colaborador',
-            text: ` 
-                    SELECT count(pf.id) as total_data
+            text: `SELECT count(pf.id) as total_data
                     FROM (
                         SELECT vc.variablesreserva, vc.total_str, p.*, ipc.estado_general        
                         FROM (
@@ -466,15 +460,14 @@ class DataDataAccess implements IDataAccess<IData> {
                     ( 
                         ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $5 AND $6 ) OR
                         ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($5)::integer AND ($6)::integer )
-                    )
-                    `,
+                    )`,
             values: [
-                search_all === '' ? '' : `%${search_all}%`,
-                _nro_habitaciones,
-                _capacidad_maxima,
-                _nro_banios,
-                _total_start,
-                _total_end
+                    search_all === '' ? '' : `%${search_all}%`,
+                    _nro_habitaciones,
+                    _capacidad_maxima,
+                    _nro_banios,
+                    _total_start,
+                    _total_end
             ]
         }
 
@@ -497,8 +490,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-users-admin',
-            text: ` 
-                    SELECT count(dt.*) as total_data
+            text: `SELECT count(dt.*) as total_data
                     FROM (
                         SELECT usu.id, usu.nombre_completo, usu.username,
                         STRING_AGG(srol.nombre, ' | ') as nombrerol_str
@@ -516,11 +508,10 @@ class DataDataAccess implements IDataAccess<IData> {
                         UNACCENT(lower( replace(trim(dt.nombrerol_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                         UNACCENT(lower( replace(trim(dt.username ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
                         $2 = ''
-                    )
-                    `,
+                    )`,
             values: [
-                this.filterStatus,
-                search_all === '' ? '' : `%${search_all}%`
+                    this.filterStatus,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
         let lData: Array<IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IData | IErrorResponse>
@@ -542,7 +533,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-perfiles-DN',
-            text: ` SELECT COUNT(dt.*) as total_data 
+            text: `SELECT COUNT(dt.*) as total_data 
                     FROM (
                         SELECT rl.*
                         FROM ${Constants.tbl_responsable_lead_dn_sql} rl
@@ -556,11 +547,10 @@ class DataDataAccess implements IDataAccess<IData> {
                             $2 = ''
                         )
                         GROUP BY rl.id, usu.nombre_completo
-                    ) dt
-                    `,
+                    ) dt`,
             values: [
-                this.filterStatus,
-                search_all === '' ? '' : `%${search_all}%`
+                    this.filterStatus,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
         let lData: Array<IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IData | IErrorResponse>
@@ -582,7 +572,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-devices',
-            text: ` SELECT COUNT(d.*) as total_data 
+            text: `SELECT COUNT(d.*) as total_data 
                     FROM (
                         SELECT d.*, 
                         COALESCE((p.etiqueta), 'Libre') as etiqueta, 
@@ -603,11 +593,10 @@ class DataDataAccess implements IDataAccess<IData> {
                         UNACCENT(lower( replace(trim(d.etiqueta),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                         UNACCENT(lower( replace(trim(d.mac),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                         $2 = ''
-                    )
-                    `,
+                    )`,
             values: [
-                this.filterStatus,
-                search_all === '' ? '' : `%${search_all}%`
+                    this.filterStatus,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
         let lData: Array<IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IData | IErrorResponse>
@@ -627,14 +616,12 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-devices-report',
-            text: ` 
-                    SELECT COUNT(rd.*) as total_data 
+            text: `SELECT COUNT(rd.*) as total_data 
                     FROM ${Constants.tbl_reporte_atic_sql} rd
-                    WHERE date(rd.fecha) BETWEEN $1 AND $2
-                    `,
+                    WHERE date(rd.fecha) BETWEEN $1 AND $2`,
             values: [
-                filter_ns_start,
-                filter_ns_end
+                    filter_ns_start,
+                    filter_ns_end
             ]
         }
 
@@ -659,21 +646,20 @@ class DataDataAccess implements IDataAccess<IData> {
         const queryData = {
             name: "get-inventario",
             text: `SELECT COUNT (inv.id_piso, inv.id_articulo, inv.cantidad, ar.mobiliario, ar.stock, ar.total , pi.id_dispositivo_ref, pi.etiqueta) as total_data
-                        FROM ${Constants.tbl_inventario_da_sql} inv
-                        INNER JOIN ${Constants.tbl_piso_sql} pi
-                        ON pi.id = inv.id_piso
-                        INNER JOIN ${Constants.tbl_articulos_da_sql} ar
-                        ON ar.id = inv.id_articulo
-                        WHERE
-                        (
-                            UNACCENT(lower( replace(trim(ar.mobiliario), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
-                            UNACCENT(lower( replace(trim(pi.etiqueta), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
-                            UNACCENT(lower( replace(trim(pi.id_dispositivo_ref), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
-                            $1 = ''
-                        )
-                        `,
+                    FROM ${Constants.tbl_inventario_da_sql} inv
+                    INNER JOIN ${Constants.tbl_piso_sql} pi
+                    ON pi.id = inv.id_piso
+                    INNER JOIN ${Constants.tbl_articulos_da_sql} ar
+                    ON ar.id = inv.id_articulo
+                    WHERE
+                    (
+                        UNACCENT(lower( replace(trim(ar.mobiliario), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
+                        UNACCENT(lower( replace(trim(pi.etiqueta), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
+                        UNACCENT(lower( replace(trim(pi.id_dispositivo_ref), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
+                        $1 = ''
+                    )`,
             values: [
-                search_all === '' ? '' : `%${search_all}%`
+                    search_all === '' ? '' : `%${search_all}%`
             ]
 
         }
@@ -702,12 +688,9 @@ class DataDataAccess implements IDataAccess<IData> {
                         UNACCENT(lower( replace(trim(ar.tag), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
                         UNACCENT(lower( replace(trim(ar.mobiliario), ' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
                         $1 = ''
-                    )
-                    `,
-
+                    )`,
             values: [
-
-                search_all === '' ? '' : `%${search_all}%`
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -731,7 +714,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-prescriptores',
-            text: ` SELECT count(gp.*) as total_data
+            text: `SELECT count(gp.*) as total_data
                     FROM (
                         SELECT gp.id
                             FROM tbl_grupo_prescriptor_dn gp
@@ -754,11 +737,10 @@ class DataDataAccess implements IDataAccess<IData> {
                                 UNACCENT(lower( replace(trim(COALESCE(dpre.empresa_str,'')),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
                                 $2 = ''
                             )
-                    ) gp
-                    `,
+                    ) gp`,
             values: [
-                1,
-                search_all === '' ? '' : `%${search_all}%`
+                    1,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
         let lData: Array<IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IData | IErrorResponse>
@@ -781,7 +763,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-propietarios',
-            text: ` SELECT count(gp.*) as total_data
+            text: `SELECT count(gp.*) as total_data
                     FROM (
                         SELECT gp.id
                         FROM ${Constants.tbl_grupo_propietario_dn_sql} gp
@@ -802,8 +784,7 @@ class DataDataAccess implements IDataAccess<IData> {
                             UNACCENT(lower( replace(trim(COALESCE(dpro.email_str,'')),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                             $2 = ''
                         )
-                    ) gp
-                    `,
+                    ) gp`,
             values: [
                 1,
                 search_all === '' ? '' : `%${search_all}%`
@@ -825,41 +806,39 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-keys',
-            text: ` 
-                    SELECT count(keys.*) as total_data 
+            text: `SELECT count(keys.*) as total_data 
                         FROM (
-                              SELECT ll.ubicacion, ll.tipo_tarjeta, ll.idqr, ll.qr,
-                              (CASE
-                                    WHEN count(dll.*) > 0 THEN STRING_AGG(COALESCE(dll.id_dispositivo_ref, ''), ' | ')
-                                    WHEN count(dll.*) = 0 THEN 'Libre'
-                                    END
-                              ) AS pisos_str,
-                              ll.estado
-                              FROM ${Constants.tbl_llave_sql} ll
-                              LEFT JOIN (	
-                                          SELECT llm.idllave, 
-                                          (CASE
-                                                WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
-                                                WHEN p.id_dispositivo_ref IS NULL THEN 'Libre'
-                                          END) AS id_dispositivo_ref
-                                          FROM ${Constants.tbl_llave_x_manija_sql} llm
-                                          INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
-                                          INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo AND d.estado = 1)
-                                          LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
-                              ) dll ON dll.idllave = ll.id
-                              GROUP BY ll.id
+                            SELECT ll.ubicacion, ll.tipo_tarjeta, ll.idqr, ll.qr,
+                            (CASE
+                                WHEN count(dll.*) > 0 THEN STRING_AGG(COALESCE(dll.id_dispositivo_ref, ''), ' | ')
+                                WHEN count(dll.*) = 0 THEN 'Libre'
+                                END
+                            ) AS pisos_str,
+                            ll.estado
+                            FROM ${Constants.tbl_llave_sql} ll
+                            LEFT JOIN (	
+                                SELECT llm.idllave, 
+                                (CASE
+                                    WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
+                                    WHEN p.id_dispositivo_ref IS NULL THEN 'Libre'
+                                END) AS id_dispositivo_ref
+                                FROM ${Constants.tbl_llave_x_manija_sql} llm
+                                INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
+                                INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo AND d.estado = 1)
+                                LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
+                            ) dll ON dll.idllave = ll.id
+                            GROUP BY ll.id
                         ) keys
-                         WHERE keys.estado >= $1 AND keys.estado IS NOT NULL AND 
-                         ( 
-                              UNACCENT(lower( replace(trim(keys.idqr ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
-                              UNACCENT(lower( replace(trim(keys.tipo_tarjeta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              UNACCENT(lower( replace(trim(keys.ubicacion ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              UNACCENT(lower( replace(trim(keys.pisos_str),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                              $2 = '')
-                    `,
+                        WHERE keys.estado >= $1 AND keys.estado IS NOT NULL AND 
+                        ( 
+                            UNACCENT(lower( replace(trim(keys.idqr ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
+                            UNACCENT(lower( replace(trim(keys.tipo_tarjeta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                            UNACCENT(lower( replace(trim(keys.ubicacion ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                            UNACCENT(lower( replace(trim(keys.pisos_str),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                            $2 = '')`,
             values: [
-                -1,
-                search_all === '' ? '' : `%${search_all}%`
+                    -1,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
         let lData: Array<IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IData | IErrorResponse>
@@ -879,8 +858,7 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: 'get-total-personal-oficina',
-            text: ` 
-                    SELECT count(fo.id) as total_data
+            text: `SELECT count(fo.id) as total_data
                     FROM tbl_fichaje_oficina fo
                     INNER JOIN tbl_usuario usu ON (usu.id = fo.idusuario)
                     WHERE fo.estado = 1 AND 
@@ -888,12 +866,11 @@ class DataDataAccess implements IDataAccess<IData> {
                     ( 
                         UNACCENT(lower( replace(trim(usu.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR 
                         $3 = ''
-                    )
-                    `,
+                    )`,
             values: [
-                filter_m_start,
-                filter_m_end,
-                search_all === '' ? '' : `%${search_all}%`
+                    filter_m_start,
+                    filter_m_end,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -912,38 +889,35 @@ class DataDataAccess implements IDataAccess<IData> {
         
         const queryData = {
             name : "get-total-usuarios-rrhh",
-            text: `
-            SELECT count(usp.*) as total_data FROM	
-                (SELECT us.* , ur.correo_personal , ur.jornada
-                FROM
-                (SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario,
-                usu.nombre_completo,
-                (CASE
-                WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
-                WHEN count(srol.*) = 0 THEN '[]'
-                END) AS roles,
-                             STRING_AGG(srol.nombre, ' | ') as nombrerol_str
-                FROM ${Constants.tbl_usuario_sql} usu
-                LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre , uxr.ismain
-                FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
-                JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
-                JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
-                ) srol on (srol.idusuario = usu.id)
-                WHERE usu.estado >= 1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
-                AND srol.ismain = true
-                GROUP BY usu.id							
-                ) as us
-                LEFT JOIN ${Constants.tbl_usuario_rrhh_sql} ur ON us.id = ur.id) AS usp
-                            WHERE ( 
-                            UNACCENT(lower( replace(trim(usp.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
-                            UNACCENT(lower( replace(trim(usp.nombrerol_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
-                            UNACCENT(lower( replace(trim(usp.username ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR 
-                            $1 = ''
-                            ) 
-                            AND usp.id not in (select idusuario_resp from tbl_responsable_lead_dn where idusuario_resp <> 6)
-                            AND usp.username not in ('rrhh','RRHH1', 'rmg', 'rmg1', 'rmg2', 'ade', 'ADE1', 'crm', 'CRM1', 'atic','dn', 'da', 'da1','da2', 'da3', 'da4', 'da5')
-
-            `,
+            text: `SELECT count(usp.*) as total_data FROM	
+                    (SELECT us.* , ur.correo_personal , ur.jornada
+                    FROM
+                    (SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario,
+                    usu.nombre_completo,
+                    (CASE
+                    WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
+                    WHEN count(srol.*) = 0 THEN '[]'
+                    END) AS roles,
+                        STRING_AGG(srol.nombre, ' | ') as nombrerol_str
+                    FROM ${Constants.tbl_usuario_sql} usu
+                    LEFT JOIN ( SELECT uxr.idusuario, uxr.idrol, r.nombre , uxr.ismain
+                    FROM ${Constants.tbl_usuario_x_rol_sql} uxr 
+                    JOIN ${Constants.tbl_rol_sql} r on (r.id = uxr.idrol)
+                    JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = uxr.idusuario)
+                    ) srol on (srol.idusuario = usu.id)
+                    WHERE usu.estado >= 1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
+                    AND srol.ismain = true
+                    GROUP BY usu.id							
+                    ) as us
+                    LEFT JOIN ${Constants.tbl_usuario_rrhh_sql} ur ON us.id = ur.id) AS usp
+                        WHERE ( 
+                        UNACCENT(lower( replace(trim(usp.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
+                        UNACCENT(lower( replace(trim(usp.nombrerol_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
+                        UNACCENT(lower( replace(trim(usp.username ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR 
+                        $1 = ''
+                        ) 
+                        AND usp.id not in (select idusuario_resp from tbl_responsable_lead_dn where idusuario_resp <> 6)
+                        AND usp.username not in ('rrhh','RRHH1', 'rmg', 'rmg1', 'rmg2', 'ade', 'ADE1', 'crm', 'CRM1', 'atic','dn', 'da', 'da1','da2', 'da3', 'da4', 'da5')`,
             // text : `
             // SELECT count(dt.*) as total_data
             //         FROM (
@@ -969,7 +943,7 @@ class DataDataAccess implements IDataAccess<IData> {
 					
             // `,
             values: [
-                search_all === '' ? '' : `%${search_all}%`
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -984,7 +958,6 @@ class DataDataAccess implements IDataAccess<IData> {
         if(!this.infoExtra) this.infoExtra = { filter : {} }
         else if(!this.infoExtra!.filter) this.infoExtra = { filter : {} }
 
-
         const _search_all = this.infoExtra!.filter!.search_all || ''
         const _nro_habitaciones = isNaN(parseInt(this.infoExtra!.filter!.nro_habitaciones)) ? -1 : parseInt(this.infoExtra!.filter!.nro_habitaciones)
         const _capacidad_maxima = isNaN(parseInt(this.infoExtra!.filter!.capacidad_maxima)) ? -1 : parseInt(this.infoExtra!.filter!.capacidad_maxima)
@@ -998,115 +971,112 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name: "get-total-data-info-comercial",
-            text : `
-            SELECT count(ptd.*) as total_data
-			FROM(
-                    SELECT pf.*
-                 FROM (
-                 SELECT ipc.id, ipc.estado_general, 
-                 p.etiqueta AS a_etiqueta, p.id as idpiso, plfc.plataformas,
-                 COALESCE(vc.variablesreserva, '[]') as variablesreserva,
-                 p.ciudad as a_localidad, p.codigo_postal as a_codigo_postal, 
-                 (p.direccion || ', Nro ' || p.nro_edificio || ', ' || p.nro_piso) as a_full_direccion, p.ubicacion_mapa,
-                 vc.total_str,p.ocupacion_maxima, p.m2, p.nro_dormitorios, p.nro_camas, p.nro_banios, p.nro_sofacama,
-                 p.etiqueta
-                 FROM tbl_piso p
-                 LEFT JOIN tbl_info_piso_da ipd ON p.id = ipd.id
-                 LEFT JOIN tbl_info_piso_comercial_rmg ipc ON (p.id = ipc.idpiso)
-                 LEFT JOIN (
-                     SELECT p.id,
-                     (CASE
-                         WHEN count(pc.*) > 0 THEN jsonb_agg(json_build_object(  'id', pc.id,
-                                                                                 'codigo', COALESCE(pc.codigo, ''), 
-                                                                                 'nombre', COALESCE(pc.nombre, ''),
-                                                                                 'link', COALESCE(pi.link, '') ))
-                         WHEN count(pc.*) = 0 THEN '[]'
-                     END
-                     ) as plataformas
-                     FROM tbl_info_piso_comercial_rmg ipc
-                     RIGHT JOIN tbl_piso p ON (p.id = ipc.idpiso)
-                     LEFT JOIN tbl_plataforma_comercial_rmg pc ON (pc.estado = 1)
-                     LEFT JOIN tbl_plataforma_infopiso_rmg pi ON (pc.id = pi.idplataformacom AND pi.estado = 1 AND ipc.id = pi.idinfopisocom)
-                     GROUP BY p.id
-                 ) plfc ON plfc.id = p.id
-                 LEFT JOIN (
-                     SELECT ipc.idpiso,
-                     (CASE
-                         WHEN count(vr.*) > 0 THEN jsonb_agg(json_build_object(  'id', vr.id, 
-                                                                                 'precio_limite', vr.precio_limite,
-                                                                                 'precio_alquiler', vr.precio_alquiler,
-                                                                                 'precio_muebles', vr.precio_muebles,
-                                                                                 'total', vr.total
-                                                                             ))
-                         WHEN count(vr.*) = 0 THEN '[]'
-                     END
-                     ) as variablesreserva,
-                     STRING_AGG( COALESCE(vr.total, 0)::text, ' | ') as total_str
-                     FROM tbl_info_piso_comercial_rmg ipc
-                     LEFT JOIN (
-                         SELECT * 
-                         FROM tbl_variables_reserva_rmg vr 
-                         WHERE vr.estado = 1 
-                         ORDER BY fecha_creacion DESC, id DESC 
-                     ) vr ON (ipc.id = vr.idinfopisocom)
-                     WHERE ipc.estado = 1
-                     GROUP BY ipc.idpiso
-                 ) vc ON (vc.idpiso = p.id)
-                 WHERE p.estado = $1 AND 
-                     (ipc.estado = 1 OR ipc.estado IS NULL) AND
-                     p.visible_rmg = 1 AND
-                     (ipc.estado_general = $9 OR $9 = -2) AND 
-                     (
-                         UNACCENT(lower( replace(trim(p.etiqueta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                         UNACCENT(lower( replace(trim(ipd.if_zonas ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                         (
-                             CASE
-                                 WHEN ipc.estado_general = 1 THEN 'activo'
-                                 WHEN ipc.estado_general = 2 THEN 'stopsell'
-                                 WHEN ipc.estado_general = 3 THEN 'nodisponible'
-                                 WHEN ipc.estado_general IS NULL THEN '---'
-                             END
-                         ) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                         UNACCENT(lower( replace(trim(   COALESCE(ciudad, '') || ',' ||
-                                                         COALESCE(codigo_postal, '') || ','  || 
-                                                         COALESCE(direccion, '') || ',' || 
-                                                         COALESCE(nro_edificio, '') || ',' ||
-                                                         COALESCE(nro_piso, '') ),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
-                         $2 = ''
-                     ) 
-                     ) AS pf
-                     LEFT JOIN tbl_info_piso_da ipd ON pf.idpiso = ipd.id
-                     WHERE 
-                     (
-                         ipd.ds_nro_dormitorios = $3 OR $3 = -1 
-                     ) AND
-                     (
-                         $4 <= ipd.cp_ocupacion_maxima OR $4 = -1
-                     ) AND
-                     (
-                         ipd.ds_nro_camas = $5 OR $5 = -1
-                     ) AND
-                     (
-                         ipd.bs_nro_banios = $6 OR $6 = -1
-                     ) AND
-                     ( 
-                         ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $7 AND $8 ) OR
-                         ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($7)::integer AND ($8)::integer )
-                     ) 
-                 ORDER BY pf.estado_general ASC, CAST(COALESCE(pf.total_str, '0') as double precision) ASC, pf.etiqueta ASC
-                ) as ptd
-                    
-            `,
+            text : `SELECT count(ptd.*) as total_data
+                    FROM(
+                        SELECT pf.*
+                        FROM (
+                        SELECT ipc.id, ipc.estado_general, 
+                        p.etiqueta AS a_etiqueta, p.id as idpiso, plfc.plataformas,
+                        COALESCE(vc.variablesreserva, '[]') as variablesreserva,
+                        p.ciudad as a_localidad, p.codigo_postal as a_codigo_postal, 
+                        (p.direccion || ', Nro ' || p.nro_edificio || ', ' || p.nro_piso) as a_full_direccion, p.ubicacion_mapa,
+                        vc.total_str,p.ocupacion_maxima, p.m2, p.nro_dormitorios, p.nro_camas, p.nro_banios, p.nro_sofacama,
+                        p.etiqueta
+                        FROM tbl_piso p
+                        LEFT JOIN tbl_info_piso_da ipd ON p.id = ipd.id
+                        LEFT JOIN tbl_info_piso_comercial_rmg ipc ON (p.id = ipc.idpiso)
+                        LEFT JOIN (
+                            SELECT p.id,
+                            (CASE
+                                WHEN count(pc.*) > 0 THEN jsonb_agg(json_build_object(  'id', pc.id,
+                                                                                        'codigo', COALESCE(pc.codigo, ''), 
+                                                                                        'nombre', COALESCE(pc.nombre, ''),
+                                                                                        'link', COALESCE(pi.link, '') ))
+                                WHEN count(pc.*) = 0 THEN '[]'
+                            END
+                            ) as plataformas
+                            FROM tbl_info_piso_comercial_rmg ipc
+                            RIGHT JOIN tbl_piso p ON (p.id = ipc.idpiso)
+                            LEFT JOIN tbl_plataforma_comercial_rmg pc ON (pc.estado = 1)
+                            LEFT JOIN tbl_plataforma_infopiso_rmg pi ON (pc.id = pi.idplataformacom AND pi.estado = 1 AND ipc.id = pi.idinfopisocom)
+                            GROUP BY p.id
+                        ) plfc ON plfc.id = p.id
+                        LEFT JOIN (
+                            SELECT ipc.idpiso,
+                            (CASE
+                                WHEN count(vr.*) > 0 THEN jsonb_agg(json_build_object(  'id', vr.id, 
+                                                                                        'precio_limite', vr.precio_limite,
+                                                                                        'precio_alquiler', vr.precio_alquiler,
+                                                                                        'precio_muebles', vr.precio_muebles,
+                                                                                        'total', vr.total
+                                                                                    ))
+                                WHEN count(vr.*) = 0 THEN '[]'
+                            END
+                            ) as variablesreserva,
+                            STRING_AGG( COALESCE(vr.total, 0)::text, ' | ') as total_str
+                            FROM tbl_info_piso_comercial_rmg ipc
+                            LEFT JOIN (
+                                SELECT * 
+                                FROM tbl_variables_reserva_rmg vr 
+                                WHERE vr.estado = 1 
+                                ORDER BY fecha_creacion DESC, id DESC 
+                            ) vr ON (ipc.id = vr.idinfopisocom)
+                            WHERE ipc.estado = 1
+                            GROUP BY ipc.idpiso
+                        ) vc ON (vc.idpiso = p.id)
+                        WHERE p.estado = $1 AND 
+                            (ipc.estado = 1 OR ipc.estado IS NULL) AND
+                            p.visible_rmg = 1 AND
+                            (ipc.estado_general = $9 OR $9 = -2) AND 
+                            (
+                                UNACCENT(lower( replace(trim(p.etiqueta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                                UNACCENT(lower( replace(trim(ipd.if_zonas ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                                (
+                                    CASE
+                                        WHEN ipc.estado_general = 1 THEN 'activo'
+                                        WHEN ipc.estado_general = 2 THEN 'stopsell'
+                                        WHEN ipc.estado_general = 3 THEN 'nodisponible'
+                                        WHEN ipc.estado_general IS NULL THEN '---'
+                                    END
+                                ) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                                UNACCENT(lower( replace(trim(   COALESCE(ciudad, '') || ',' ||
+                                                                COALESCE(codigo_postal, '') || ','  || 
+                                                                COALESCE(direccion, '') || ',' || 
+                                                                COALESCE(nro_edificio, '') || ',' ||
+                                                                COALESCE(nro_piso, '') ),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
+                                $2 = ''
+                            ) 
+                            ) AS pf
+                            LEFT JOIN tbl_info_piso_da ipd ON pf.idpiso = ipd.id
+                            WHERE 
+                            (
+                                ipd.ds_nro_dormitorios = $3 OR $3 = -1 
+                            ) AND
+                            (
+                                $4 <= ipd.cp_ocupacion_maxima OR $4 = -1
+                            ) AND
+                            (
+                                ipd.ds_nro_camas = $5 OR $5 = -1
+                            ) AND
+                            (
+                                ipd.bs_nro_banios = $6 OR $6 = -1
+                            ) AND
+                            ( 
+                                ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $7 AND $8 ) OR
+                                ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($7)::integer AND ($8)::integer )
+                            ) 
+                        ORDER BY pf.estado_general ASC, CAST(COALESCE(pf.total_str, '0') as double precision) ASC, pf.etiqueta ASC
+                        ) as ptd`,
             values : [
-                1,
-                _search_all === '' ? '' : `%${_search_all}%`,
-                _nro_habitaciones,
-                _capacidad_maxima,
-                _nro_camas,
-                _nro_banios,
-                _total_start,
-                _total_end,
-                _estado_general
+                    1,
+                    _search_all === '' ? '' : `%${_search_all}%`,
+                    _nro_habitaciones,
+                    _capacidad_maxima,
+                    _nro_camas,
+                    _nro_banios,
+                    _total_start,
+                    _total_end,
+                    _estado_general
             ]
         }
 
@@ -1125,10 +1095,9 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name : "get-total-data-pisos-da",
-            text: `
-            SELECT count (pft.*) as total_data 
-                FROM 	(
-                    SELECT pf.*
+            text: `SELECT count (pft.*) as total_data 
+                    FROM 	(
+                        SELECT pf.*
                             FROM 
                             (
                                 SELECT p.id,
@@ -1169,10 +1138,9 @@ class DataDataAccess implements IDataAccess<IData> {
                             )
                             ORDER BY nullif(regexp_replace(lower(pf.etiqueta), '[^a-z]', '', 'g'),'')::text, 
                                     nullif(regexp_replace(pf.etiqueta, '[^0-9]', '', 'g'),'')::int
-                        ) as pft
-                    `,
+                    ) as pft`,
             values : [
-            _search_all === '' ? '' : `%${_search_all}%`
+                    _search_all === '' ? '' : `%${_search_all}%`
             ]
         }
         let lData: Array <IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array <IData | IErrorResponse>
@@ -1190,10 +1158,9 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name : "get-total-share-data",
-            text : `
-            SELECT count(pts.*) as total_data
-                    FROM (
-                    SELECT pf.* 
+            text : `SELECT count(pts.*) as total_data
+                        FROM (
+                        SELECT pf.* 
                             FROM
                             (
                             SELECT
@@ -1233,10 +1200,9 @@ class DataDataAccess implements IDataAccess<IData> {
                             ORDER BY p.etiqueta ASC ) as pf
                             LEFT JOIN tbl_info_piso_da ipd ON pf.id = ipd.id
                             ORDER BY pf.etiqueta ASC 
-                            ) as pts 
-            `,
+                            ) as pts`,
             values : [
-                _search_all === '' ? '' : `%${_search_all}%`
+                    _search_all === '' ? '' : `%${_search_all}%`
             ]
         }
         let lData : Array <IData | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array <IData | IErrorResponse>
@@ -1255,41 +1221,39 @@ class DataDataAccess implements IDataAccess<IData> {
 
         const queryData = {
             name : "get-total-vacaciones",
-            text: `
-            SELECT count (tv.*) as total_data 
-            FROM(
-                SELECT sv.id ,
-                (
-                    CASE 
-                        when sv.estado_solicitud = 0 THEN 'En espera'
-                        when sv.estado_solicitud = 1 THEN 'Aprobada'
-                        when sv.estado_solicitud = 2 THEN 'Rechazada' 
-                    END
-                ) as estado_solicitud
-                FROM tbl_solicitud_rrhh sv
-                LEFT JOIN tbl_usuario usu ON usu.id = sv.idusuario
-                WHERE sv.fecha_inicio BETWEEN $1 AND $2 AND
-                ( 
-                    UNACCENT(lower( replace(trim(usu.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
-                    UNACCENT(lower( replace(trim(
+            text: `SELECT count (tv.*) as total_data 
+                    FROM(
+                        SELECT sv.id ,
                         (
                             CASE 
-                            when sv.estado_solicitud = 0 THEN 'En espera'
-                            when sv.estado_solicitud = 1 THEN 'Aprobada'
-                            when sv.estado_solicitud = 2 THEN 'Rechazada' 
+                                when sv.estado_solicitud = 0 THEN 'En espera'
+                                when sv.estado_solicitud = 1 THEN 'Aprobada'
+                                when sv.estado_solicitud = 2 THEN 'Rechazada' 
                             END
+                        ) as estado_solicitud
+                        FROM tbl_solicitud_rrhh sv
+                        LEFT JOIN tbl_usuario usu ON usu.id = sv.idusuario
+                        WHERE sv.fecha_inicio BETWEEN $1 AND $2 AND
+                        ( 
+                            UNACCENT(lower( replace(trim(usu.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR
+                            UNACCENT(lower( replace(trim(
+                                (
+                                    CASE 
+                                    when sv.estado_solicitud = 0 THEN 'En espera'
+                                    when sv.estado_solicitud = 1 THEN 'Aprobada'
+                                    when sv.estado_solicitud = 2 THEN 'Rechazada' 
+                                    END
+                                )
+                                    ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR 
+                            $3 = ''
                         )
-                            ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR 
-                    $3 = ''
-                )
-                ORDER BY sv.estado ASC) tv
-                  
-            `,
+                        ORDER BY sv.estado ASC) tv
+                        
+                    `,
             values : [
-               
-                filter_m_start,
-                filter_m_end,
-                _search_all === '' ? '' : `%${_search_all}%`,
+                    filter_m_start,
+                    filter_m_end,
+                    _search_all === '' ? '' : `%${_search_all}%`,
             ]
         }
 
@@ -1340,13 +1304,12 @@ class DataDataAccess implements IDataAccess<IData> {
                         UNACCENT(lower( replace(trim(COALESCE(sp.piso,'')),' ','') )) LIKE UNACCENT(lower( replace(trim($4),' ','') )) OR
                         UNACCENT(lower( replace(trim(COALESCE(sp.lbl_estado_solicitud,'')),' ','') )) LIKE UNACCENT(lower( replace(trim($4),' ','') )) OR
                         $4 = ''
-                    )
-                    `,
+                    )`,
             values: [
-                filter_state_sol,
-                filter_m_start,
-                filter_m_end,
-                search_all === '' ? '' : `%${search_all}%`
+                    filter_state_sol,
+                    filter_m_start,
+                    filter_m_end,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -1372,10 +1335,9 @@ class DataDataAccess implements IDataAccess<IData> {
             text: ` SELECT count(*) as total_data
                     FROM tbl_solicitud_precio 
                     WHERE estado = 1 AND 
-                    estado_solicitud = $1
-                    `,
+                    estado_solicitud = $1`,
             values: [
-                estadoSol
+                    estadoSol
             ]
         }
 
@@ -1430,17 +1392,16 @@ class DataDataAccess implements IDataAccess<IData> {
             // ) AND uxr.ismain = true AND usu.estado = 1
 
             // `,
-            text: `
-                    select count(fo.*)			
-                    from tbl_usuario u
-                    LEFT join tbl_usuario_rrhh ur on u.id = ur.id
-                    INNER JOIN tbl_usuario_x_rol uxr on u.id = uxr.idusuario
-                    left join (
-                            select fo.*
-                            from tbl_fichaje_oficina fo
-                            where fo.fecha BETWEEN $1 AND $2
+            text: `SELECT count(fo.*)			
+                    FROM tbl_usuario u
+                    LEFT JOIN tbl_usuario_rrhh ur ON u.id = ur.id
+                    INNER JOIN tbl_usuario_x_rol uxr ON u.id = uxr.idusuario
+                    LEFT JOIN (
+                            SELECT fo.*
+                            FROM tbl_fichaje_oficina fo
+                            WHERE fo.fecha BETWEEN $1 AND $2
                             AND fo.estado = 1
-                                ) fo on fo.idusuario = u.id
+                                ) fo ON fo.idusuario = u.id
                     WHERE
                     ( 
                         UNACCENT(lower( replace(trim(u.nombre_completo ),' ','')  )) LIKE UNACCENT(lower( replace(trim($3),' ','') )) OR 
@@ -1458,13 +1419,11 @@ class DataDataAccess implements IDataAccess<IData> {
                     ) 
                     AND uxr.ismain = true AND u.estado = 1
                     AND uxr.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
-                    AND u.id not in (select idusuario_resp from tbl_responsable_lead_dn where idusuario_resp <> 6)
-                
-            `,
+                    AND u.id not in (select idusuario_resp from tbl_responsable_lead_dn where idusuario_resp <> 6)`,
             values : [
-                filter_m_start, 
-                filter_m_end,
-                _search_all === '' ? '' : `%${_search_all}%`
+                    filter_m_start, 
+                    filter_m_end,
+                    _search_all === '' ? '' : `%${_search_all}%`
             ]
         }
 

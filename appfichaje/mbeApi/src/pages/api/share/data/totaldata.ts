@@ -15,7 +15,7 @@ const handler = nc(
                   res.status(500).end("Something broke!");
             },
             onNoMatch: (req: NextApiRequest, res: NextApiResponse) => {
-              res.status(404).end("Page is not found");
+                  res.status(404).end("Page is not found");
             }
       })
       .use(MiddlewareInstance.verifyToken)

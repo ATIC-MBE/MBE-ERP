@@ -9,10 +9,10 @@ class UserRolDataAccess implements IDataAccess<IUserRol> {
       public client: DbConnection
 
       constructor( 
-                        public idUserLogin: BigInt,
-                        public filterStatus: StatusDataType,
-                        public isTransactions: boolean, 
-                        public infoExtra?: any ) {
+            public idUserLogin: BigInt,
+            public filterStatus: StatusDataType,
+            public isTransactions: boolean, 
+            public infoExtra?: any ) {
             this.client = new DbConnection(isTransactions)
       }
 
@@ -40,9 +40,9 @@ class UserRolDataAccess implements IDataAccess<IUserRol> {
             const queryData = {
                   name: 'get-users-x-role',
                   text: `SELECT us.*
-                         FROM ${Constants.tbl_usuario_x_rol_sql} us
-                         JOIN ${Constants.tbl_usuario_sql} u on (u.id = us.idusuario)
-                         WHERE us.idrol LIKE $1 AND u.estado >= $2 AND u.estado IS NOT NULL`,
+                        FROM ${Constants.tbl_usuario_x_rol_sql} us
+                        JOIN ${Constants.tbl_usuario_sql} u on (u.id = us.idusuario)
+                        WHERE us.idrol LIKE $1 AND u.estado >= $2 AND u.estado IS NOT NULL`,
                   values: [ idrole, this.filterStatus ]
             }
 

@@ -22,10 +22,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -36,74 +36,74 @@ class LeadDataAccess implements IDataAccess<ILead> {
         // let filter_tipo_lead = this.infoExtra.filter.tipo_lead || '-2'
         // console.log(this.infoExtra.filter)
         const queryData  = {
-                name: 'get-lead',
-                text: ` 
-                        SELECT
-                        l.id, l.lead_id, l.tipo_lead, to_char( l."timestamp", 'DD/MM/YYYY HH24:MI:SS') as "timestamp", 
-                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.next_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS next_step,
-                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.last_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS last_step,
-                        l.semana, 
-                        l.nombre, l.apellido, l.grupo_wpp, l.referencia, 
-                        l.precio, l.m2, l.codigo_postal, l.direccion, l.nro_edificio, l.nro_piso, 
-                        l.localidad, l.estatus, l.nro_llamadas, l.fecha_creacion, l.fecha_ult_cambio, 
-                        l.idtipoavance, l.idresponsable, l.idtipoocupacion, l.idtipointeresa, 
-                        l.idusuario_creacion, l.idusuario_ult_cambio, 
-                        tlf.telefonos, tlf.telefonos_str, cr.correos, rsp.responsable,
-                        COALESCE((ti.nombre), 'NA') as name_tinteresa,
-                        l.nombre_completo as persona,
-                        l.nombre_completo
+            name: 'get-lead',
+            text: ` 
+                    SELECT
+                    l.id, l.lead_id, l.tipo_lead, to_char( l."timestamp", 'DD/MM/YYYY HH24:MI:SS') as "timestamp", 
+                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.next_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS next_step,
+                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.last_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS last_step,
+                    l.semana, 
+                    l.nombre, l.apellido, l.grupo_wpp, l.referencia, 
+                    l.precio, l.m2, l.codigo_postal, l.direccion, l.nro_edificio, l.nro_piso, 
+                    l.localidad, l.estatus, l.nro_llamadas, l.fecha_creacion, l.fecha_ult_cambio, 
+                    l.idtipoavance, l.idresponsable, l.idtipoocupacion, l.idtipointeresa, 
+                    l.idusuario_creacion, l.idusuario_ult_cambio, 
+                    tlf.telefonos, tlf.telefonos_str, cr.correos, rsp.responsable,
+                    COALESCE((ti.nombre), 'NA') as name_tinteresa,
+                    l.nombre_completo as persona,
+                    l.nombre_completo
+                    FROM ${Constants.tbl_lead_dn_sql} l
+                    LEFT JOIN (
+                        SELECT l.id,
+                        (CASE
+                            WHEN count(tlf.*) > 0 THEN jsonb_agg(json_build_object('id', tlf.id, 
+                                                                                'numero', tlf.numero))
+                            WHEN count(tlf.*) = 0 THEN '[]'
+                        END
+                        ) as telefonos,
+                        STRING_AGG(tlf.numero, ' | ') as telefonos_str
                         FROM ${Constants.tbl_lead_dn_sql} l
-                        LEFT JOIN (
-                            SELECT l.id,
-                            (CASE
-                                WHEN count(tlf.*) > 0 THEN jsonb_agg(json_build_object('id', tlf.id, 
-                                                                                    'numero', tlf.numero))
-                                WHEN count(tlf.*) = 0 THEN '[]'
-                            END
-                            ) as telefonos,
-                            STRING_AGG(tlf.numero, ' | ') as telefonos_str
-                            FROM ${Constants.tbl_lead_dn_sql} l
-                            LEFT JOIN ${Constants.tbl_telefono_dn_sql} tlf ON (tlf.idlead = l.id AND tlf.estado = 1)
-                            WHERE l.estatus >= $1
-                            GROUP BY l.id
-                        ) tlf ON tlf.id = l.id
-                        LEFT JOIN (
-                            SELECT l.id,
-                            (CASE
-                                WHEN count(cl.*) > 0 THEN jsonb_agg(json_build_object('id', cl.id, 
-                                                                                    'correo', cl.correo))
-                                WHEN count(cl.*) = 0 THEN '[]'
-                            END
-                            ) as correos
-                            FROM ${Constants.tbl_lead_dn_sql} l
-                            LEFT JOIN ${Constants.tbl_correo_dn_sql} cl ON (cl.idlead = l.id AND cl.estado = 1)
-                            WHERE l.estatus >= $1
-                            GROUP BY l.id
-                        ) cr ON cr.id = l.id
-                        LEFT JOIN (
-                            SELECT rl.id, rl.codigo || ' -> ' || COALESCE((usu.nombre || ' ' || usu.apellido), 'Todos') AS responsable
-                            FROM ${Constants.tbl_responsable_lead_dn_sql} rl
-                            LEFT JOIN ${Constants.tbl_usuario_sql} usu ON usu.id = rl.idusuario_resp
-                        ) rsp ON (rsp.id = l.idresponsable)
-                        LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
-                        WHERE (l.estatus = $1 OR $1 = -2) AND 
-                        (l.next_step BETWEEN $2 AND $3) AND 
-                        (l.idresponsable = $4 OR $4 = -2) AND
-                        (l.tipo_lead = $5 OR $5 = '-2') AND 
-                        (   UNACCENT(lower( replace(trim(tlf.telefonos_str),' ','') )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
-                            UNACCENT(lower( replace(trim(l.nombre_completo),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR
-                            UNACCENT(lower( replace(trim(l.comentario_historico),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
-                            $6 = '')
-                        ORDER BY COALESCE(ti.codigo, 0) DESC, l.next_step ASC
-                        `,
-                values: [
-                            this.infoExtra.filter.estatus, 
-                            this.infoExtra.filter.ns_start, 
-                            this.infoExtra.filter.ns_end, 
-                            this.infoExtra.filter.idresponsable, 
-                            this.infoExtra.filter.tipo_lead,
-                            this.infoExtra.filter.search_all === '' ? '' : `%${this.infoExtra.filter.search_all}%`
-                        ]
+                        LEFT JOIN ${Constants.tbl_telefono_dn_sql} tlf ON (tlf.idlead = l.id AND tlf.estado = 1)
+                        WHERE l.estatus >= $1
+                        GROUP BY l.id
+                    ) tlf ON tlf.id = l.id
+                    LEFT JOIN (
+                        SELECT l.id,
+                        (CASE
+                            WHEN count(cl.*) > 0 THEN jsonb_agg(json_build_object('id', cl.id, 
+                                                                                'correo', cl.correo))
+                            WHEN count(cl.*) = 0 THEN '[]'
+                        END
+                        ) as correos
+                        FROM ${Constants.tbl_lead_dn_sql} l
+                        LEFT JOIN ${Constants.tbl_correo_dn_sql} cl ON (cl.idlead = l.id AND cl.estado = 1)
+                        WHERE l.estatus >= $1
+                        GROUP BY l.id
+                    ) cr ON cr.id = l.id
+                    LEFT JOIN (
+                        SELECT rl.id, rl.codigo || ' -> ' || COALESCE((usu.nombre || ' ' || usu.apellido), 'Todos') AS responsable
+                        FROM ${Constants.tbl_responsable_lead_dn_sql} rl
+                        LEFT JOIN ${Constants.tbl_usuario_sql} usu ON usu.id = rl.idusuario_resp
+                    ) rsp ON (rsp.id = l.idresponsable)
+                    LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
+                    WHERE (l.estatus = $1 OR $1 = -2) AND 
+                    (l.next_step BETWEEN $2 AND $3) AND 
+                    (l.idresponsable = $4 OR $4 = -2) AND
+                    (l.tipo_lead = $5 OR $5 = '-2') AND 
+                    (   UNACCENT(lower( replace(trim(tlf.telefonos_str),' ','') )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
+                        UNACCENT(lower( replace(trim(l.nombre_completo),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR
+                        UNACCENT(lower( replace(trim(l.comentario_historico),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
+                        $6 = '')
+                    ORDER BY COALESCE(ti.codigo, 0) DESC, l.next_step ASC
+                    `,
+            values: [
+                        this.infoExtra.filter.estatus, 
+                        this.infoExtra.filter.ns_start, 
+                        this.infoExtra.filter.ns_end, 
+                        this.infoExtra.filter.idresponsable, 
+                        this.infoExtra.filter.tipo_lead,
+                        this.infoExtra.filter.search_all === '' ? '' : `%${this.infoExtra.filter.search_all}%`
+            ]
         }
 
         let lData: Array<ILead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ILead | IErrorResponse>
@@ -220,14 +220,14 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     ORDER BY lsub.lbl_nivel ASC, COALESCE(l.idtipointeresa, 0) DESC, lsub.lbl_orden ASC, lsub.nro_row ASC, lsub.id DESC
                     `,
             values: [
-                        this.infoExtra.filter.estatus, 
-                        this.infoExtra.filter.ns_start, 
-                        this.infoExtra.filter.ns_end, 
-                        this.infoExtra.filter.idresponsable, 
-                        this.infoExtra.filter.tipo_lead,
-                        this.infoExtra.filter.search_all === '' ? '' : `%${this.infoExtra.filter.search_all}%`,
-                        _dateCurrent,
-                        _dateLastWeek
+                    this.infoExtra.filter.estatus, 
+                    this.infoExtra.filter.ns_start, 
+                    this.infoExtra.filter.ns_end, 
+                    this.infoExtra.filter.idresponsable, 
+                    this.infoExtra.filter.tipo_lead,
+                    this.infoExtra.filter.search_all === '' ? '' : `%${this.infoExtra.filter.search_all}%`,
+                    _dateCurrent,
+                    _dateLastWeek
                     ]
         }
 
@@ -361,17 +361,18 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     ORDER BY lsub.lbl_nivel ASC, COALESCE(l.idtipointeresa, 0) DESC, lsub.lbl_orden ASC, lsub.nro_row ASC, lsub.id DESC
                     LIMIT $9 OFFSET $10
                     `,
-            values: [   filter_estatus, 
-                        filter_ns_start, 
-                        filter_ns_end, 
-                        filter_idresponsable, 
-                        filter_tipo_lead,
-                        search_all === '' ? '' : `%${search_all}%`,
-                        _dateCurrent,
-                        _dateLastWeek,
-                        limit,
-                        offset
-                    ]
+            values: [
+                    filter_estatus, 
+                    filter_ns_start, 
+                    filter_ns_end, 
+                    filter_idresponsable, 
+                    filter_tipo_lead,
+                    search_all === '' ? '' : `%${search_all}%`,
+                    _dateCurrent,
+                    _dateLastWeek,
+                    limit,
+                    offset
+            ]
         }
 
         let lData: Array<ILead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ILead | IErrorResponse>
@@ -491,69 +492,69 @@ class LeadDataAccess implements IDataAccess<ILead> {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             // Insert codigo
             let queryData = {
-                    name: 'insert-lead',
-                    text: `INSERT INTO ${Constants.tbl_lead_dn_sql}( 
-                        "timestamp",
-                        next_step,
-                        last_step,
-                        fecha_creacion,
-                        fecha_ult_cambio,
-                        idusuario_creacion,
-                        idusuario_ult_cambio,
-                        idtipoavance,
-                        idresponsable,
-                        idtipoocupacion,
-                        idtipointeresa,
-                        nombre,
-                        apellido,
-                        grupo_wpp,
-                        referencia,
-                        precio,
-                        m2,
-                        direccion,
-                        nro_edificio,
-                        nro_piso,
-                        codigo_postal,
-                        localidad,
-                        tipo_lead,
-                        empresa,
-                        idcategoria,
-                        nombre_completo,
-                        estatus,
-                        comentario_historico
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,
-                            regexp_replace(regexp_replace($28, '[[:alpha:]]', '','g'), '( ){1,}', '|','g') ) RETURNING *`,
-                    values: [
-                                timeStampCurrent,
-                                data.next_step,
-                                data.last_step, 
-                                timeStampCurrent, 
-                                timeStampCurrent, 
-                                this.idUserLogin, 
-                                this.idUserLogin,
-                                data.idtipoavance,
-                                data.idresponsable,
-                                data.idtipoocupacion,
-                                data.idtipointeresa,
-                                data.nombre_completo,
-                                data.nombre_completo,
-                                data.grupo_wpp,
-                                data.referencia,
-                                data.precio,
-                                data.m2,
-                                data.direccion,
-                                data.nro_edificio,
-                                data.nro_piso,
-                                data.codigo_postal,
-                                data.localidad,
-                                data.tipo_lead,
-                                data.empresa,
-                                data.idcategoria,
-                                data.nombre_completo,
-                                (data.estatus === null || data.estatus === undefined) ? 0 : data.estatus,
-                                data.comentario || ''
-                        ]
+                name: 'insert-lead',
+                text: `INSERT INTO ${Constants.tbl_lead_dn_sql}( 
+                    "timestamp",
+                    next_step,
+                    last_step,
+                    fecha_creacion,
+                    fecha_ult_cambio,
+                    idusuario_creacion,
+                    idusuario_ult_cambio,
+                    idtipoavance,
+                    idresponsable,
+                    idtipoocupacion,
+                    idtipointeresa,
+                    nombre,
+                    apellido,
+                    grupo_wpp,
+                    referencia,
+                    precio,
+                    m2,
+                    direccion,
+                    nro_edificio,
+                    nro_piso,
+                    codigo_postal,
+                    localidad,
+                    tipo_lead,
+                    empresa,
+                    idcategoria,
+                    nombre_completo,
+                    estatus,
+                    comentario_historico
+                    )
+                    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,
+                        regexp_replace(regexp_replace($28, '[[:alpha:]]', '','g'), '( ){1,}', '|','g') ) RETURNING *`,
+                values: [
+                        timeStampCurrent,
+                        data.next_step,
+                        data.last_step, 
+                        timeStampCurrent, 
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        this.idUserLogin,
+                        data.idtipoavance,
+                        data.idresponsable,
+                        data.idtipoocupacion,
+                        data.idtipointeresa,
+                        data.nombre_completo,
+                        data.nombre_completo,
+                        data.grupo_wpp,
+                        data.referencia,
+                        data.precio,
+                        data.m2,
+                        data.direccion,
+                        data.nro_edificio,
+                        data.nro_piso,
+                        data.codigo_postal,
+                        data.localidad,
+                        data.tipo_lead,
+                        data.empresa,
+                        data.idcategoria,
+                        data.nombre_completo,
+                        (data.estatus === null || data.estatus === undefined) ? 0 : data.estatus,
+                        data.comentario || ''
+                ]
             }
 
             let lDataLead = (await client.query(queryData)).rows as Array<ILead | IErrorResponse>
@@ -628,34 +629,34 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     const queryInsertUser = {
                         name: 'insert-user-from-lead',
                         text: `INSERT INTO ${Constants.tbl_usuario_sql}(
-                              username,
-                              email, 
-                              password, 
-                              nombre, 
-                              apellido, 
-                              fecha_creacion, 
-                              fecha_ultimo_cambio,
-                              idusuario,
-                              ref_lead,
-                              nombre_completo,
-                              telefono,
-                              empresa,
-                              idcategoria)
-                              VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
+                                username,
+                                email, 
+                                password, 
+                                nombre, 
+                                apellido, 
+                                fecha_creacion, 
+                                fecha_ultimo_cambio,
+                                idusuario,
+                                ref_lead,
+                                nombre_completo,
+                                telefono,
+                                empresa,
+                                idcategoria)
+                                VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [
-                              idLeadRef,
-                              data.correos[0].correo,
-                              UtilInstance.encryptDataHash256(Constants.reset_password_value),
-                              data.nombre_completo,
-                              data.nombre_completo,
-                              timeStampCurrent,
-                              timeStampCurrent,
-                              this.idUserLogin,
-                              idLeadRef,
-                              data.nombre_completo,
-                              data.telefonos[0].numero,
-                              data.empresa,
-                              data.idcategoria
+                            idLeadRef,
+                            data.correos[0].correo,
+                            UtilInstance.encryptDataHash256(Constants.reset_password_value),
+                            data.nombre_completo,
+                            data.nombre_completo,
+                            timeStampCurrent,
+                            timeStampCurrent,
+                            this.idUserLogin,
+                            idLeadRef,
+                            data.nombre_completo,
+                            data.telefonos[0].numero,
+                            data.empresa,
+                            data.idcategoria
                         ]
                     }
                     let lDataUser = (await client.query(queryInsertUser)).rows as Array<IUser>
@@ -694,9 +695,9 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     const idDataUserDB = (userDB as IUser).id!
                     const role = data.tipo_lead === Constants.code_lead_propietario ? Constants.code_rol_propietario : Constants.code_rol_colaborador
                     queryData = {
-                          name: 'insert-user-x-rol',
-                          text: `INSERT INTO ${Constants.tbl_usuario_x_rol_sql} ( idusuario, idrol ) VALUES($1,$2) RETURNING *`,
-                          values: [idDataUserDB, role]
+                        name: 'insert-user-x-rol',
+                        text: `INSERT INTO ${Constants.tbl_usuario_x_rol_sql} ( idusuario, idrol ) VALUES($1,$2) RETURNING *`,
+                        values: [idDataUserDB, role]
                     }
                     await client.query(queryData)
 
@@ -722,9 +723,9 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio
                                         ) VALUES($1,$2,$2) RETURNING *`,
                                 values: [
-                                            data.grupo!.nombre,
-                                            timeStampCurrent
-                                    ]
+                                        data.grupo!.nombre,
+                                        timeStampCurrent
+                                ]
                             }
                             let _nGrupo = (await client.query(queryInsertGrupo)).rows as Array<IGrupoPrescriptor>
                             _idGrupoPre = (_nGrupo.length !== 0) ? _nGrupo[0].id! : 0 
@@ -736,10 +737,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio = $2
                                         WHERE id = $3 RETURNING *`,
                                 values: [
-                                            1,
-                                            timeStampCurrent,
-                                            _idGrupoPre
-                                        ]
+                                        1,
+                                        timeStampCurrent,
+                                        _idGrupoPre
+                                ]
                             }
                             await client.query(queryUpdateActivarGrupo)
                         }
@@ -753,10 +754,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                     idgrupo
                                     ) VALUES($1,$2,$3) RETURNING *`,
                             values: [
-                                        idDataUserDB,   
-                                        timeStampCurrent,
-                                        _idGrupoPre
-                                ]
+                                    idDataUserDB,   
+                                    timeStampCurrent,
+                                    _idGrupoPre
+                            ]
                         }
                         await client.query(queryInsertPrescriptor)
 
@@ -770,33 +771,32 @@ class LeadDataAccess implements IDataAccess<ILead> {
                         let queryInsertSuceso = {
                             name: 'insert-suceso-prescriptor-dn',
                             text: `INSERT INTO ${Constants.tbl_suceso_prescriptor_dn_sql} (
-                                        comentario,
-                                        data,
-                                        fecha_creacion, 
-                                        idusuario,
-                                        idgrupo,
-                                        nro_visitas,
-                                        nro_reservas,
-                                        valor,
-                                        flag_vr,
-                                        lead_id,
-                                        ref_historico_lead)
+                                    comentario,
+                                    data,
+                                    fecha_creacion, 
+                                    idusuario,
+                                    idgrupo,
+                                    nro_visitas,
+                                    nro_reservas,
+                                    valor,
+                                    flag_vr,
+                                    lead_id,
+                                    ref_historico_lead)
                                     VALUES( $1, $2, $3, $4, $5, $6, $7, $8, $9,$10,$11) RETURNING *`,
                             values: [   data.comentario,
-                                        {},
-                                        timeStampCurrent, 
-                                        this.idUserLogin, 
-                                        _idGrupoPre,
-                                        0,
-                                        0,
-                                        0,
-                                        'na',
-                                        idLeadRef,
-                                        _uuidHistorico
-                                    ]
+                                    {},
+                                    timeStampCurrent, 
+                                    this.idUserLogin, 
+                                    _idGrupoPre,
+                                    0,
+                                    0,
+                                    0,
+                                    'na',
+                                    idLeadRef,
+                                    _uuidHistorico
+                            ]
                         }
                         await client.query(queryInsertSuceso)
-
                     } else if ( data.tipo_lead === Constants.code_lead_propietario && data.grupo ) {
                         // Paso#1: Vericamos la existencia del grupo
                         const queryGetDataGrupo = {
@@ -832,14 +832,13 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio = $2
                                         WHERE id = $3 RETURNING *`,
                                 values: [
-                                            1,
-                                            timeStampCurrent,
-                                            _idGrupoPro
-                                        ]
+                                        1,
+                                        timeStampCurrent,
+                                        _idGrupoPro
+                                ]
                             }
                             await client.query(queryUpdateActivarGrupo)
                         }
-
                         // Paso#2: Se crea el propietario
                         const queryInsertPropietario = {
                             name: 'insert-propietario-x-grupo',
@@ -849,10 +848,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                     idgrupo
                                     ) VALUES($1,$2,$3) RETURNING *`,
                             values: [
-                                        idDataUserDB,   
-                                        timeStampCurrent,
-                                        _idGrupoPro
-                                ]
+                                    idDataUserDB,   
+                                    timeStampCurrent,
+                                    _idGrupoPro
+                            ]
                         }
                         await client.query(queryInsertPropietario)
 
@@ -866,22 +865,23 @@ class LeadDataAccess implements IDataAccess<ILead> {
                         let queryInsertSuceso = {
                             name: 'insert-suceso-propietario-dn',
                             text: `INSERT INTO ${Constants.tbl_suceso_propietario_dn_sql} (
-                                        comentario,
-                                        data,
-                                        fecha_creacion, 
-                                        idusuario,
-                                        idgrupo,
-                                        lead_id,
-                                        ref_historico_lead)
+                                    comentario,
+                                    data,
+                                    fecha_creacion, 
+                                    idusuario,
+                                    idgrupo,
+                                    lead_id,
+                                    ref_historico_lead)
                                     VALUES( $1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-                            values: [   data.comentario,
-                                        {},
-                                        timeStampCurrent, 
-                                        this.idUserLogin, 
-                                        _idGrupoPro,
-                                        idLeadRef,
-                                        _uuidHistorico
-                                    ]
+                            values: [
+                                    data.comentario,
+                                    {},
+                                    timeStampCurrent, 
+                                    this.idUserLogin, 
+                                    _idGrupoPro,
+                                    idLeadRef,
+                                    _uuidHistorico
+                            ]
                         }
                         await client.query(queryInsertSuceso)
                     }
@@ -904,18 +904,19 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                 idusuario,
                                 ref_lead)
                                 VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
-                            values: [   'España', 
-                                        data.localidad || `LOC-${idLeadRef}`, 
-                                        data.codigo_postal || `CP-${idLeadRef}`, 
-                                        data.direccion || `DIR-${idLeadRef}`, 
-                                        data.nro_edificio,
-                                        data.nro_piso,
-                                        idLeadRef,
-                                        timeStampCurrent, 
-                                        timeStampCurrent,
-                                        this.idUserLogin,
-                                        idLeadRef
-                                ]
+                            values: [
+                                    'España', 
+                                    data.localidad || `LOC-${idLeadRef}`, 
+                                    data.codigo_postal || `CP-${idLeadRef}`, 
+                                    data.direccion || `DIR-${idLeadRef}`, 
+                                    data.nro_edificio,
+                                    data.nro_piso,
+                                    idLeadRef,
+                                    timeStampCurrent, 
+                                    timeStampCurrent,
+                                    this.idUserLogin,
+                                    idLeadRef
+                            ]
                         }
                         let lData = (await client.query(queryData)).rows as Array<IApartment | IErrorResponse>
                         let pisoDB = lData[0]
@@ -955,21 +956,21 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     )
                     VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
                 values: [
-                            timeStampCurrent,
-                            data.next_step,
-                            data.last_step, 
-                            this.infoExtra.data || {}, 
-                            data.name_tinteresa, 
-                            data.name_tavance, 
-                            data.name_tocupacion,
-                            data.estatus,
-                            data.comentario,
-                            idLeadDB,
-                            this.idUserLogin,
-                            data.tipo_accion,
-                            data.name_categoria,
-                            _uuidHistorico
-                    ]
+                        timeStampCurrent,
+                        data.next_step,
+                        data.last_step, 
+                        this.infoExtra.data || {}, 
+                        data.name_tinteresa, 
+                        data.name_tavance, 
+                        data.name_tocupacion,
+                        data.estatus,
+                        data.comentario,
+                        idLeadDB,
+                        this.idUserLogin,
+                        data.tipo_accion,
+                        data.name_categoria,
+                        _uuidHistorico
+                ]
             }
             let lDataHistoricoLead = (await client.query(queryData)).rows as Array<IHistoricoLead | IErrorResponse>
 
@@ -1023,34 +1024,34 @@ class LeadDataAccess implements IDataAccess<ILead> {
         let responseD = await this.client.execQueryPool( async (client): Promise<Array<IModel | IErrorResponse>> => {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             let queryData = {
-                    name: 'update-lead',
-                    text: `UPDATE ${Constants.tbl_lead_dn_sql} SET
-                            "timestamp" = $1,
-                            next_step = $2,
-                            fecha_ult_cambio = $3,
-                            idusuario_ult_cambio = $4,
-                            idtipoavance = $5,
-                            idresponsable = $6,
-                            idtipoocupacion = $7,
-                            idtipointeresa = $8,
-                            nombre = $9,
-                            apellido = $10,
-                            grupo_wpp = $11,
-                            referencia = $12,
-                            estatus = $13,
-                            precio = $14,
-                            m2 = $15,
-                            direccion = $16,
-                            nro_edificio = $17,
-                            nro_piso = $18,
-                            codigo_postal = $19,
-                            localidad = $20,
-                            tipo_lead = $21,
-                            empresa = $22,
-                            idcategoria = $23,
-                            nombre_completo = $24
-                            WHERE id = $25 AND estatus >= $26 RETURNING *`,
-                    values: [   
+                name: 'update-lead',
+                text: `UPDATE ${Constants.tbl_lead_dn_sql} SET
+                        "timestamp" = $1,
+                        next_step = $2,
+                        fecha_ult_cambio = $3,
+                        idusuario_ult_cambio = $4,
+                        idtipoavance = $5,
+                        idresponsable = $6,
+                        idtipoocupacion = $7,
+                        idtipointeresa = $8,
+                        nombre = $9,
+                        apellido = $10,
+                        grupo_wpp = $11,
+                        referencia = $12,
+                        estatus = $13,
+                        precio = $14,
+                        m2 = $15,
+                        direccion = $16,
+                        nro_edificio = $17,
+                        nro_piso = $18,
+                        codigo_postal = $19,
+                        localidad = $20,
+                        tipo_lead = $21,
+                        empresa = $22,
+                        idcategoria = $23,
+                        nombre_completo = $24
+                        WHERE id = $25 AND estatus >= $26 RETURNING *`,
+                values: [   
                         timeStampCurrent, 
                         data.next_step, 
                         timeStampCurrent,  
@@ -1077,7 +1078,7 @@ class LeadDataAccess implements IDataAccess<ILead> {
                         data.nombre_completo,
                         id,
                         this.filterStatus
-                    ]
+                ]
             }
             let lDataLead = (await client.query(queryData)).rows as Array<ILead | IErrorResponse>
 
@@ -1156,20 +1157,20 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     )
                     VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
                 values: [
-                            timeStampCurrent,
-                            data.next_step,
-                            data.last_step, 
-                            this.infoExtra.data || {}, 
-                            data.name_tinteresa, 
-                            data.name_tavance, 
-                            data.name_tocupacion,
-                            data.estatus,
-                            data.comentario,
-                            idLeadDB,
-                            this.idUserLogin,
-                            data.tipo_accion,
-                            data.name_categoria
-                    ]
+                        timeStampCurrent,
+                        data.next_step,
+                        data.last_step, 
+                        this.infoExtra.data || {}, 
+                        data.name_tinteresa, 
+                        data.name_tavance, 
+                        data.name_tocupacion,
+                        data.estatus,
+                        data.comentario,
+                        idLeadDB,
+                        this.idUserLogin,
+                        data.tipo_accion,
+                        data.name_categoria
+                ]
             }
             let lDataHistoricoLead = (await client.query(queryData)).rows as Array<IHistoricoLead | IErrorResponse>
 
@@ -1214,109 +1215,109 @@ class LeadDataAccess implements IDataAccess<ILead> {
         const _dateLastWeek = UtilInstance.actionAddAndDismissDays(_dateCurrent, -7).fecha
 
         const queryData  = {
-                name: 'get-my-leads',
-                text: ` 
-                        SELECT
-                        l.id, l.lead_id, l.tipo_lead,
-                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.next_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS next_step,
-                        REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.last_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS last_step,
-                        l.grupo_wpp, 
-                        l.precio, COALESCE((l.precio), 1232) as precio_final, 
-                        l.estatus, 
-                        l.idtipoavance, l.idresponsable, l.idtipoocupacion, l.idtipointeresa, 
-                        tlf.telefonos_str, rsp.responsable,
-                        COALESCE((ti.nombre), 'NA') as name_tinteresa,
-                        l.nombre_completo as persona,
-                        l.nombre_completo,
-                        lsub.lbl_orden
+            name: 'get-my-leads',
+            text: ` 
+                    SELECT
+                    l.id, l.lead_id, l.tipo_lead,
+                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.next_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS next_step,
+                    REPLACE(REPLACE(REPLACE(REPLACE(to_char( l.last_step, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS last_step,
+                    l.grupo_wpp, 
+                    l.precio, COALESCE((l.precio), 1232) as precio_final, 
+                    l.estatus, 
+                    l.idtipoavance, l.idresponsable, l.idtipoocupacion, l.idtipointeresa, 
+                    tlf.telefonos_str, rsp.responsable,
+                    COALESCE((ti.nombre), 'NA') as name_tinteresa,
+                    l.nombre_completo as persona,
+                    l.nombre_completo,
+                    lsub.lbl_orden
+                    FROM (
+                        SELECT *
                         FROM (
-                            SELECT *
-                            FROM (
-                                (
-                                    SELECT id, 'nivel_1' AS lbl_nivel, 'orden_1' AS lbl_orden,
-                                    ROW_NUMBER() OVER (ORDER BY idtipointeresa DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC) AS nro_row
-                                    FROM ${Constants.tbl_lead_dn_sql} 
-                                    WHERE next_step = $8 AND
-                                        idtipointeresa IS NOT NULL AND
-                                        (next_step BETWEEN $3 AND $4)
-                                    ORDER BY idtipointeresa DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC
-                                )
-                                UNION
-                                (
-                                    SELECT id, 'nivel_1' AS lbl_nivel, 'orden_2' AS lbl_orden,
-                                    ROW_NUMBER() OVER (ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC) AS nro_row
-                                    FROM ${Constants.tbl_lead_dn_sql} 
-                                    WHERE (next_step > $9 AND next_step < $8) AND
-                                        (next_step BETWEEN $3 AND $4)
-                                    ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC
-                                )
-                                UNION
-                                (
-                                    SELECT id, 'nivel_2' AS lbl_nivel, 'orden_3' AS lbl_orden,
-                                    ROW_NUMBER() OVER (ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step ASC, COALESCE(idtipoocupacion, 100) ASC, id DESC) AS nro_row
-                                    FROM ${Constants.tbl_lead_dn_sql} 
-                                    WHERE ( next_step > $8 OR next_step <= $9 ) AND
-                                        (next_step BETWEEN $3 AND $4)
-                                    ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step ASC, COALESCE(idtipoocupacion, 100) ASC, id DESC
-                                )
-                            ) d
-                        ) lsub
-                        INNER JOIN ${Constants.tbl_lead_dn_sql} l ON l.id = lsub.id
-                        LEFT JOIN (
-                            SELECT l.id,
-                            (CASE
-                                WHEN count(tlf.*) > 0 THEN jsonb_agg(json_build_object('id', tlf.id, 
-                                                                                    'numero', tlf.numero))
-                                WHEN count(tlf.*) = 0 THEN '[]'
-                            END
-                            ) as telefonos,
-                            STRING_AGG(tlf.numero, ' | ') as telefonos_str
-                            FROM ${Constants.tbl_lead_dn_sql} l
-                            LEFT JOIN ${Constants.tbl_telefono_dn_sql} tlf ON (tlf.idlead = l.id AND tlf.estado = 1)
-                            WHERE l.estatus >= 1
-                            GROUP BY l.id
-                        ) tlf ON tlf.id = l.id
-                        LEFT JOIN (
-                            SELECT l.id,
-                            (CASE
-                                WHEN count(cl.*) > 0 THEN jsonb_agg(json_build_object('id', cl.id, 
-                                                                                    'correo', cl.correo))
-                                WHEN count(cl.*) = 0 THEN '[]'
-                            END
-                            ) as correos
-                            FROM ${Constants.tbl_lead_dn_sql} l
-                            LEFT JOIN ${Constants.tbl_correo_dn_sql} cl ON (cl.idlead = l.id AND cl.estado = 1)
-                            WHERE l.estatus >= 1
-                            GROUP BY l.id
-                        ) cr ON cr.id = l.id
-                        LEFT JOIN (
-                            SELECT rl.id, rl.codigo || ' -> ' || COALESCE((usu.nombre || ' ' || usu.apellido), 'Todos') AS responsable
-                            FROM ${Constants.tbl_responsable_lead_dn_sql} rl
-                            LEFT JOIN ${Constants.tbl_usuario_sql} usu ON usu.id = rl.idusuario_resp
-                        ) rsp ON (rsp.id = l.idresponsable)
-                        LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
-                        WHERE (l.estatus = $1 OR $1 = -2) AND 
-                        (l.next_step BETWEEN $2 AND $3) AND 
-                        (l.idresponsable = $4 OR $4 = -2) AND
-                        (l.tipo_lead = $5 OR $5 = '-2') AND 
-                        (   UNACCENT(lower( replace(trim(tlf.telefonos_str),' ','') )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
-                            UNACCENT(lower( replace(trim(l.nombre_completo),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR
-                            UNACCENT(lower( replace(trim(l.comentario_historico),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
-                            $6 = ''
-                        )
-                        ORDER BY lsub.lbl_nivel ASC, COALESCE(l.idtipointeresa, 0) DESC, lsub.lbl_orden ASC, lsub.nro_row ASC, lsub.id DESC
-                    `,
+                            (
+                                SELECT id, 'nivel_1' AS lbl_nivel, 'orden_1' AS lbl_orden,
+                                ROW_NUMBER() OVER (ORDER BY idtipointeresa DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC) AS nro_row
+                                FROM ${Constants.tbl_lead_dn_sql} 
+                                WHERE next_step = $8 AND
+                                    idtipointeresa IS NOT NULL AND
+                                    (next_step BETWEEN $3 AND $4)
+                                ORDER BY idtipointeresa DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC
+                            )
+                            UNION
+                            (
+                                SELECT id, 'nivel_1' AS lbl_nivel, 'orden_2' AS lbl_orden,
+                                ROW_NUMBER() OVER (ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC) AS nro_row
+                                FROM ${Constants.tbl_lead_dn_sql} 
+                                WHERE (next_step > $9 AND next_step < $8) AND
+                                    (next_step BETWEEN $3 AND $4)
+                                ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step DESC, COALESCE(idtipoocupacion, 100) ASC, id DESC
+                            )
+                            UNION
+                            (
+                                SELECT id, 'nivel_2' AS lbl_nivel, 'orden_3' AS lbl_orden,
+                                ROW_NUMBER() OVER (ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step ASC, COALESCE(idtipoocupacion, 100) ASC, id DESC) AS nro_row
+                                FROM ${Constants.tbl_lead_dn_sql} 
+                                WHERE ( next_step > $8 OR next_step <= $9 ) AND
+                                    (next_step BETWEEN $3 AND $4)
+                                ORDER BY COALESCE(idtipointeresa, 0) DESC, next_step ASC, COALESCE(idtipoocupacion, 100) ASC, id DESC
+                            )
+                        ) d
+                    ) lsub
+                    INNER JOIN ${Constants.tbl_lead_dn_sql} l ON l.id = lsub.id
+                    LEFT JOIN (
+                        SELECT l.id,
+                        (CASE
+                            WHEN count(tlf.*) > 0 THEN jsonb_agg(json_build_object('id', tlf.id, 
+                                                                                'numero', tlf.numero))
+                            WHEN count(tlf.*) = 0 THEN '[]'
+                        END
+                        ) as telefonos,
+                        STRING_AGG(tlf.numero, ' | ') as telefonos_str
+                        FROM ${Constants.tbl_lead_dn_sql} l
+                        LEFT JOIN ${Constants.tbl_telefono_dn_sql} tlf ON (tlf.idlead = l.id AND tlf.estado = 1)
+                        WHERE l.estatus >= 1
+                        GROUP BY l.id
+                    ) tlf ON tlf.id = l.id
+                    LEFT JOIN (
+                        SELECT l.id,
+                        (CASE
+                            WHEN count(cl.*) > 0 THEN jsonb_agg(json_build_object('id', cl.id, 
+                                                                                'correo', cl.correo))
+                            WHEN count(cl.*) = 0 THEN '[]'
+                        END
+                        ) as correos
+                        FROM ${Constants.tbl_lead_dn_sql} l
+                        LEFT JOIN ${Constants.tbl_correo_dn_sql} cl ON (cl.idlead = l.id AND cl.estado = 1)
+                        WHERE l.estatus >= 1
+                        GROUP BY l.id
+                    ) cr ON cr.id = l.id
+                    LEFT JOIN (
+                        SELECT rl.id, rl.codigo || ' -> ' || COALESCE((usu.nombre || ' ' || usu.apellido), 'Todos') AS responsable
+                        FROM ${Constants.tbl_responsable_lead_dn_sql} rl
+                        LEFT JOIN ${Constants.tbl_usuario_sql} usu ON usu.id = rl.idusuario_resp
+                    ) rsp ON (rsp.id = l.idresponsable)
+                    LEFT JOIN ${Constants.tbl_tipo_interesa_dn_sql} ti ON (ti.id = l.idtipointeresa)
+                    WHERE (l.estatus = $1 OR $1 = -2) AND 
+                    (l.next_step BETWEEN $2 AND $3) AND 
+                    (l.idresponsable = $4 OR $4 = -2) AND
+                    (l.tipo_lead = $5 OR $5 = '-2') AND 
+                    (   UNACCENT(lower( replace(trim(tlf.telefonos_str),' ','') )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
+                        UNACCENT(lower( replace(trim(l.nombre_completo),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR
+                        UNACCENT(lower( replace(trim(l.comentario_historico),' ','')  )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
+                        $6 = ''
+                    )
+                    ORDER BY lsub.lbl_nivel ASC, COALESCE(l.idtipointeresa, 0) DESC, lsub.lbl_orden ASC, lsub.nro_row ASC, lsub.id DESC
+                `,
             values: [
-                        1, 
-                        filter_idresponsable, 
-                        filter_ns_start, 
-                        filter_ns_end, 
-                        this.idUserLogin, 
-                        filter_tipo_lead,
-                        this.infoExtra.filter.search_all === '' ? '' : `%${this.infoExtra.filter.search_all}%`,
-                        _dateCurrent,
-                        _dateLastWeek
-                    ]
+                    1, 
+                    filter_idresponsable, 
+                    filter_ns_start, 
+                    filter_ns_end, 
+                    this.idUserLogin, 
+                    filter_tipo_lead,
+                    this.infoExtra.filter.search_all === '' ? '' : `%${this.infoExtra.filter.search_all}%`,
+                    _dateCurrent,
+                    _dateLastWeek
+            ]
         }
 
         let lData: Array<ILead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ILead | IErrorResponse>
@@ -1442,18 +1443,18 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     LIMIT $10 OFFSET $11
                     `,
             values: [   
-                        1, 
-                        filter_idresponsable, 
-                        filter_ns_start, 
-                        filter_ns_end, 
-                        this.idUserLogin, 
-                        filter_tipo_lead,
-                        filter_search_all === '' ? '' : `%${filter_search_all}%`,
-                        _dateCurrent,
-                        _dateLastWeek,
-                        limit,
-                        offset
-                    ]
+                    1, 
+                    filter_idresponsable, 
+                    filter_ns_start, 
+                    filter_ns_end, 
+                    this.idUserLogin, 
+                    filter_tipo_lead,
+                    filter_search_all === '' ? '' : `%${filter_search_all}%`,
+                    _dateCurrent,
+                    _dateLastWeek,
+                    limit,
+                    offset
+            ]
         }
 
         let lData: Array<ILead | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ILead | IErrorResponse>
@@ -1483,37 +1484,37 @@ class LeadDataAccess implements IDataAccess<ILead> {
             const _uuidHistorico = `hl-${UtilInstance.getUUID()}`
 
             let queryData = {
-                    name: 'update-lead',
-                    text: `UPDATE ${Constants.tbl_lead_dn_sql} SET
-                            "timestamp" = $1,
-                            next_step = $2,
-                            fecha_ult_cambio = $3,
-                            idusuario_ult_cambio = $4,
-                            idtipoavance = $5,
-                            idresponsable = $6,
-                            idtipoocupacion = $7,
-                            idtipointeresa = $8,
-                            nombre = $9,
-                            apellido = $10,
-                            grupo_wpp = $11,
-                            referencia = $12,
-                            estatus = $13,
-                            precio = $14,
-                            m2 = $15,
-                            direccion = $16,
-                            nro_edificio = $17,
-                            nro_piso = $18,
-                            codigo_postal = $19,
-                            localidad = $20,
-                            last_step = $21,
-                            nro_llamadas = $22,
-                            empresa = $23,
-                            idcategoria = $24,
-                            tipo_lead = $25,
-                            nombre_completo = $26,
-                            comentario_historico = regexp_replace(regexp_replace($27, '[[:alpha:]]', '','g'), '( ){1,}', '|','g')
-                            WHERE id = $28 AND estatus >= $29 RETURNING *`,
-                    values: [   
+                name: 'update-lead',
+                text: `UPDATE ${Constants.tbl_lead_dn_sql} SET
+                        "timestamp" = $1,
+                        next_step = $2,
+                        fecha_ult_cambio = $3,
+                        idusuario_ult_cambio = $4,
+                        idtipoavance = $5,
+                        idresponsable = $6,
+                        idtipoocupacion = $7,
+                        idtipointeresa = $8,
+                        nombre = $9,
+                        apellido = $10,
+                        grupo_wpp = $11,
+                        referencia = $12,
+                        estatus = $13,
+                        precio = $14,
+                        m2 = $15,
+                        direccion = $16,
+                        nro_edificio = $17,
+                        nro_piso = $18,
+                        codigo_postal = $19,
+                        localidad = $20,
+                        last_step = $21,
+                        nro_llamadas = $22,
+                        empresa = $23,
+                        idcategoria = $24,
+                        tipo_lead = $25,
+                        nombre_completo = $26,
+                        comentario_historico = regexp_replace(regexp_replace($27, '[[:alpha:]]', '','g'), '( ){1,}', '|','g')
+                        WHERE id = $28 AND estatus >= $29 RETURNING *`,
+                values: [   
                         timeStampCurrent, 
                         data.next_step, 
                         timeStampCurrent,  
@@ -1527,7 +1528,6 @@ class LeadDataAccess implements IDataAccess<ILead> {
                         data.grupo_wpp,
                         data.referencia,
                         data.estatus,
-
                         data.precio || undefined,
                         data.m2 || undefined,
                         data.direccion || undefined,
@@ -1535,7 +1535,6 @@ class LeadDataAccess implements IDataAccess<ILead> {
                         data.nro_piso || undefined,
                         data.codigo_postal || undefined,
                         data.localidad || undefined,
-
                         data.last_step,
                         data.nro_llamadas,
                         data.empresa,
@@ -1545,7 +1544,7 @@ class LeadDataAccess implements IDataAccess<ILead> {
                         `${dataPrevInit.comentario_historico} ${data.comentario}`,
                         id,
                         this.filterStatus
-                    ]
+                ]
             }
             
             // console.log(`comentario: ${dataPrevInit.comentario_historico} ${data.comentario}`)
@@ -1631,34 +1630,34 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     const queryInsertUser = {
                         name: 'insert-user-from-lead',
                         text: `INSERT INTO ${Constants.tbl_usuario_sql}(
-                              username,
-                              email, 
-                              password, 
-                              nombre, 
-                              apellido, 
-                              fecha_creacion, 
-                              fecha_ultimo_cambio,
-                              idusuario,
-                              ref_lead,
-                              nombre_completo,
-                              telefono,
-                              empresa,
-                              idcategoria)
-                              VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
+                                username,
+                                email, 
+                                password, 
+                                nombre, 
+                                apellido, 
+                                fecha_creacion, 
+                                fecha_ultimo_cambio,
+                                idusuario,
+                                ref_lead,
+                                nombre_completo,
+                                telefono,
+                                empresa,
+                                idcategoria)
+                                VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
                         values: [
-                              dataPrev.lead_id,
-                              data.correos[0].correo,
-                              UtilInstance.encryptDataHash256(Constants.reset_password_value),
-                              data.nombre_completo,
-                              data.nombre_completo,
-                              timeStampCurrent,
-                              timeStampCurrent,
-                              this.idUserLogin,
-                              dataPrev.lead_id,
-                              data.nombre_completo,
-                              data.telefonos[0].numero,
-                              data.empresa,
-                              data.idcategoria
+                                dataPrev.lead_id,
+                                data.correos[0].correo,
+                                UtilInstance.encryptDataHash256(Constants.reset_password_value),
+                                data.nombre_completo,
+                                data.nombre_completo,
+                                timeStampCurrent,
+                                timeStampCurrent,
+                                this.idUserLogin,
+                                dataPrev.lead_id,
+                                data.nombre_completo,
+                                data.telefonos[0].numero,
+                                data.empresa,
+                                data.idcategoria
                         ]
                     }
                     let lDataUser = (await client.query(queryInsertUser)).rows as Array<IUser>
@@ -1679,18 +1678,18 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                 idcategoria = $10
                                 WHERE id = $11 RETURNING *`,
                         values: [
-                                    1,
-                                    data.correos[0].correo,
-                                    data.nombre_completo,
-                                    data.nombre_completo,
-                                    timeStampCurrent,
-                                    this.idUserLogin,
-                                    data.nombre_completo,
-                                    data.telefonos[0].numero,
-                                    data.empresa,
-                                    data.idcategoria,
-                                    userDB!.id,
-                                ]
+                                1,
+                                data.correos[0].correo,
+                                data.nombre_completo,
+                                data.nombre_completo,
+                                timeStampCurrent,
+                                this.idUserLogin,
+                                data.nombre_completo,
+                                data.telefonos[0].numero,
+                                data.empresa,
+                                data.idcategoria,
+                                userDB!.id,
+                        ]
                     }
                     await client.query(queryUpdateUserLead)
                 }
@@ -1709,9 +1708,9 @@ class LeadDataAccess implements IDataAccess<ILead> {
                     
                     // Agregar rol colaborador | propietario
                     const queryUserRolData = {
-                          name: 'insert-user-x-rol',
-                          text: `INSERT INTO ${Constants.tbl_usuario_x_rol_sql} ( idusuario, idrol ) VALUES($1,$2) RETURNING *`,
-                          values: [idDataUserDB, role]
+                        name: 'insert-user-x-rol',
+                        text: `INSERT INTO ${Constants.tbl_usuario_x_rol_sql} ( idusuario, idrol ) VALUES($1,$2) RETURNING *`,
+                        values: [idDataUserDB, role]
                     }
                     await client.query(queryUserRolData)
 
@@ -1760,9 +1759,9 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio
                                         ) VALUES($1,$2,$2) RETURNING *`,
                                 values: [
-                                            data.grupo!.nombre,
-                                            timeStampCurrent
-                                    ]
+                                        data.grupo!.nombre,
+                                        timeStampCurrent
+                                ]
                             }
                             let _nGrupo = (await client.query(queryInsertGrupo)).rows as Array<IGrupoPrescriptor>
                             _idGrupoPre = (_nGrupo.length !== 0) ? _nGrupo[0].id! : 0 
@@ -1774,10 +1773,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio = $2
                                         WHERE id = $3 RETURNING *`,
                                 values: [
-                                            1,
-                                            timeStampCurrent,
-                                            _idGrupoPre
-                                        ]
+                                        1,
+                                        timeStampCurrent,
+                                        _idGrupoPre
+                                ]
                             }
                             await client.query(queryUpdateActivarGrupo)
                             _isGroupNew = false
@@ -1792,10 +1791,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                     idgrupo
                                     ) VALUES($1,$2,$3) RETURNING *`,
                             values: [
-                                        idDataUserDB,   
-                                        timeStampCurrent,
-                                        _idGrupoPre
-                                ]
+                                    idDataUserDB,   
+                                    timeStampCurrent,
+                                    _idGrupoPre
+                            ]
                         }
                         await client.query(queryInsertPrescriptor)
 
@@ -1835,22 +1834,22 @@ class LeadDataAccess implements IDataAccess<ILead> {
                             const queryInsertSuceso = {
                                 name: 'insert-suceso-prescriptor-dn',
                                 text: `INSERT INTO ${Constants.tbl_suceso_prescriptor_dn_sql} (
-                                            comentario, data, fecha_creacion, idusuario, idgrupo,
-                                            nro_visitas, nro_reservas, valor, flag_vr, lead_id, ref_historico_lead, ref_suceso)
+                                        comentario, data, fecha_creacion, idusuario, idgrupo,
+                                        nro_visitas, nro_reservas, valor, flag_vr, lead_id, ref_historico_lead, ref_suceso)
                                         VALUES( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
                                 values: [   _dataHistoryLead[i].comentario,
-                                            {},
-                                            _dataHistoryLead[i].fecha_creacion, 
-                                            _dataHistoryLead[i].idusuario_resp, 
-                                            _idGrupoPre,
-                                            0,
-                                            0,
-                                            0,
-                                            'na',
-                                            dataPrev.lead_id,
-                                            _dataHistoryLead[i].ref_historico_lead,
-                                            _dataHistoryLead[i].ref_suceso
-                                        ]
+                                        {},
+                                        _dataHistoryLead[i].fecha_creacion, 
+                                        _dataHistoryLead[i].idusuario_resp, 
+                                        _idGrupoPre,
+                                        0,
+                                        0,
+                                        0,
+                                        'na',
+                                        dataPrev.lead_id,
+                                        _dataHistoryLead[i].ref_historico_lead,
+                                        _dataHistoryLead[i].ref_suceso
+                                ]
                             }
                             await client.query(queryInsertSuceso)
                         }
@@ -1877,9 +1876,9 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio
                                         ) VALUES($1,$2,$2) RETURNING *`,
                                 values: [
-                                            data.grupo!.nombre,
-                                            timeStampCurrent
-                                    ]
+                                        data.grupo!.nombre,
+                                        timeStampCurrent
+                                ]
                             }
                             let _nGrupo = (await client.query(queryInsertGrupo)).rows as Array<IGrupoPropietario>
                             _idGrupoPro = (_nGrupo.length !== 0) ? _nGrupo[0].id! : 0 
@@ -1891,9 +1890,9 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                         fecha_ultimo_cambio = $2
                                         WHERE id = $3 RETURNING *`,
                                 values: [
-                                            1,
-                                            timeStampCurrent,
-                                            _idGrupoPro
+                                        1,
+                                        timeStampCurrent,
+                                        _idGrupoPro
                                         ]
                             }
                             await client.query(queryUpdateActivarGrupo)
@@ -1909,10 +1908,10 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                     idgrupo
                                     ) VALUES($1,$2,$3) RETURNING *`,
                             values: [
-                                        idDataUserDB,   
-                                        timeStampCurrent,
-                                        _idGrupoPro
-                                ]
+                                    idDataUserDB,   
+                                    timeStampCurrent,
+                                    _idGrupoPro
+                            ]
                         }
                         await client.query(queryInsertPropietario)
 
@@ -1956,24 +1955,24 @@ class LeadDataAccess implements IDataAccess<ILead> {
                             let queryInsertSuceso = {
                                 name: 'insert-suceso-propietario-dn',
                                 text: `INSERT INTO ${Constants.tbl_suceso_propietario_dn_sql} (
-                                            comentario,
-                                            data,
-                                            fecha_creacion, 
-                                            idusuario,
-                                            idgrupo,
-                                            lead_id,
-                                            ref_historico_lead, 
-                                            ref_suceso)
+                                        comentario,
+                                        data,
+                                        fecha_creacion, 
+                                        idusuario,
+                                        idgrupo,
+                                        lead_id,
+                                        ref_historico_lead, 
+                                        ref_suceso)
                                         VALUES( $1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
                                 values: [   _dataHistoryLead[i].comentario,
-                                            {},
-                                            _dataHistoryLead[i].fecha_creacion, 
-                                            _dataHistoryLead[i].idusuario_resp, 
-                                            _idGrupoPro,
-                                            dataPrev.lead_id,
-                                            _dataHistoryLead[i].ref_historico_lead,
-                                            _dataHistoryLead[i].ref_suceso
-                                        ]
+                                        {},
+                                        _dataHistoryLead[i].fecha_creacion, 
+                                        _dataHistoryLead[i].idusuario_resp, 
+                                        _idGrupoPro,
+                                        dataPrev.lead_id,
+                                        _dataHistoryLead[i].ref_historico_lead,
+                                        _dataHistoryLead[i].ref_suceso
+                                ]
                             }
                             await client.query(queryInsertSuceso)
                         }
@@ -1998,17 +1997,17 @@ class LeadDataAccess implements IDataAccess<ILead> {
                                 ref_lead)
                                 VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
                             values: [   'España', 
-                                        data.localidad || `LOC-${dataPrev.lead_id}`, 
-                                        data.codigo_postal || `CP-${dataPrev.lead_id}`, 
-                                        data.direccion || `DIR-${dataPrev.lead_id}`, 
-                                        data.nro_edificio,
-                                        data.nro_piso,
-                                        dataPrev.lead_id,
-                                        timeStampCurrent, 
-                                        timeStampCurrent,
-                                        this.idUserLogin,
-                                        dataPrev.lead_id
-                                ]
+                                    data.localidad || `LOC-${dataPrev.lead_id}`, 
+                                    data.codigo_postal || `CP-${dataPrev.lead_id}`, 
+                                    data.direccion || `DIR-${dataPrev.lead_id}`, 
+                                    data.nro_edificio,
+                                    data.nro_piso,
+                                    dataPrev.lead_id,
+                                    timeStampCurrent, 
+                                    timeStampCurrent,
+                                    this.idUserLogin,
+                                    dataPrev.lead_id
+                            ]
                         }
                         let lData = (await client.query(queryData)).rows as Array<IApartment | IErrorResponse>
                         let pisoDB = lData[0]
@@ -2018,7 +2017,7 @@ class LeadDataAccess implements IDataAccess<ILead> {
                             queryData = {
                                 name: 'insert-piso-x-user',
                                 text: `INSERT INTO ${Constants.tbl_piso_x_usuario_sql} ( idusuario, idpiso )
-                                    VALUES($1,$2) RETURNING *`,
+                                        VALUES($1,$2) RETURNING *`,
                                 values: [ idDataUserDB, idDataPisoDB]
                             }
                             await client.query(queryData)

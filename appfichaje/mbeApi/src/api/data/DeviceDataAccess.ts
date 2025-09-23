@@ -54,37 +54,37 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             SELECT d.id, d.idtipodispositivo, d.idpiso, d.codigo, d.nombre, d.ubicacion,d.estado,d.descripcion ,td.codigo as type,
             (
             CASE
-                    WHEN td.codigo LIKE 'lock' AND count(dl.*) <> 0 THEN jsonb_agg(
-                                                                json_build_object(
-                                                                'mac' , dl.mac, 
-                                                                'bateria' ,dl.bateria,
-                                                                'codigo_permanente' ,dl.codigo_permanente
-                                                            ))
-                    WHEN td.codigo LIKE 'ttlock' AND count(dl.*) <> 0 THEN jsonb_agg(
-                                                                json_build_object(
-                                                                'mac' , dl.mac, 
-                                                                'bateria' ,dl.bateria,
-                                                                'codigo_permanente' ,dl.codigo_permanente
-                                                            ))
-                    WHEN td.codigo LIKE 'movil' AND count(dm.*) <> 0 THEN jsonb_agg(
-                                                                json_build_object(
-                                                                'version_app', dm.version_app,
-                                                                'ip', dm.ip,
-                                                                'macwifi',dm.macwifi
-                                                            ))
-                    WHEN td.codigo LIKE 'router' AND count(dr.*) <> 0 THEN jsonb_agg(
-                                                                json_build_object(
-                                                                'tipo_conexion', dr.tipo_conexion
-                                                            ))
-                    WHEN td.codigo LIKE 'sonoff' AND count(ds.*) <> 0 THEN jsonb_agg(
-                                                                json_build_object(
-                                                                'na', 'na'
-                                                            ))
-                    WHEN td.codigo LIKE 'telefonillo' AND count(dt.*) <> 0 THEN jsonb_agg(
-                                                                json_build_object(
-                                                                'ip_arduino', dt.ip_arduino
-                                                            ))
-                    ELSE '{}'
+                WHEN td.codigo LIKE 'lock' AND count(dl.*) <> 0 THEN jsonb_agg(
+                                                            json_build_object(
+                                                            'mac' , dl.mac, 
+                                                            'bateria' ,dl.bateria,
+                                                            'codigo_permanente' ,dl.codigo_permanente
+                                                        ))
+                WHEN td.codigo LIKE 'ttlock' AND count(dl.*) <> 0 THEN jsonb_agg(
+                                                            json_build_object(
+                                                            'mac' , dl.mac, 
+                                                            'bateria' ,dl.bateria,
+                                                            'codigo_permanente' ,dl.codigo_permanente
+                                                        ))
+                WHEN td.codigo LIKE 'movil' AND count(dm.*) <> 0 THEN jsonb_agg(
+                                                            json_build_object(
+                                                            'version_app', dm.version_app,
+                                                            'ip', dm.ip,
+                                                            'macwifi',dm.macwifi
+                                                        ))
+                WHEN td.codigo LIKE 'router' AND count(dr.*) <> 0 THEN jsonb_agg(
+                                                            json_build_object(
+                                                            'tipo_conexion', dr.tipo_conexion
+                                                        ))
+                WHEN td.codigo LIKE 'sonoff' AND count(ds.*) <> 0 THEN jsonb_agg(
+                                                            json_build_object(
+                                                            'na', 'na'
+                                                        ))
+                WHEN td.codigo LIKE 'telefonillo' AND count(dt.*) <> 0 THEN jsonb_agg(
+                                                            json_build_object(
+                                                            'ip_arduino', dt.ip_arduino
+                                                        ))
+                ELSE '{}'
                 END
             ) as info_extra
             FROM tbl_dispositivo d
@@ -114,13 +114,13 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
         const queryData = {
             name: 'insert-device',
             text: `INSERT INTO ${Constants.tbl_dispositivo_sql}(
-                          codigo,
-                          nombre,
-                          ubicacion,
-                          estado,  
-                          fecha_creacion, 
-                          fecha_ultimo_cambio)
-                          VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+                    codigo,
+                    nombre,
+                    ubicacion,
+                    estado,  
+                    fecha_creacion, 
+                    fecha_ultimo_cambio)
+                    VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
             values: [
                 data.codigo,
                 data.nombre,
@@ -148,7 +148,7 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
     /**
      *      Mismas funciones con dispositivos de tipo "lock"
- 
+
      * @returns 
      */
 
@@ -158,9 +158,9 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
         const queryData = {
             name: 'get-locks',
             text: `SELECT dev.id, dev.nombre, dev.idtipodispositivo, dev.fecha_creacion, dev.fecha_ultimo_cambio, dev.ubicacion
-                        FROM ${Constants.tbl_dispositivo_sql} dev
-                        JOIN ${Constants.tbl_tipo_dispositivo_sql} mtype on (dev.idtipodispositivo = mtype.id)
-                        WHERE dev.estado >= $1 AND dev.estado IS NOT NULL AND (mtype.codigo LIKE 'lock' OR mtype.codigo LIKE 'ttlock')`,
+                    FROM ${Constants.tbl_dispositivo_sql} dev
+                    JOIN ${Constants.tbl_tipo_dispositivo_sql} mtype on (dev.idtipodispositivo = mtype.id)
+                    WHERE dev.estado >= $1 AND dev.estado IS NOT NULL AND (mtype.codigo LIKE 'lock' OR mtype.codigo LIKE 'ttlock')`,
             values: [this.filterStatus]
         }
 
@@ -196,11 +196,11 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
         const queryData = {
             name: 'Insert-Device-ERP',
             text: `INSERT INTO ${Constants.type_device_telefonillo}(
-                ip_arduino)
-                VALUES($1)
-                RETURNING *`,
+                    ip_arduino)
+                    VALUES($1)
+                    RETURNING *`,
             values: [
-                data.ip_arduino
+                    data.ip_arduino
             ]
         }
         let lData: Array<IDevice | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IDevice | IErrorResponse>
@@ -215,8 +215,7 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
         console.log('ddd')
         const queryData = {
             name: 'get-device-by-piso',
-            text: `
-                    SELECT d.id, d.idtipodispositivo, d.idpiso, d.codigo, d.nombre, d.ubicacion, td.codigo as type,
+            text: `SELECT d.id, d.idtipodispositivo, d.idpiso, d.codigo, d.nombre, d.ubicacion, td.codigo as type,
                     (
                         CASE
                             WHEN td.codigo LIKE 'lock' AND count(dl.*) <> 0 THEN jsonb_agg(
@@ -282,7 +281,7 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
         const queryData = {
             name: 'get-all-devices',
-            text: ` SELECT
+            text: `SELECT
                     d.id,
                     d.codigo,
                     d.nombre,
@@ -318,10 +317,10 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                     LIMIT $3 OFFSET $4
                     `,
             values: [
-                this.filterStatus,
-                search_all === '' ? '' : `%${search_all}%`,
-                limit,
-                offset
+                    this.filterStatus,
+                    search_all === '' ? '' : `%${search_all}%`,
+                    limit,
+                    offset
             ]
         }
 
@@ -350,23 +349,22 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
         const queryData = {
             name: 'insert-device',
             text: `INSERT INTO ${Constants.tbl_dispositivo_sql} 
-            (codigo, nombre, ubicacion, descripcion, estado, 
-            fecha_creacion, fecha_ultimo_cambio, 
-            idpiso, idtipodispositivo, propietario) 
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+                    (codigo, nombre, ubicacion, descripcion, estado, 
+                    fecha_creacion, fecha_ultimo_cambio, 
+                    idpiso, idtipodispositivo, propietario) 
+                    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
 
             values: [
-                data.codigo,
-                data.nombre,
-                data.ubicacion,
-                data.descripcion,
-                data.estado,
-                timeStampCurrent,
-                timeStampCurrent,
-                data.idpiso,
-                data.idtipodispositivo,
-                data.propietario,
-
+                    data.codigo,
+                    data.nombre,
+                    data.ubicacion,
+                    data.descripcion,
+                    data.estado,
+                    timeStampCurrent,
+                    timeStampCurrent,
+                    data.idpiso,
+                    data.idtipodispositivo,
+                    data.propietario,
             ]
         }
 
@@ -393,8 +391,8 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                     t.codigo LIKE $1
                     ORDER BY d.nombre ASC`,
             values: [
-                code || '',
-                this.filterStatus
+                    code || '',
+                    this.filterStatus
             ]
         }
 
@@ -420,7 +418,7 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                     d.estado = 1 AND 
                     d.codigo = ANY($1::character varying[])`,
             values: [
-                lCodes
+                    lCodes
             ]
         }
 
@@ -440,8 +438,7 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
     async getByTypeDeviceCode(lTypeDeviceCodes: Array<TypeDeviceType>): Promise<Array<IDevice> | IErrorResponse> {
         const queryData = {
             name: 'get-all-devices-by-typecode',
-            text: `
-                    SELECT d.id ,d.codigo, d.idpiso, p.id_dispositivo_ref AS code_piso, td.codigo AS type
+            text: `SELECT d.id ,d.codigo, d.idpiso, p.id_dispositivo_ref AS code_piso, td.codigo AS type
                     FROM ${Constants.tbl_dispositivo_sql} d
                     INNER JOIN ${Constants.tbl_tipo_dispositivo_sql} td ON td.id = d.idtipodispositivo
                     INNER JOIN ${Constants.tbl_piso_sql} p ON p.id = d.idpiso
@@ -451,7 +448,7 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                     td.codigo = ANY($1::character varying[])
                     `,
             values: [
-                lTypeDeviceCodes
+                    lTypeDeviceCodes
             ]
         }
 
@@ -488,18 +485,17 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             const queryData = {
                 name: "delete-one-device",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET 
-                estado = $1,
-                idtipodispositivo = $2,
-                fecha_ultimo_cambio= $3,
-                idpiso = $4
-                WHERE id = $5 RETURNING *`,
-
+                    estado = $1,
+                    idtipodispositivo = $2,
+                    fecha_ultimo_cambio= $3,
+                    idpiso = $4
+                    WHERE id = $5 RETURNING *`,
                 values: [
-                    Constants.code_status_delete,
-                    dataDeviceDB.idtipodispositivo,
-                    timeStampCurrent,
-                    dataDeviceDB.idpiso,
-                    id
+                        Constants.code_status_delete,
+                        dataDeviceDB.idtipodispositivo,
+                        timeStampCurrent,
+                        dataDeviceDB.idpiso,
+                        id
                 ]
             }
             // let lData : Array<IDevice | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IDevice | IErrorResponse>
@@ -526,34 +522,34 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "update Device",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                idpiso = $1,
-                idtipodispositivo = $2,
-                codigo = $3,
-                nombre = $4,
-                ubicacion = $5,
-                ref_dispositivo = $6,
-                etiqueta_dispositivo = $7,
-                descripcion = $8,
-                estado = $9,
-                marca = $10,
-                modelo = $11, 
-                ubicacion_piso = $12                
-                WHERE id = $13 RETURNING *`,
+                    idpiso = $1,
+                    idtipodispositivo = $2,
+                    codigo = $3,
+                    nombre = $4,
+                    ubicacion = $5,
+                    ref_dispositivo = $6,
+                    etiqueta_dispositivo = $7,
+                    descripcion = $8,
+                    estado = $9,
+                    marca = $10,
+                    modelo = $11, 
+                    ubicacion_piso = $12                
+                    WHERE id = $13 RETURNING *`,
 
                 values: [
-                    data.idpiso,
-                    data.idtipodispositivo,
-                    data.codigo,
-                    data.nombre,
-                    data.ubicacion,
-                    data.ref_dispositivo,
-                    data.etiqueta_dispositivo,
-                    data.descripcion,
-                    data.estado,
-                    data.marca,
-                    data.modelo,
-                    data.ubicacion_piso,
-                    id
+                        data.idpiso,
+                        data.idtipodispositivo,
+                        data.codigo,
+                        data.nombre,
+                        data.ubicacion,
+                        data.ref_dispositivo,
+                        data.etiqueta_dispositivo,
+                        data.descripcion,
+                        data.estado,
+                        data.marca,
+                        data.modelo,
+                        data.ubicacion_piso,
+                        id
                 ]
             };
 
@@ -577,20 +573,17 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
             let LDataAllDevice = (await client.query(queryData)).rows as Array<IDevice | IErrorResponse>
@@ -603,10 +596,9 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                             INSERT INTO ${Constants.tbl_telefonillo_sql}
                             (iddispositivo,ip_arduino)
                             VALUES($1,$2) RETURNING *`,
-
                     values: [
-                        _data.id,
-                        data.ip_arduino
+                            _data.id,
+                            data.ip_arduino
                     ]
                 }
                 await client.query(queryData)
@@ -637,20 +629,17 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
             let LDataAllDevice = (await client.query(queryData)).rows as Array<IDevice | IErrorResponse>
@@ -664,12 +653,11 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                             INSERT INTO ${Constants.tbl_manija_sql}
                             (iddispositivo,mac,codigo_permanente,bateria)
                             VALUES($1,$2,$3,$4) RETURNING *`,
-
                     values: [
-                        _data.id,
-                        data.mac,
-                        data.codigo_permanente,
-                        data.bateria || 0,
+                            _data.id,
+                            data.mac,
+                            data.codigo_permanente,
+                            data.bateria || 0,
                     ]
                 }
                 await client.query(queryData)
@@ -694,20 +682,18 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
 
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
             let LDataAllDevice = (await client.query(queryData)).rows as Array<IDevice | IErrorResponse>
@@ -717,11 +703,9 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                 const _data = (LDataAllDevice as Array<ILock>)[0]
                 const queryData = {
                     name: "Insert-device-lock",
-                    text: `
-                            INSERT INTO ${Constants.tbl_ttlock_sql}
+                    text: `INSERT INTO ${Constants.tbl_ttlock_sql}
                             (id,mac,codigo_permanente,bateria)
                             VALUES($1,$2,$3,$4) RETURNING *`,
-
                     values: [
                         _data.id,
                         data.mac,
@@ -757,20 +741,18 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
 
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
             let LDataAllDevice = (await client.query(queryData)).rows as Array<IDevice | IErrorResponse>
@@ -779,13 +761,11 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                 const _data = (LDataAllDevice as Array<ICamara>)[0]
                 const queryData = {
                     name: "Insert-device-camara",
-                    text: `
-                            INSERT INTO ${Constants.tbl_camara_sql}
+                    text: `INSERT INTO ${Constants.tbl_camara_sql}
                             (iddispositivo)
                             VALUES($1) RETURNING *`,
-
                     values: [
-                        _data.id
+                            _data.id
                     ]
                 }
                 await client.query(queryData)
@@ -815,20 +795,17 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
 
@@ -838,16 +815,14 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                 const _data = (LDataAllDevice as Array<IMovil>)[0]
                 const queryData = {
                     name: "Insert-device-movil",
-                    text: `
-                            INSERT INTO ${Constants.tbl_movil_sql}
+                    text: `INSERT INTO ${Constants.tbl_movil_sql}
                             (iddispositivo,version_app,ip,macwifi)
                             VALUES($1,$2,$3,$4) RETURNING *`,
-
                     values: [
-                        _data.id,
-                        data.version_app,
-                        data.ip,
-                        data.macwifi,
+                            _data.id,
+                            data.version_app,
+                            data.ip,
+                            data.macwifi,
                     ],
                 }
                 await client.query(queryData)
@@ -877,20 +852,17 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
             let LDataAllDevice = (await client.query(queryData)).rows as Array<IDevice | IErrorResponse>
@@ -899,13 +871,11 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                 const _data = (LDataAllDevice as Array<ISwitchOnOff>)[0]
                 const queryData = {
                     name: "Insert-device-Sonoff",
-                    text: `
-                            INSERT INTO ${Constants.tbl_sonoff_sql}
+                    text: `INSERT INTO ${Constants.tbl_sonoff_sql}
                             (iddispositivo)
                             VALUES($1) RETURNING *`,
-
                     values: [
-                        _data.id,
+                            _data.id,
                     ]
                 }
                 await client.query(queryData)
@@ -935,20 +905,18 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
 
             const queryData = {
                 name: "Insert-device",
-                text: `
-                     INSERT INTO ${Constants.tbl_dispositivo_sql}
-                     (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
-                     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+                text: `INSERT INTO ${Constants.tbl_dispositivo_sql}
+                        (codigo,nombre,idtipodispositivo,fecha_creacion,fecha_ultimo_cambio,descripcion,idpiso)
+                        VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
 
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.idtipodispositivo,
-                    timeStampCurrent,
-                    timeStampCurrent,
-                    data.descripcion,
-                    _idpiso,
-
+                        data.codigo,
+                        data.nombre,
+                        data.idtipodispositivo,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.descripcion,
+                        _idpiso,
                 ]
             }
             let LDataAllDevice = (await client.query(queryData)).rows as Array<IDevice | IErrorResponse>
@@ -957,17 +925,16 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
                 const _data = (LDataAllDevice as Array<IRouter>)[0]
                 const queryData = {
                     name: "Insert-device-Router",
-                    text: `
-                            INSERT INTO ${Constants.tbl_router_sql}
+                    text: `INSERT INTO ${Constants.tbl_router_sql}
                             (iddispositivo,nombre_red,password_red,proveedor,tipo_conexion)
                             VALUES($1,$2,$3,$4,$5) RETURNING *`,
 
                     values: [
-                        _data.id,
-                        data.nombre_red,
-                        data.password_red,
-                        data.proveedor,
-                        data.tipo_conexion,
+                            _data.id,
+                            data.nombre_red,
+                            data.password_red,
+                            data.proveedor,
+                            data.tipo_conexion,
                     ]
                 }
                 await client.query(queryData)
@@ -999,22 +966,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1023,15 +989,12 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             if (LDataAllDevice.length !== 0) {
                 const queryData = {
                     name: "update-device-Telefonillo",
-                    text: `
-                            UPDATE ${Constants.tbl_telefonillo_sql} SET 
+                    text: `UPDATE ${Constants.tbl_telefonillo_sql} SET 
                             ip_arduino = $1
                             WHERE iddispositivo = $2 RETURNING *`,
-
                     values: [
-                        data.ip_arduino,
-                        id
-
+                            data.ip_arduino,
+                            id
                     ]
                 }
                 await client.query(queryData)
@@ -1063,22 +1026,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1087,19 +1049,16 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             if (LDataAllDevice.length !== 0) {
                 const queryData = {
                     name: "update-device-Lock",
-                    text: `
-                            UPDATE ${Constants.tbl_manija_sql} SET 
+                    text: `UPDATE ${Constants.tbl_manija_sql} SET 
                             codigo_permanente = $1,
                             bateria = $2,
                             mac = $3
                             WHERE iddispositivo = $4 RETURNING *`,
-
                     values: [
-                        data.codigo_permanente,
-                        data.bateria || 0,
-                        data.mac,
-                        id
-
+                            data.codigo_permanente,
+                            data.bateria || 0,
+                            data.mac,
+                            id
                     ]
                 }
                 await client.query(queryData)
@@ -1131,22 +1090,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1155,19 +1113,16 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             if (LDataAllDevice.length !== 0) {
                 const queryData = {
                     name: "update-device-Lock",
-                    text: `
-                            UPDATE ${Constants.tbl_manija_sql} SET 
+                    text: `UPDATE ${Constants.tbl_manija_sql} SET 
                             codigo_permanente = $1,
                             bateria = $2,
                             mac = $3
                             WHERE iddispositivo = $4 RETURNING *`,
-
                     values: [
-                        data.codigo_permanente,
-                        data.bateria || 0,
-                        data.mac,
-                        id
-
+                            data.codigo_permanente,
+                            data.bateria || 0,
+                            data.mac,
+                            id
                     ]
                 }
                 await client.query(queryData)
@@ -1199,22 +1154,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1265,22 +1219,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1289,19 +1242,16 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             if (LDataAllDevice.length !== 0) {
                 const queryData = {
                     name: "update-device-Movil",
-                    text: `
-                            UPDATE ${Constants.tbl_movil_sql} SET 
+                    text: `UPDATE ${Constants.tbl_movil_sql} SET 
                             version_app = $1,
                             ip=$2,
                             macwifi=$3
                             WHERE iddispositivo = $4 RETURNING *`,
-
                     values: [
-                        data.version_app,
-                        data.ip, // inclui el campo ip en los valores
-                        data.macwifi, // inclui el campo macwifi en los valores
-                        id
-
+                            data.version_app,
+                            data.ip, // inclui el campo ip en los valores
+                            data.macwifi, // inclui el campo macwifi en los valores
+                            id
                     ]
                 }
                 await client.query(queryData)
@@ -1333,22 +1283,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1399,22 +1348,21 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             let queryData = {
                 name: "Device-update",
                 text: `UPDATE ${Constants.tbl_dispositivo_sql} SET
-                codigo = $1,
-                nombre = $2,
-                descripcion = $3,
-                estado = $4,
-                fecha_ultimo_cambio = $5,
-                idpiso = $6 
-                WHERE id = $7 RETURNING *`,
-
+                        codigo = $1,
+                        nombre = $2,
+                        descripcion = $3,
+                        estado = $4,
+                        fecha_ultimo_cambio = $5,
+                        idpiso = $6 
+                        WHERE id = $7 RETURNING *`,
                 values: [
-                    data.codigo,
-                    data.nombre,
-                    data.descripcion,
-                    data.estado,
-                    timeStampCurrent,
-                    _idpiso,
-                    id
+                        data.codigo,
+                        data.nombre,
+                        data.descripcion,
+                        data.estado,
+                        timeStampCurrent,
+                        _idpiso,
+                        id
                 ]
             };
 
@@ -1423,21 +1371,18 @@ class DeviceDataAccess implements IDataAccess<IDevice> {
             if (LDataAllDevice.length !== 0) {
                 const queryData = {
                     name: "update-device-router",
-                    text: `
-                            UPDATE ${Constants.tbl_router_sql} SET 
+                    text: `UPDATE ${Constants.tbl_router_sql} SET 
                             nombre_red = $1,
                             password_red = $2,
                             proveedor = $3,
                             tipo_conexion = $4
                             WHERE iddispositivo = $5 RETURNING *`,
-
                     values: [
-                        data.nombre_red,
-                        data.password_red,
-                        data.proveedor,
-                        data.tipo_conexion,
-                        id
-
+                            data.nombre_red,
+                            data.password_red,
+                            data.proveedor,
+                            data.tipo_conexion,
+                            id
                     ]
                 }
                 await client.query(queryData)

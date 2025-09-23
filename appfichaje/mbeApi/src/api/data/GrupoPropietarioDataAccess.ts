@@ -14,14 +14,14 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
     public client: DbConnection
 
     constructor( 
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean, 
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean, 
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
-     /**
+    /**
      * Filtra los grupos por NOMBRE-GRUPO, NOMBRE PRESCRIPTORES, TELEFONO-PRESCRIPTORES
      * @returns 
      */
@@ -61,9 +61,9 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                     ORDER BY gp.next_step_order ASC, gp.nombre ASC
                     `,
             values: [
-                        this.filterStatus,
-                        _search_all === '' ? '' : `%${_search_all}%`
-                    ]
+                    this.filterStatus,
+                    _search_all === '' ? '' : `%${_search_all}%`
+            ]
         }
 
         // UNACCENT(lower( replace(trim(tlf.telefonos_str),' ','') )) LIKE UNACCENT(lower( replace(trim($6),' ','') )) OR 
@@ -85,12 +85,12 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
             text: `
                     SELECT gp.*,
                     (CASE
-                            WHEN count(gup.*) > 0 THEN jsonb_agg(json_build_object('id', gup.id, 
-                                                                                'nombre_completo', trim(gup.nombre_completo),
-                                                                                'telefono', COALESCE(trim(gup.telefono), ''),
-                                                                                'email', trim(gup.email)
-                                                                                ))
-                            WHEN count(gup.*) = 0 THEN '[]'
+                        WHEN count(gup.*) > 0 THEN jsonb_agg(json_build_object('id', gup.id, 
+                                                                            'nombre_completo', trim(gup.nombre_completo),
+                                                                            'telefono', COALESCE(trim(gup.telefono), ''),
+                                                                            'email', trim(gup.email)
+                                                                            ))
+                        WHEN count(gup.*) = 0 THEN '[]'
                     END) AS propietarios
                     FROM ${Constants.tbl_grupo_propietario_dn_sql} gp
                     LEFT JOIN (
@@ -103,7 +103,7 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                     WHERE gp.id = $1 AND gp.estado >= $2 AND gp.estado IS NOT NULL
                     GROUP BY gp.id
                     ORDER BY gp.nombre ASC
-                   `,
+                `,
             values: [ id, this.filterStatus ]
         }
 
@@ -162,19 +162,20 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                         otros = $10,
                         acceso_intranet = $11
                         WHERE id = $12 RETURNING *`,
-                values: [   data.nombre!,
-                            data.whatsapp!,
-                            _total_nro_llamadas,
-                            timeStampCurrent,
-                            data.next_step,
-                            data.administrador?.trim(),
-                            data.presidente?.trim(),
-                            data.vecinos?.trim(),
-                            data.portero?.trim(),
-                            data.otros?.trim(),
-                            data.acceso_intranet?.trim(),
-                            id
-                            ]
+                values: [   
+                        data.nombre!,
+                        data.whatsapp!,
+                        _total_nro_llamadas,
+                        timeStampCurrent,
+                        data.next_step,
+                        data.administrador?.trim(),
+                        data.presidente?.trim(),
+                        data.vecinos?.trim(),
+                        data.portero?.trim(),
+                        data.otros?.trim(),
+                        data.acceso_intranet?.trim(),
+                        id
+                ]
             }
             await client.query(queryDataUpdateGP)
 
@@ -182,22 +183,23 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
             let queryInsertSuceso = {
                 name: 'insert-suceso-propietario-dn',
                 text: `INSERT INTO ${Constants.tbl_suceso_propietario_dn_sql} (
-                          comentario,
-                          data,
-                          fecha_creacion,
-                          idusuario,
-                          idgrupo,
-                          ref_suceso,
-                          next_step )
-                       VALUES( $1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-                values: [   data.comentario_suceso,
-                            _dataDB || {},
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            id,
-                            _uuidSuceso,
-                            data.next_step
-                        ]
+                        comentario,
+                        data,
+                        fecha_creacion,
+                        idusuario,
+                        idgrupo,
+                        ref_suceso,
+                        next_step )
+                        VALUES( $1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+                values: [
+                        data.comentario_suceso,
+                        _dataDB || {},
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        id,
+                        _uuidSuceso,
+                        data.next_step
+                ]
             }
             await client.query(queryInsertSuceso)
 
@@ -214,10 +216,10 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                                 email = $3
                                 WHERE id = $4 RETURNING *`,
                         values: [   data.propietarios![_i].nombre_completo,
-                                    data.propietarios![_i].telefono,
-                                    data.propietarios![_i].email,
-                                    data.propietarios![_i].id
-                                ]
+                                data.propietarios![_i].telefono,
+                                data.propietarios![_i].email,
+                                data.propietarios![_i].id
+                        ]
                     }
                     await client.query(queryUpdateUserData)
                 }
@@ -258,12 +260,12 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                                     idusuario_ult_cambio = $4
                                     WHERE id = $5 RETURNING *`,
                             values: [
-                                        1,
-                                        timeStampCurrent,
-                                        timeStampCurrent,
-                                        this.idUserLogin,
-                                        _dataLead.id
-                                    ]
+                                    1,
+                                    timeStampCurrent,
+                                    timeStampCurrent,
+                                    this.idUserLogin,
+                                    _dataLead.id
+                            ]
                         }
                         await client.query(queryUpdateLeadData)
 
@@ -310,21 +312,21 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                             const queryDataHL = {
                                 name: 'insert-history-lead',
                                 text: `INSERT INTO ${Constants.tbl_historico_lead_dn_sql} ( 
-                                    fecha_creacion,
-                                    next_step,
-                                    last_step,
-                                    data,
-                                    interesa,
-                                    avance,
-                                    ocupacion,
-                                    estatus,
-                                    comentario,
-                                    idlead,
-                                    idusuario_resp,
-                                    tipo_accion,
-                                    categoria,
-                                    ref_suceso
-                                    ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
+                                        fecha_creacion,
+                                        next_step,
+                                        last_step,
+                                        data,
+                                        interesa,
+                                        avance,
+                                        ocupacion,
+                                        estatus,
+                                        comentario,
+                                        idlead,
+                                        idusuario_resp,
+                                        tipo_accion,
+                                        categoria,
+                                        ref_suceso
+                                        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
                                 values: [
                                         _dataHistorySuceso[i].fecha_creacion,
                                         _dataLead.next_step,
@@ -358,7 +360,7 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
         if ( ({ ...responseD[0] } as IErrorResponse).error) return responseD[0] as IErrorResponse
 
         const dataResponse = { ...responseD[0] } as IGrupoPropietario
-        
+
         return dataResponse
     }
 
@@ -409,19 +411,20 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                         otros = $11,
                         acceso_intranet = $12
                         WHERE id = $13 RETURNING *`,
-                values: [   `${data.nombre!}_old_${timeStampCurrent}`,
-                            data.whatsapp!,
-                            -1,
-                            _total_nro_llamadas,
-                            timeStampCurrent,
-                            data.next_step,
-                            data.administrador?.trim(),
-                            data.presidente?.trim(),
-                            data.vecinos?.trim(),
-                            data.portero?.trim(),
-                            data.acceso_intranet?.trim(),
-                            id
-                            ]
+                values: [   
+                        `${data.nombre!}_old_${timeStampCurrent}`,
+                        data.whatsapp!,
+                        -1,
+                        _total_nro_llamadas,
+                        timeStampCurrent,
+                        data.next_step,
+                        data.administrador?.trim(),
+                        data.presidente?.trim(),
+                        data.vecinos?.trim(),
+                        data.portero?.trim(),
+                        data.acceso_intranet?.trim(),
+                        id
+                ]
             }
             await client.query(queryDataUpdateGP)
 
@@ -429,22 +432,23 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
             let queryInsertSuceso = {
                 name: 'insert-suceso-propietario-dn',
                 text: `INSERT INTO ${Constants.tbl_suceso_propietario_dn_sql} (
-                          comentario,
-                          data,
-                          fecha_creacion,
-                          idusuario,
-                          idgrupo,
-                          ref_suceso,
-                          next_step)
-                       VALUES( $1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-                values: [   data.comentario_suceso,
-                            _dataDB || {},
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            id,
-                            _uuidSuceso,
-                            data.next_step
-                        ]
+                        comentario,
+                        data,
+                        fecha_creacion,
+                        idusuario,
+                        idgrupo,
+                        ref_suceso,
+                        next_step)
+                        VALUES( $1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+                values: [
+                        data.comentario_suceso,
+                        _dataDB || {},
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        id,
+                        _uuidSuceso,
+                        data.next_step
+                ]
             }
             await client.query(queryInsertSuceso)
 
@@ -460,11 +464,12 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                                 telefono = $2,
                                 email = $3
                                 WHERE id = $4 RETURNING *`,
-                        values: [   data.propietarios![_i].nombre_completo,
-                                    data.propietarios![_i].telefono,
-                                    data.propietarios![_i].email,
-                                    data.propietarios![_i].id
-                                ]
+                        values: [
+                                data.propietarios![_i].nombre_completo,
+                                data.propietarios![_i].telefono,
+                                data.propietarios![_i].email,
+                                data.propietarios![_i].id
+                        ]
                     }
                     await client.query(queryUpdateUserData)
                 }
@@ -505,12 +510,12 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                                     idusuario_ult_cambio = $4
                                     WHERE id = $5 RETURNING *`,
                             values: [
-                                        1,
-                                        timeStampCurrent,
-                                        timeStampCurrent,
-                                        this.idUserLogin,
-                                        _dataLead.id
-                                    ]
+                                    1,
+                                    timeStampCurrent,
+                                    timeStampCurrent,
+                                    this.idUserLogin,
+                                    _dataLead.id
+                            ]
                         }
                         await client.query(queryUpdateLeadData)
 
@@ -554,21 +559,21 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                             const queryDataHL = {
                                 name: 'insert-history-lead',
                                 text: `INSERT INTO ${Constants.tbl_historico_lead_dn_sql} ( 
-                                    fecha_creacion,
-                                    next_step,
-                                    last_step,
-                                    data,
-                                    interesa,
-                                    avance,
-                                    ocupacion,
-                                    estatus,
-                                    comentario,
-                                    idlead,
-                                    idusuario_resp,
-                                    tipo_accion,
-                                    categoria,
-                                    ref_suceso
-                                    ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
+                                        fecha_creacion,
+                                        next_step,
+                                        last_step,
+                                        data,
+                                        interesa,
+                                        avance,
+                                        ocupacion,
+                                        estatus,
+                                        comentario,
+                                        idlead,
+                                        idusuario_resp,
+                                        tipo_accion,
+                                        categoria,
+                                        ref_suceso
+                                        ) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
                                 values: [
                                         _dataHistorySuceso[i].fecha_creacion,
                                         _dataLead.next_step,
@@ -589,8 +594,8 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                             await client.query(queryDataHL)
                         }
                     } else {
-                        //Lanzar Error
-                        break
+                    //Lanzar Error
+                    break
                     }
                 }
             }
@@ -652,11 +657,11 @@ class GrupoPropietarioDataAccess implements IDataAccess<IGrupoPropietario> {
                     LIMIT $3 OFFSET $4
                     `,
             values: [
-                        1,
-                        search_all === '' ? '' : `%${search_all}%`,
-                        limit,
-                        offset,
-                    ]
+                    1,
+                    search_all === '' ? '' : `%${search_all}%`,
+                    limit,
+                    offset,
+            ]
         }
 
         let lData: Array<IGrupoPropietario | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IGrupoPropietario | IErrorResponse>

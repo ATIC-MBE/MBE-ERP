@@ -19,7 +19,7 @@ export interface IVariablesReserva extends IModel {
     edad_max?: number
     mascota: boolean
     observacion?: string
-   
+
     // Relaciones
     idinfopisocom?: number
     idtipoestancia?: number

@@ -10,26 +10,25 @@ class ParametrosGeneralesDataAccess implements IDataAccess<IParametrosGenerales>
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<IParametrosGenerales> | IErrorResponse> {
         const queryData  = {
-                name: 'get-parametros-generales',
-                text: ` SELECT pg.*
-                        FROM ${Constants.tbl_parametros_generales_sql} pg
-                        WHERE pg.estado >= $1
-                        ORDER BY pg.codigo ASC
-                        `,
-                values: [this.filterStatus]
+            name: 'get-parametros-generales',
+            text: ` SELECT pg.*
+                    FROM ${Constants.tbl_parametros_generales_sql} pg
+                    WHERE pg.estado >= $1
+                    ORDER BY pg.codigo ASC
+                    `,
+            values: [this.filterStatus]
         }
-
         let lData: Array<IParametrosGenerales | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IParametrosGenerales | IErrorResponse>
-        
+
         if ( ({ ...lData[0] } as IErrorResponse).error ) return lData[0] as IErrorResponse
 
         return lData as Array<IParametrosGenerales>
@@ -53,13 +52,13 @@ class ParametrosGeneralesDataAccess implements IDataAccess<IParametrosGenerales>
 
     async getByCode(codigo: string): Promise<IParametrosGenerales | IErrorResponse> {
         const queryData  = {
-                name: 'get-parametros-generales-x-codigo',
-                text: ` SELECT pg.*
-                        FROM ${Constants.tbl_parametros_generales_sql} pg
-                        WHERE pg.estado >= $1 AND pg.codigo LIKE $2
-                        ORDER BY pg.codigo ASC
-                        `,
-                values: [this.filterStatus, codigo]
+            name: 'get-parametros-generales-x-codigo',
+            text: ` SELECT pg.*
+                    FROM ${Constants.tbl_parametros_generales_sql} pg
+                    WHERE pg.estado >= $1 AND pg.codigo LIKE $2
+                    ORDER BY pg.codigo ASC
+                    `,
+            values: [this.filterStatus, codigo]
         }
 
         let lData: Array<IParametrosGenerales | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IParametrosGenerales | IErrorResponse>

@@ -13,22 +13,22 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<IInfoPisoComercial> | IErrorResponse> {
         const queryData  = {
-                name: 'get-info-piso-comercial',
-                text: ` SELECT ipc.*
-                        FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
-                        INNER JOIN ${Constants.tbl_piso_sql} p ON (p.id = ipc.idpiso AND p.estado = $1)
-                        ORDER BY ipc.nombre_comercial ASC
-                        `,
-                values: [this.filterStatus]
+            name: 'get-info-piso-comercial',
+            text: ` SELECT ipc.*
+                    FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
+                    INNER JOIN ${Constants.tbl_piso_sql} p ON (p.id = ipc.idpiso AND p.estado = $1)
+                    ORDER BY ipc.nombre_comercial ASC
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<IInfoPisoComercial | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<IInfoPisoComercial | IErrorResponse>
@@ -62,158 +62,157 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
         _total_end = _total_end > -1 ? _total_end : 10000000
 
         const queryData  = {
-                name: 'get-all-info-piso-comercial',
-                text: ` SELECT pf.*,
-                        ipd.cp_ocupacion_maxima,
-                        ipd.cp_m2,
-                        ipd.ds_nro_dormitorios,
-                        ipd.ds_nro_camas,
-                        ipd.bs_nro_banios,
-                        ipd.ca_aire_acondicionado,
-                        ipd.ca_calefaccion,
-                        ipd.cp_ascensor,
-                        ipd.ca_discapacidad,
-                        ipd.ds_descripcion_camas,
-                        ipd.bs_nro_aseos,
-                        ipd.bs_descripcion_banios,
-                        ipd.ds_descripcion_sofacama,
-                        ipd.ds_nro_sofacama,
+            name: 'get-all-info-piso-comercial',
+            text: ` SELECT pf.*,
+                    ipd.cp_ocupacion_maxima,
+                    ipd.cp_m2,
+                    ipd.ds_nro_dormitorios,
+                    ipd.ds_nro_camas,
+                    ipd.bs_nro_banios,
+                    ipd.ca_aire_acondicionado,
+                    ipd.ca_calefaccion,
+                    ipd.cp_ascensor,
+                    ipd.ca_discapacidad,
+                    ipd.ds_descripcion_camas,
+                    ipd.bs_nro_aseos,
+                    ipd.bs_descripcion_banios,
+                    ipd.ds_descripcion_sofacama,
+                    ipd.ds_nro_sofacama,
 
+                    (
+                        CASE
+                        WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = true THEN 'Si'
+                        WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.aire_acondicionado = true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.aire_acondicionado = false THEN 'No'
+                        END
+                    ) as lbl_aire_acondicionado,
+                    (
+                        CASE
+                        WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = true THEN 'Si'
+                        WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.calefaccion = true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.calefaccion = false THEN 'No'
+                        END
+                    ) as lbl_calefaccion,
+                    (
+                        CASE
+                        WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = true THEN 'Si'
+                        WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.ascensor= true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.ascensor = false THEN 'No'
+                        END
+                    ) as lbl_ascensor,
+                    (
+                        CASE
+                        WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = true THEN 'Si'
+                        WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.discapacidad = true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.discapacidad = false THEN 'No'
+                        END
+                    ) as lbl_discapacidad
+                FROM (
+                        SELECT ipc.id, ipc.estado_general, 
+                        p.etiqueta AS a_etiqueta, p.id as idpiso, plfc.plataformas,
+                        COALESCE(vc.variablesreserva, '[]') as variablesreserva,
+                        p.ciudad as a_localidad, p.codigo_postal as a_codigo_postal, 
+                        (p.direccion || ', Nro ' || p.nro_edificio || ', ' || p.nro_piso) as a_full_direccion, p.ubicacion_mapa,
+                        vc.total_str,p.ocupacion_maxima, p.m2, p.nro_dormitorios, p.nro_camas, p.nro_banios, p.nro_sofacama,
+                        p.etiqueta, p.discapacidad , p.ascensor , p.calefaccion , p.aire_acondicionado
+                        FROM ${Constants.tbl_piso_sql} p
+                        LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON p.id = ipd.id
+                        LEFT JOIN ${Constants.tbl_info_piso_comercial_myd_sql} ipc ON (p.id = ipc.idpiso)
+                        LEFT JOIN (
+                            SELECT p.id,
+                            (CASE
+                                WHEN count(pc.*) > 0 THEN jsonb_agg(json_build_object(  'id', pc.id,
+                                                                                        'codigo', COALESCE(pc.codigo, ''), 
+                                                                                        'nombre', COALESCE(pc.nombre, ''),
+                                                                                        'link', COALESCE(pi.link, '') ))
+                                WHEN count(pc.*) = 0 THEN '[]'
+                            END
+                            ) as plataformas
+                            FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
+                            RIGHT JOIN ${Constants.tbl_piso_sql} p ON (p.id = ipc.idpiso)
+                            LEFT JOIN ${Constants.tbl_plataforma_comercial_myd_sql} pc ON (pc.estado = 1)
+                            LEFT JOIN ${Constants.tbl_plataforma_infopiso_myd_sql} pi ON (pc.id = pi.idplataformacom AND pi.estado = 1 AND ipc.id = pi.idinfopisocom)
+                            GROUP BY p.id
+                        ) plfc ON plfc.id = p.id
+                        LEFT JOIN (
+                            SELECT ipc.idpiso,
+                            (CASE
+                                WHEN count(vr.*) > 0 THEN jsonb_agg(json_build_object(  'id', vr.id, 
+                                                                                        'precio_limite', vr.precio_limite,
+                                                                                        'precio_alquiler', vr.precio_alquiler,
+                                                                                        'precio_muebles', vr.precio_muebles,
+                                                                                        'total', vr.total
+                                                                                    ))
+                                WHEN count(vr.*) = 0 THEN '[]'
+                            END
+                            ) as variablesreserva,
+                            STRING_AGG( COALESCE(vr.total, 0)::text, ' | ') as total_str
+                            FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
+                            LEFT JOIN (
+                                SELECT * 
+                                FROM ${Constants.tbl_variables_reserva_myd_sql} vr 
+                                WHERE vr.estado = 1 
+                                ORDER BY fecha_creacion DESC, id DESC 
+                            ) vr ON (ipc.id = vr.idinfopisocom)
+                            WHERE ipc.estado = 1
+                            GROUP BY ipc.idpiso
+                        ) vc ON (vc.idpiso = p.id)
+                    WHERE p.estado = $1 AND 
+                        (ipc.estado = 1 OR ipc.estado IS NULL) AND
+                        p.visible_rmg = 1 AND
+                        (ipc.estado_general = $9 OR $9 = -2) AND 
                         (
-                         CASE
-                            WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = true THEN 'Si'
-                            WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.aire_acondicionado = true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.aire_acondicionado = false THEN 'No'
-                         END
-                     ) as lbl_aire_acondicionado,
-                     (
-                         CASE
-                            WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = true THEN 'Si'
-                            WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.calefaccion = true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.calefaccion = false THEN 'No'
-                         END
-                     ) as lbl_calefaccion,
-                     (
-                         CASE
-                            WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = true THEN 'Si'
-                            WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.ascensor= true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.ascensor = false THEN 'No'
-                         END
-                     ) as lbl_ascensor,
-                     (
-                         CASE
-                            WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = true THEN 'Si'
-                            WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.discapacidad = true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.discapacidad = false THEN 'No'
-                         END
-                     ) as lbl_discapacidad
-                 FROM (
-                            SELECT ipc.id, ipc.estado_general, 
-                            p.etiqueta AS a_etiqueta, p.id as idpiso, plfc.plataformas,
-                            COALESCE(vc.variablesreserva, '[]') as variablesreserva,
-                            p.ciudad as a_localidad, p.codigo_postal as a_codigo_postal, 
-                            (p.direccion || ', Nro ' || p.nro_edificio || ', ' || p.nro_piso) as a_full_direccion, p.ubicacion_mapa,
-                            vc.total_str,p.ocupacion_maxima, p.m2, p.nro_dormitorios, p.nro_camas, p.nro_banios, p.nro_sofacama,
-                            p.etiqueta, p.discapacidad , p.ascensor , p.calefaccion , p.aire_acondicionado
-                            FROM ${Constants.tbl_piso_sql} p
-                            LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON p.id = ipd.id
-                            LEFT JOIN ${Constants.tbl_info_piso_comercial_myd_sql} ipc ON (p.id = ipc.idpiso)
-                            LEFT JOIN (
-                                SELECT p.id,
-                                (CASE
-                                    WHEN count(pc.*) > 0 THEN jsonb_agg(json_build_object(  'id', pc.id,
-                                                                                            'codigo', COALESCE(pc.codigo, ''), 
-                                                                                            'nombre', COALESCE(pc.nombre, ''),
-                                                                                            'link', COALESCE(pi.link, '') ))
-                                    WHEN count(pc.*) = 0 THEN '[]'
-                                END
-                                ) as plataformas
-                                FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
-                                RIGHT JOIN ${Constants.tbl_piso_sql} p ON (p.id = ipc.idpiso)
-                                LEFT JOIN ${Constants.tbl_plataforma_comercial_myd_sql} pc ON (pc.estado = 1)
-                                LEFT JOIN ${Constants.tbl_plataforma_infopiso_myd_sql} pi ON (pc.id = pi.idplataformacom AND pi.estado = 1 AND ipc.id = pi.idinfopisocom)
-                                GROUP BY p.id
-                            ) plfc ON plfc.id = p.id
-                            LEFT JOIN (
-                                SELECT ipc.idpiso,
-                                (CASE
-                                    WHEN count(vr.*) > 0 THEN jsonb_agg(json_build_object(  'id', vr.id, 
-                                                                                            'precio_limite', vr.precio_limite,
-                                                                                            'precio_alquiler', vr.precio_alquiler,
-                                                                                            'precio_muebles', vr.precio_muebles,
-                                                                                            'total', vr.total
-                                                                                        ))
-                                    WHEN count(vr.*) = 0 THEN '[]'
-                                END
-                                ) as variablesreserva,
-                                STRING_AGG( COALESCE(vr.total, 0)::text, ' | ') as total_str
-                                FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
-                                LEFT JOIN (
-                                    SELECT * 
-                                    FROM ${Constants.tbl_variables_reserva_myd_sql} vr 
-                                    WHERE vr.estado = 1 
-                                    ORDER BY fecha_creacion DESC, id DESC 
-                                ) vr ON (ipc.id = vr.idinfopisocom)
-                                WHERE ipc.estado = 1
-                                GROUP BY ipc.idpiso
-                            ) vc ON (vc.idpiso = p.id)
-                        WHERE p.estado = $1 AND 
-                            (ipc.estado = 1 OR ipc.estado IS NULL) AND
-                            p.visible_rmg = 1 AND
-                            (ipc.estado_general = $9 OR $9 = -2) AND 
+                            UNACCENT(lower( replace(trim(p.etiqueta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                            UNACCENT(lower( replace(trim(ipd.if_zonas ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                             (
-                                UNACCENT(lower( replace(trim(p.etiqueta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                                UNACCENT(lower( replace(trim(ipd.if_zonas ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                                (
-                                    CASE
-                                        WHEN ipc.estado_general = 1 THEN 'activo'
-                                        WHEN ipc.estado_general = 2 THEN 'stopsell'
-                                        WHEN ipc.estado_general = 3 THEN 'nodisponible'
-                                        WHEN ipc.estado_general IS NULL THEN '---'
-                                    END
-                                ) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                                UNACCENT(lower( replace(trim(   COALESCE(ciudad, '') || ',' ||
-                                                                COALESCE(codigo_postal, '') || ','  || 
-                                                                COALESCE(direccion, '') || ',' || 
-                                                                COALESCE(nro_edificio, '') || ',' ||
-                                                                COALESCE(nro_piso, '') ),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
-                                $2 = '') 
-                    ) AS pf
-                     LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON pf.idpiso = ipd.id
-                     WHERE 
-                     
-                     (
-                         ipd.ds_nro_dormitorios = $3 OR $3 = -1 
-                     ) AND
-                     (
-                         $4 <= ipd.cp_ocupacion_maxima OR $4 = -1
-                     ) AND
-                     (
-                         ipd.ds_nro_camas = $5 OR $5 = -1
-                     ) AND
-                     (
-                         ipd.bs_nro_banios = $6 OR $6 = -1
-                     ) AND
-                     ( 
-                         ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $7 AND $8 ) OR
-                         ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($7)::integer AND ($8)::integer )
-                     ) 
-                 ORDER BY pf.estado_general ASC, CAST(COALESCE(pf.total_str, '0') as double precision) ASC, pf.etiqueta ASC
+                                CASE
+                                    WHEN ipc.estado_general = 1 THEN 'activo'
+                                    WHEN ipc.estado_general = 2 THEN 'stopsell'
+                                    WHEN ipc.estado_general = 3 THEN 'nodisponible'
+                                    WHEN ipc.estado_general IS NULL THEN '---'
+                                END
+                            ) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                            UNACCENT(lower( replace(trim(   COALESCE(ciudad, '') || ',' ||
+                                                            COALESCE(codigo_postal, '') || ','  || 
+                                                            COALESCE(direccion, '') || ',' || 
+                                                            COALESCE(nro_edificio, '') || ',' ||
+                                                            COALESCE(nro_piso, '') ),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
+                            $2 = '') 
+                ) AS pf
+                    LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON pf.idpiso = ipd.id
+                    WHERE 
+                    (
+                        ipd.ds_nro_dormitorios = $3 OR $3 = -1 
+                    ) AND
+                    (
+                        $4 <= ipd.cp_ocupacion_maxima OR $4 = -1
+                    ) AND
+                    (
+                        ipd.ds_nro_camas = $5 OR $5 = -1
+                    ) AND
+                    (
+                        ipd.bs_nro_banios = $6 OR $6 = -1
+                    ) AND
+                    ( 
+                        ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $7 AND $8 ) OR
+                        ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($7)::integer AND ($8)::integer )
+                    ) 
+                ORDER BY pf.estado_general ASC, CAST(COALESCE(pf.total_str, '0') as double precision) ASC, pf.etiqueta ASC
 `,
                 values: [   this.filterStatus,
-                            _search_all === '' ? '' : `%${_search_all}%`,
-                            _nro_habitaciones,
-                            _capacidad_maxima,
-                            _nro_camas,
-                            _nro_banios,
-                            _total_start,
-                            _total_end,
-                            _estado_general
-                        ]
+                        _search_all === '' ? '' : `%${_search_all}%`,
+                        _nro_habitaciones,
+                        _capacidad_maxima,
+                        _nro_camas,
+                        _nro_banios,
+                        _total_start,
+                        _total_end,
+                        _estado_general
+                ]
         }
 
         // UNACCENT(lower( replace(trim(vc.total_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
@@ -236,8 +235,8 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             // Insert codigo
             let queryData = {
-                    name: 'insert-info-piso-comercial',
-                    text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
+                name: 'insert-info-piso-comercial',
+                text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
                         nombre_comercial,
                         link_nombre_comercial,
                         estado_general,
@@ -255,7 +254,7 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         idpiso
                         )
                         VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *`,
-                    values: [
+                values: [
                         data.nombre_comercial,
                         data.link_nombre_comercial, 
                         data.estado_general,
@@ -271,7 +270,7 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         timeStampCurrent, 
                         this.idUserLogin, 
                         data.idpiso
-                    ]
+                ]
             }
             let lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
             let dataDB = lDataDB[0] as IInfoPisoComercial
@@ -313,39 +312,39 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             // Insert codigo
             let queryData = {
-                    name: 'update-info-piso-comercial',
-                    text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
-                        nombre_comercial = $1,
-                        link_nombre_comercial = $2,
-                        estado_general = $3,
-                        link_tour_virtual = $4,
-                        link_calendario_disponibilidad = $5,
-                        link_repositorio = $6,
-                        tiene_anuncio = $7,
-                        anuncio_usuario = $8,
-                        anuncio_contrasenia = $9,
-                        anuncio_plataforma = $10,
-                        anuncio_link = $11,
-                        fecha_ultimo_cambio = $12,
-                        idusuario_ult_cambio = $13
-                        WHERE id = $14 AND idpiso = $15 RETURNING *`,
-                    values: [
-                        data.nombre_comercial,
-                        data.link_nombre_comercial, 
-                        data.estado_general,
-                        data.link_tour_virtual,
-                        data.link_calendario_disponibilidad,
-                        data.link_repositorio,
-                        data.tiene_anuncio,
-                        data.anuncio_usuario,
-                        data.anuncio_contrasenia,
-                        data.anuncio_plataforma,
-                        data.anuncio_link,
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        data.id,
-                        data.idpiso
-                    ]
+                name: 'update-info-piso-comercial',
+                text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
+                    nombre_comercial = $1,
+                    link_nombre_comercial = $2,
+                    estado_general = $3,
+                    link_tour_virtual = $4,
+                    link_calendario_disponibilidad = $5,
+                    link_repositorio = $6,
+                    tiene_anuncio = $7,
+                    anuncio_usuario = $8,
+                    anuncio_contrasenia = $9,
+                    anuncio_plataforma = $10,
+                    anuncio_link = $11,
+                    fecha_ultimo_cambio = $12,
+                    idusuario_ult_cambio = $13
+                    WHERE id = $14 AND idpiso = $15 RETURNING *`,
+                values: [
+                    data.nombre_comercial,
+                    data.link_nombre_comercial, 
+                    data.estado_general,
+                    data.link_tour_virtual,
+                    data.link_calendario_disponibilidad,
+                    data.link_repositorio,
+                    data.tiene_anuncio,
+                    data.anuncio_usuario,
+                    data.anuncio_contrasenia,
+                    data.anuncio_plataforma,
+                    data.anuncio_link,
+                    timeStampCurrent, 
+                    this.idUserLogin, 
+                    data.id,
+                    data.idpiso
+                ]
             }
 
             let lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -501,19 +500,19 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             // Insert codigo
             let queryData = {
-                    name: 'update-info-piso-comercial',
-                    text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
-                        estado_general = $1,
-                        fecha_ultimo_cambio = $2,
-                        idusuario_ult_cambio = $3
-                        WHERE id = $4 AND idpiso = $5 RETURNING *`,
-                    values: [ 
-                        data.estado_general,
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        data.id,
-                        data.idpiso
-                    ]
+                name: 'update-info-piso-comercial',
+                text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
+                    estado_general = $1,
+                    fecha_ultimo_cambio = $2,
+                    idusuario_ult_cambio = $3
+                    WHERE id = $4 AND idpiso = $5 RETURNING *`,
+                values: [ 
+                    data.estado_general,
+                    timeStampCurrent, 
+                    this.idUserLogin, 
+                    data.id,
+                    data.idpiso
+                ]
             }
 
             let lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -537,47 +536,47 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 for (let i = 0; i < data.variablesreserva!.length; i++) {
                     const queryData = {
                         name: 'insert-variablereserva-x-piso-comercial',
-                        text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql} 
-                                (   aplica, 
-                                    fecha_inicio_vigencia, 
-                                    estado, 
-                                    precio_base, 
-                                    porcentaje_descuento, 
-                                    precio_alquiler, 
-                                    precio_muebles,
-                                    total,
-                                    duracion_estancia,
-                                    edad_min,
-                                    edad_max,
-                                    mascota,
-                                    observacion,
-                                    fecha_creacion,
-                                    fecha_ultimo_cambio,
-                                    idusuario_ult_cambio,
-                                    idinfopisocom,
-                                    idtipoestancia
+                        text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql} (
+                                aplica, 
+                                fecha_inicio_vigencia, 
+                                estado, 
+                                precio_base, 
+                                porcentaje_descuento, 
+                                precio_alquiler, 
+                                precio_muebles,
+                                total,
+                                duracion_estancia,
+                                edad_min,
+                                edad_max,
+                                mascota,
+                                observacion,
+                                fecha_creacion,
+                                fecha_ultimo_cambio,
+                                idusuario_ult_cambio,
+                                idinfopisocom,
+                                idtipoestancia
                                 )
                                 VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
                         values: [   
-                                    data.variablesreserva![i].aplica,
-                                    data.variablesreserva![i].fecha_inicio_vigencia || undefined,
-                                    data.variablesreserva![i].estado,
-                                    data.variablesreserva![i].precio_base,
-                                    data.variablesreserva![i].porcentaje_descuento,
-                                    data.variablesreserva![i].precio_alquiler,
-                                    data.variablesreserva![i].precio_muebles,
-                                    data.variablesreserva![i].total,
-                                    data.variablesreserva![i].duracion_estancia,
-                                    data.variablesreserva![i].edad_min,
-                                    data.variablesreserva![i].edad_max,
-                                    data.variablesreserva![i].mascota,
-                                    data.variablesreserva![i].observacion,
-                                    timeStampCurrent,
-                                    timeStampCurrent,
-                                    this.idUserLogin,
-                                    idDataDB,
-                                    data.variablesreserva![i].idtipoestancia,
-                                ]
+                                data.variablesreserva![i].aplica,
+                                data.variablesreserva![i].fecha_inicio_vigencia || undefined,
+                                data.variablesreserva![i].estado,
+                                data.variablesreserva![i].precio_base,
+                                data.variablesreserva![i].porcentaje_descuento,
+                                data.variablesreserva![i].precio_alquiler,
+                                data.variablesreserva![i].precio_muebles,
+                                data.variablesreserva![i].total,
+                                data.variablesreserva![i].duracion_estancia,
+                                data.variablesreserva![i].edad_min,
+                                data.variablesreserva![i].edad_max,
+                                data.variablesreserva![i].mascota,
+                                data.variablesreserva![i].observacion,
+                                timeStampCurrent,
+                                timeStampCurrent,
+                                this.idUserLogin,
+                                idDataDB,
+                                data.variablesreserva![i].idtipoestancia,
+                        ]
                     }
                     await client.query(queryData)
                 }
@@ -604,7 +603,6 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
         let responseD = await this.client.execQueryPool( async (client): Promise<Array<IModel | IErrorResponse>> => {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
 
-     
             const queryDataUpdate = {
                 name : "update-info-piso-comercial",
                 text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
@@ -619,37 +617,36 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         RETURNING *
                         `,
                 values : [
-                    timeStampCurrent, 
-                    this.idUserLogin, 
-                    data.idpiso
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        data.idpiso
                 ]
             }
             let lDataDB = (await client.query(queryDataUpdate)).rows as Array<IInfoPisoComercial | IErrorResponse>
-           
 
             if(lDataDB && lDataDB.length == 0){
                  // Insert codigo
-                            let queryData = {
-                                name: 'insert-info-piso-comercial',
-                                text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
-                                    estado_general,
-                                    fecha_creacion,
-                                    fecha_ultimo_cambio,
-                                    idusuario_ult_cambio,
-                                    idpiso
-                                    )
-                                    VALUES($1,$2,$3,$4,$5) RETURNING *`,
-                                values: [
-                                    data.estado_general,
-                                    timeStampCurrent, 
-                                    timeStampCurrent, 
-                                    this.idUserLogin, 
-                                    data.idpiso
-                                ]
-                        }
-        
-                    lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
-                  
+                let queryData = {
+                    name: 'insert-info-piso-comercial',
+                    text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
+                            estado_general,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idpiso
+                            )
+                            VALUES($1,$2,$3,$4,$5) RETURNING *`,
+                    values: [
+                        data.estado_general,
+                        timeStampCurrent, 
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        data.idpiso
+                ]
+                }
+
+                lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
+
             }
             let dataDB = lDataDB[0] as IInfoPisoComercial
             // let dataDB = lDataDB[0] as IInfoPisoComercial
@@ -673,10 +670,10 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                     // Si no actualiza, insertamos el registro
                     if (respTmp === 0) {
                         const queryData = {
-                            name: 'insert-plataforma-x-piso-comercial',
-                            text: `INSERT INTO ${Constants.tbl_plataforma_infopiso_myd_sql} ( link, fecha_ultimo_cambio, idinfopisocom, idplataformacom )
-                                    VALUES($1, $2, $3, $4)`,
-                            values: [ data.plataformas![i].link, timeStampCurrent, idDataDB, data.plataformas![i].id]
+                                name: 'insert-plataforma-x-piso-comercial',
+                                text: `INSERT INTO ${Constants.tbl_plataforma_infopiso_myd_sql} ( link, fecha_ultimo_cambio, idinfopisocom, idplataformacom )
+                                        VALUES($1, $2, $3, $4)`,
+                                values: [ data.plataformas![i].link, timeStampCurrent, idDataDB, data.plataformas![i].id]
                         }
                         await client.query(queryData)
                     }
@@ -709,14 +706,14 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
             let queryData = {
                     name: 'update-info-piso-comercial',
                     text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
-                        fecha_ultimo_cambio = $1,
-                        idusuario_ult_cambio = $2
-                        WHERE id = $3 AND idpiso = $4 RETURNING *`,
+                            fecha_ultimo_cambio = $1,
+                            idusuario_ult_cambio = $2
+                            WHERE id = $3 AND idpiso = $4 RETURNING *`,
                     values: [
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        data.id,
-                        data.idpiso
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            data.id,
+                            data.idpiso
                     ]
             }
 
@@ -788,10 +785,10 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         RETURNING *
                         `,
                 values : [
-                    data.estado_general,
-                    timeStampCurrent, 
-                    this.idUserLogin, 
-                    data.idpiso
+                        data.estado_general,
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        data.idpiso
                 ]
             }
             
@@ -799,8 +796,8 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
 
             if(lDataDB && lDataDB.length == 0){
                 let queryData = {
-                        name: 'insert-info-piso-comercial-estado-general',
-                        text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
+                    name: 'insert-info-piso-comercial-estado-general',
+                    text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
                             estado_general,
                             fecha_creacion,
                             fecha_ultimo_cambio,
@@ -808,13 +805,13 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                             idpiso
                             )
                             VALUES($1,$2,$3,$4,$5) RETURNING *`,
-                        values: [
+                    values: [
                             data.estado_general,
                             timeStampCurrent, 
                             timeStampCurrent, 
                             this.idUserLogin, 
                             data.idpiso
-                        ]
+                    ]
                 }
                 lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
             }
@@ -841,19 +838,19 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
         let responseD = await this.client.execQueryPool( async (client): Promise<Array<IModel | IErrorResponse>> => {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             let queryData = {
-                    name: 'update-info-piso-comercial-estado-general',
-                    text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET
+                name: 'update-info-piso-comercial-estado-general',
+                text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET
                         estado_general = $1, 
                         fecha_ultimo_cambio = $2,
                         idusuario_ult_cambio = $3
                         WHERE id = $4 AND idpiso = $5 RETURNING *`,
-                    values: [
+                values: [
                         data.estado_general,
                         timeStampCurrent, 
                         this.idUserLogin, 
                         data.id,
                         data.idpiso
-                    ]
+                ]
             }
 
             let lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -894,32 +891,32 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         RETURNING *
                         `,
                 values : [
-                    timeStampCurrent, 
-                    this.idUserLogin, 
-                    data.idpiso
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        data.idpiso
                 ]
             }
             
             let lDataDB = (await client.query(queryDataUpdate)).rows as Array<IInfoPisoComercial | IErrorResponse>
-           
+
 
             if(lDataDB && lDataDB.length == 0) {
                 let queryData = {
                     name: 'insert-info-piso-comercial-alquiler',
                     text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
-                        estado_general,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idpiso
-                        )
-                        VALUES($1,$2,$3,$4,$5) RETURNING *`,
+                            estado_general,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idpiso
+                            )
+                            VALUES($1,$2,$3,$4,$5) RETURNING *`,
                     values: [
-                        data.estado_general,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        data.idpiso
+                            data.estado_general,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            data.idpiso
                     ]
                 }
 
@@ -943,11 +940,11 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         idusuario_ult_cambio = $3
                         WHERE idinfopisocom = $4 AND estado = 1 RETURNING *`,
                 values: [
-                            0,
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            idDataDB
-                        ]
+                        0,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        idDataDB
+                ]
             }
             await client.query(queryDeleteReserva)
 
@@ -977,12 +974,12 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         )
                         VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
                     values: [
-                        _dataReserva.precio_alquiler || 0,
-                        _dataReserva.precio_alquiler || 0,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB
+                            _dataReserva.precio_alquiler || 0,
+                            _dataReserva.precio_alquiler || 0,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -991,43 +988,43 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-lastdata',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        aplica,
-                        fecha_inicio_vigencia, 
-                        precio_base, 
-                        porcentaje_descuento, 
-                        precio_alquiler, 
-                        precio_muebles,
-                        total,
-                        duracion_estancia,
-                        edad_min,
-                        edad_max,
-                        mascota,
-                        observacion,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom,
-                        precio_limite
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+                            aplica,
+                            fecha_inicio_vigencia, 
+                            precio_base, 
+                            porcentaje_descuento, 
+                            precio_alquiler, 
+                            precio_muebles,
+                            total,
+                            duracion_estancia,
+                            edad_min,
+                            edad_max,
+                            mascota,
+                            observacion,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom,
+                            precio_limite
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
                     values: [
-                        _dataReservaDB.aplica || '',
-                        _dataReservaDB.fecha_inicio_vigencia || null,
-                        _dataReservaDB.precio_base || 0,
-                        _dataReservaDB.porcentaje_descuento || 0,
-                        _dataReserva.precio_alquiler || 0,
-                        _dataReservaDB.precio_muebles || 0,
-                        _total,
-                        _dataReservaDB.duracion_estancia || 0,
-                        _dataReservaDB.edad_min || 0,
-                        _dataReservaDB.edad_max || 0,
-                        _dataReservaDB.mascota || false,
-                        _dataReservaDB.observacion || '',
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB,
-                        _dataReservaDB.precio_limite || 0,
+                            _dataReservaDB.aplica || '',
+                            _dataReservaDB.fecha_inicio_vigencia || null,
+                            _dataReservaDB.precio_base || 0,
+                            _dataReservaDB.porcentaje_descuento || 0,
+                            _dataReserva.precio_alquiler || 0,
+                            _dataReservaDB.precio_muebles || 0,
+                            _total,
+                            _dataReservaDB.duracion_estancia || 0,
+                            _dataReservaDB.edad_min || 0,
+                            _dataReservaDB.edad_max || 0,
+                            _dataReservaDB.mascota || false,
+                            _dataReservaDB.observacion || '',
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB,
+                            _dataReservaDB.precio_limite || 0,
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1057,14 +1054,14 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
             let queryData = {
                     name: 'update-info-piso-comercial-precio-alquiler',
                     text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
-                        fecha_ultimo_cambio = $1,
-                        idusuario_ult_cambio = $2
-                        WHERE id = $3 AND idpiso = $4 RETURNING *`,
+                            fecha_ultimo_cambio = $1,
+                            idusuario_ult_cambio = $2
+                            WHERE id = $3 AND idpiso = $4 RETURNING *`,
                     values: [
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        data.id,
-                        data.idpiso
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            data.id,
+                            data.idpiso
                     ]
             }
 
@@ -1096,11 +1093,11 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         idusuario_ult_cambio = $3
                         WHERE idinfopisocom = $4 AND estado = 1 RETURNING *`,
                 values: [
-                            0,
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            idDataDB
-                        ]
+                        0,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        idDataDB
+                    ]
             }
             await client.query(queryDeleteReserva)
 
@@ -1109,21 +1106,21 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-new',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        precio_alquiler,
-                        total,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
+                            precio_alquiler,
+                            total,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
                     values: [
-                        _dataReserva.precio_alquiler,
-                        _dataReserva.precio_alquiler,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB
+                            _dataReserva.precio_alquiler,
+                            _dataReserva.precio_alquiler,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1132,43 +1129,43 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-lastdata',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        aplica,
-                        fecha_inicio_vigencia, 
-                        precio_base, 
-                        porcentaje_descuento, 
-                        precio_alquiler, 
-                        precio_muebles,
-                        total,
-                        duracion_estancia,
-                        edad_min,
-                        edad_max,
-                        mascota,
-                        observacion,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom,
-                        precio_limite
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+                            aplica,
+                            fecha_inicio_vigencia, 
+                            precio_base, 
+                            porcentaje_descuento, 
+                            precio_alquiler, 
+                            precio_muebles,
+                            total,
+                            duracion_estancia,
+                            edad_min,
+                            edad_max,
+                            mascota,
+                            observacion,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom,
+                            precio_limite
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
                     values: [
-                        _dataReservaDB.aplica || '',
-                        _dataReservaDB.fecha_inicio_vigencia || null,
-                        _dataReservaDB.precio_base || 0,
-                        _dataReservaDB.porcentaje_descuento || 0,
-                        _dataReserva.precio_alquiler || 0,
-                        _dataReservaDB.precio_muebles || 0,
-                        _total,
-                        _dataReservaDB.duracion_estancia || 0,
-                        _dataReservaDB.edad_min || 0,
-                        _dataReservaDB.edad_max || 0,
-                        _dataReservaDB.mascota || false,
-                        _dataReservaDB.observacion || '',
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB,
-                        _dataReservaDB.precio_limite
+                            _dataReservaDB.aplica || '',
+                            _dataReservaDB.fecha_inicio_vigencia || null,
+                            _dataReservaDB.precio_base || 0,
+                            _dataReservaDB.porcentaje_descuento || 0,
+                            _dataReserva.precio_alquiler || 0,
+                            _dataReservaDB.precio_muebles || 0,
+                            _total,
+                            _dataReservaDB.duracion_estancia || 0,
+                            _dataReservaDB.edad_min || 0,
+                            _dataReservaDB.edad_max || 0,
+                            _dataReservaDB.mascota || false,
+                            _dataReservaDB.observacion || '',
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB,
+                            _dataReservaDB.precio_limite
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1222,19 +1219,19 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryData = {
                     name: 'insert-info-piso-comercial-precio-mueble',
                     text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
-                        estado_general,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idpiso
-                        )
-                        VALUES($1,$2,$3,$4,$5) RETURNING *`,
+                            estado_general,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idpiso
+                            )
+                            VALUES($1,$2,$3,$4,$5) RETURNING *`,
                     values: [
-                        data.estado_general,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        data.idpiso
+                            data.estado_general,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            data.idpiso
                     ]
                 }
 
@@ -1257,11 +1254,11 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         idusuario_ult_cambio = $3
                         WHERE idinfopisocom = $4 AND estado = 1 RETURNING *`,
                 values: [
-                            0,
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            idDataDB
-                        ]
+                        0,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        idDataDB
+                ]
             }
             await client.query(queryDeleteReserva)
 
@@ -1282,21 +1279,21 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        precio_muebles,
-                        total,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
+                            precio_muebles,
+                            total,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
                     values: [
-                        _dataReserva.precio_muebles || 0,
-                        _dataReserva.precio_muebles || 0,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB
+                            _dataReserva.precio_muebles || 0,
+                            _dataReserva.precio_muebles || 0,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1305,43 +1302,43 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-lastdata',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        aplica,
-                        fecha_inicio_vigencia, 
-                        precio_base, 
-                        porcentaje_descuento, 
-                        precio_alquiler, 
-                        precio_muebles,
-                        total,
-                        duracion_estancia,
-                        edad_min,
-                        edad_max,
-                        mascota,
-                        observacion,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom,
-                        precio_limite
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+                            aplica,
+                            fecha_inicio_vigencia, 
+                            precio_base, 
+                            porcentaje_descuento, 
+                            precio_alquiler, 
+                            precio_muebles,
+                            total,
+                            duracion_estancia,
+                            edad_min,
+                            edad_max,
+                            mascota,
+                            observacion,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom,
+                            precio_limite
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
                     values: [
-                        _dataReservaDB.aplica || '',
-                        _dataReservaDB.fecha_inicio_vigencia || null,
-                        _dataReservaDB.precio_base || 0,
-                        _dataReservaDB.porcentaje_descuento || 0,
-                        _dataReservaDB.precio_alquiler || 0,
-                        _dataReserva.precio_muebles || 0,
-                        _total,
-                        _dataReservaDB.duracion_estancia || 0,
-                        _dataReservaDB.edad_min || 0,
-                        _dataReservaDB.edad_max || 0,
-                        _dataReservaDB.mascota || false,
-                        _dataReservaDB.observacion || '',
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB,
-                        _dataReservaDB.precio_limite || 0,
+                            _dataReservaDB.aplica || '',
+                            _dataReservaDB.fecha_inicio_vigencia || null,
+                            _dataReservaDB.precio_base || 0,
+                            _dataReservaDB.porcentaje_descuento || 0,
+                            _dataReservaDB.precio_alquiler || 0,
+                            _dataReserva.precio_muebles || 0,
+                            _total,
+                            _dataReservaDB.duracion_estancia || 0,
+                            _dataReservaDB.edad_min || 0,
+                            _dataReservaDB.edad_max || 0,
+                            _dataReservaDB.mascota || false,
+                            _dataReservaDB.observacion || '',
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB,
+                            _dataReservaDB.precio_limite || 0,
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1369,17 +1366,17 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
         let responseD = await this.client.execQueryPool( async (client): Promise<Array<IModel | IErrorResponse>> => {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             let queryData = {
-                    name: 'update-info-piso-comercial-precio-mueble',
-                    text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
+                name: 'update-info-piso-comercial-precio-mueble',
+                text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
                         fecha_ultimo_cambio = $1,
                         idusuario_ult_cambio = $2
                         WHERE id = $3 AND idpiso = $4 RETURNING *`,
-                    values: [
+                values: [
                         timeStampCurrent, 
                         this.idUserLogin, 
                         data.id,
                         data.idpiso
-                    ]
+                ]
             }
 
             let lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -1410,11 +1407,11 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         idusuario_ult_cambio = $3
                         WHERE idinfopisocom = $4 AND estado = 1 RETURNING *`,
                 values: [
-                            0,
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            idDataDB
-                        ]
+                        0,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        idDataDB
+                ]
             }
             await client.query(queryDeleteReserva)
 
@@ -1423,14 +1420,14 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-new',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        precio_muebles,
-                        total,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
+                            precio_muebles,
+                            total,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6) RETURNING *`,
                     values: [
                         _dataReserva.precio_muebles || 0,
                         _dataReserva.precio_muebles || 0,
@@ -1446,43 +1443,43 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-lastdata',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        aplica,
-                        fecha_inicio_vigencia, 
-                        precio_base, 
-                        porcentaje_descuento, 
-                        precio_alquiler, 
-                        precio_muebles,
-                        total,
-                        duracion_estancia,
-                        edad_min,
-                        edad_max,
-                        mascota,
-                        observacion,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom,
-                        precio_limite
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+                            aplica,
+                            fecha_inicio_vigencia, 
+                            precio_base, 
+                            porcentaje_descuento, 
+                            precio_alquiler, 
+                            precio_muebles,
+                            total,
+                            duracion_estancia,
+                            edad_min,
+                            edad_max,
+                            mascota,
+                            observacion,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom,
+                            precio_limite
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
                     values: [
-                        _dataReservaDB.aplica || '',
-                        _dataReservaDB.fecha_inicio_vigencia || null,
-                        _dataReservaDB.precio_base || 0,
-                        _dataReservaDB.porcentaje_descuento || 0,
-                        _dataReservaDB.precio_alquiler || 0,
-                        _dataReserva.precio_muebles || 0,
-                        _total,
-                        _dataReservaDB.duracion_estancia || 0,
-                        _dataReservaDB.edad_min || 0,
-                        _dataReservaDB.edad_max || 0,
-                        _dataReservaDB.mascota || false,
-                        _dataReservaDB.observacion || '',
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB,
-                        _dataReservaDB.precio_limite
+                            _dataReservaDB.aplica || '',
+                            _dataReservaDB.fecha_inicio_vigencia || null,
+                            _dataReservaDB.precio_base || 0,
+                            _dataReservaDB.porcentaje_descuento || 0,
+                            _dataReservaDB.precio_alquiler || 0,
+                            _dataReserva.precio_muebles || 0,
+                            _total,
+                            _dataReservaDB.duracion_estancia || 0,
+                            _dataReservaDB.edad_min || 0,
+                            _dataReservaDB.edad_max || 0,
+                            _dataReservaDB.mascota || false,
+                            _dataReservaDB.observacion || '',
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB,
+                            _dataReservaDB.precio_limite
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1524,9 +1521,9 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         RETURNING *
                         `,
                 values : [ 
-                    timeStampCurrent, 
-                    this.idUserLogin, 
-                    data.idpiso
+                        timeStampCurrent, 
+                        this.idUserLogin, 
+                        data.idpiso
                 ]
             }
             let lDataDB = (await client.query(queryDataUpdate)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -1534,8 +1531,8 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
             // Se verifica si no existe el registro y proceder a crearlo
             if ( lDataDB && lDataDB.length === 0 ) {
                 let queryData = {
-                        name: 'insert-info-piso-comercial-precio-limite',
-                        text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
+                    name: 'insert-info-piso-comercial-precio-limite',
+                    text: `INSERT INTO ${Constants.tbl_info_piso_comercial_myd_sql}( 
                             estado_general,
                             fecha_creacion,
                             fecha_ultimo_cambio,
@@ -1543,13 +1540,13 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                             idpiso
                             )
                             VALUES($1,$2,$3,$4,$5) RETURNING *`,
-                        values: [
+                    values: [
                             data.estado_general,
                             timeStampCurrent, 
                             timeStampCurrent, 
                             this.idUserLogin, 
                             data.idpiso
-                        ]
+                    ]
                 }
 
                 lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -1571,11 +1568,11 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                         idusuario_ult_cambio = $3
                         WHERE idinfopisocom = $4 AND estado = 1 RETURNING *`,
                 values: [
-                            0,
-                            timeStampCurrent,
-                            this.idUserLogin,
-                            idDataDB
-                        ]
+                        0,
+                        timeStampCurrent,
+                        this.idUserLogin,
+                        idDataDB
+                ]
             }
             await client.query(queryDeleteReserva)
 
@@ -1596,19 +1593,19 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        precio_limite,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom
-                        )
-                        VALUES($1,$2,$3,$4,$5) RETURNING *`,
+                            precio_limite,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom
+                            )
+                            VALUES($1,$2,$3,$4,$5) RETURNING *`,
                     values: [
-                        _dataReserva.precio_limite || 0,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB
+                            _dataReserva.precio_limite || 0,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1616,43 +1613,43 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-lastdata',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        aplica,
-                        fecha_inicio_vigencia, 
-                        precio_base, 
-                        porcentaje_descuento, 
-                        precio_alquiler, 
-                        precio_muebles,
-                        total,
-                        duracion_estancia,
-                        edad_min,
-                        edad_max,
-                        mascota,
-                        observacion,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom,
-                        precio_limite
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+                            aplica,
+                            fecha_inicio_vigencia, 
+                            precio_base, 
+                            porcentaje_descuento, 
+                            precio_alquiler, 
+                            precio_muebles,
+                            total,
+                            duracion_estancia,
+                            edad_min,
+                            edad_max,
+                            mascota,
+                            observacion,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom,
+                            precio_limite
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
                     values: [
-                        _dataReservaDB.aplica || '',
-                        _dataReservaDB.fecha_inicio_vigencia || null,
-                        _dataReservaDB.precio_base || 0,
-                        _dataReservaDB.porcentaje_descuento || 0,
-                        _dataReservaDB.precio_alquiler || 0,
-                        _dataReservaDB.precio_muebles || 0,
-                        _dataReservaDB.total || 0,
-                        _dataReservaDB.duracion_estancia || 0,
-                        _dataReservaDB.edad_min || 0,
-                        _dataReservaDB.edad_max || 0,
-                        _dataReservaDB.mascota || false,
-                        _dataReservaDB.observacion || '',
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB,
-                        _dataReserva.precio_limite || 0,
+                            _dataReservaDB.aplica || '',
+                            _dataReservaDB.fecha_inicio_vigencia || null,
+                            _dataReservaDB.precio_base || 0,
+                            _dataReservaDB.porcentaje_descuento || 0,
+                            _dataReservaDB.precio_alquiler || 0,
+                            _dataReservaDB.precio_muebles || 0,
+                            _dataReservaDB.total || 0,
+                            _dataReservaDB.duracion_estancia || 0,
+                            _dataReservaDB.edad_min || 0,
+                            _dataReservaDB.edad_max || 0,
+                            _dataReservaDB.mascota || false,
+                            _dataReservaDB.observacion || '',
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB,
+                            _dataReserva.precio_limite || 0,
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1680,17 +1677,17 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
         let responseD = await this.client.execQueryPool( async (client): Promise<Array<IModel | IErrorResponse>> => {
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
             let queryData = {
-                    name: 'update-info-piso-comercial-precio-limite',
-                    text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
+                name: 'update-info-piso-comercial-precio-limite',
+                text: `UPDATE ${Constants.tbl_info_piso_comercial_myd_sql} SET 
                         fecha_ultimo_cambio = $1,
                         idusuario_ult_cambio = $2
                         WHERE id = $3 AND idpiso = $4 RETURNING *`,
-                    values: [
+                values: [
                         timeStampCurrent, 
                         this.idUserLogin, 
                         data.id,
                         data.idpiso
-                    ]
+                ]
             }
 
             let lDataDB = (await client.query(queryData)).rows as Array<IInfoPisoComercial | IErrorResponse>
@@ -1725,7 +1722,7 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                             timeStampCurrent,
                             this.idUserLogin,
                             idDataDB
-                        ]
+                ]
             }
             await client.query(queryDeleteReserva)
 
@@ -1734,19 +1731,19 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-new',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        precio_limite,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom
-                        )
-                        VALUES($1,$2,$3,$4,$5) RETURNING *`,
+                            precio_limite,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom
+                            )
+                            VALUES($1,$2,$3,$4,$5) RETURNING *`,
                     values: [
-                        _dataReserva.precio_limite,
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB
+                            _dataReserva.precio_limite,
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1754,43 +1751,43 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
                 let queryDataVarReserva = {
                     name: 'insert-variables-reserva-lastdata',
                     text: `INSERT INTO ${Constants.tbl_variables_reserva_myd_sql}( 
-                        aplica,
-                        fecha_inicio_vigencia, 
-                        precio_base, 
-                        porcentaje_descuento, 
-                        precio_alquiler, 
-                        precio_muebles,
-                        total,
-                        duracion_estancia,
-                        edad_min,
-                        edad_max,
-                        mascota,
-                        observacion,
-                        fecha_creacion,
-                        fecha_ultimo_cambio,
-                        idusuario_ult_cambio,
-                        idinfopisocom,
-                        precio_limite
-                        )
-                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
+                            aplica,
+                            fecha_inicio_vigencia, 
+                            precio_base, 
+                            porcentaje_descuento, 
+                            precio_alquiler, 
+                            precio_muebles,
+                            total,
+                            duracion_estancia,
+                            edad_min,
+                            edad_max,
+                            mascota,
+                            observacion,
+                            fecha_creacion,
+                            fecha_ultimo_cambio,
+                            idusuario_ult_cambio,
+                            idinfopisocom,
+                            precio_limite
+                            )
+                            VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`,
                     values: [
-                        _dataReservaDB.aplica || '',
-                        _dataReservaDB.fecha_inicio_vigencia || null,
-                        _dataReservaDB.precio_base || 0,
-                        _dataReservaDB.porcentaje_descuento || 0,
-                        _dataReservaDB.precio_alquiler || 0,
-                        _dataReservaDB.precio_muebles || 0,
-                        _dataReservaDB.total || 0,
-                        _dataReservaDB.duracion_estancia || 0,
-                        _dataReservaDB.edad_min || 0,
-                        _dataReservaDB.edad_max || 0,
-                        _dataReservaDB.mascota || false,
-                        _dataReservaDB.observacion || '',
-                        timeStampCurrent, 
-                        timeStampCurrent, 
-                        this.idUserLogin, 
-                        idDataDB,
-                        _dataReserva.precio_limite || 0,
+                            _dataReservaDB.aplica || '',
+                            _dataReservaDB.fecha_inicio_vigencia || null,
+                            _dataReservaDB.precio_base || 0,
+                            _dataReservaDB.porcentaje_descuento || 0,
+                            _dataReservaDB.precio_alquiler || 0,
+                            _dataReservaDB.precio_muebles || 0,
+                            _dataReservaDB.total || 0,
+                            _dataReservaDB.duracion_estancia || 0,
+                            _dataReservaDB.edad_min || 0,
+                            _dataReservaDB.edad_max || 0,
+                            _dataReservaDB.mascota || false,
+                            _dataReservaDB.observacion || '',
+                            timeStampCurrent, 
+                            timeStampCurrent, 
+                            this.idUserLogin, 
+                            idDataDB,
+                            _dataReserva.precio_limite || 0,
                     ]
                 }
                 await client.query(queryDataVarReserva)
@@ -1829,162 +1826,161 @@ class InfoPisoComercialDataAccess implements IDataAccess<IInfoPisoComercial> {
 
         
         const queryData  = {
-                name: 'get-all-info-piso-comercial',
-                text: ` SELECT pf.*,
-                        ipd.cp_ocupacion_maxima,
-                        ipd.cp_m2,
-                        ipd.ds_nro_dormitorios,
-                        ipd.ds_nro_camas,
-                        ipd.bs_nro_banios,
-                        ipd.ca_aire_acondicionado,
-                        ipd.ca_calefaccion,
-                        ipd.cp_ascensor,
-                        ipd.ca_discapacidad,
-                        ipd.ds_descripcion_camas,
-                        ipd.bs_nro_aseos,
-                        ipd.bs_descripcion_banios,
-                        ipd.ds_descripcion_sofacama,
-                        ipd.ds_nro_sofacama,
+            name: 'get-all-info-piso-comercial',
+            text: ` SELECT pf.*,
+                    ipd.cp_ocupacion_maxima,
+                    ipd.cp_m2,
+                    ipd.ds_nro_dormitorios,
+                    ipd.ds_nro_camas,
+                    ipd.bs_nro_banios,
+                    ipd.ca_aire_acondicionado,
+                    ipd.ca_calefaccion,
+                    ipd.cp_ascensor,
+                    ipd.ca_discapacidad,
+                    ipd.ds_descripcion_camas,
+                    ipd.bs_nro_aseos,
+                    ipd.bs_descripcion_banios,
+                    ipd.ds_descripcion_sofacama,
+                    ipd.ds_nro_sofacama,
 
+                    (
+                        CASE
+                        WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = true THEN 'Si'
+                        WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.aire_acondicionado = true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.aire_acondicionado = false THEN 'No'
+                        END
+                    ) as lbl_aire_acondicionado,
+                    (
+                        CASE
+                        WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = true THEN 'Si'
+                        WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.calefaccion = true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.calefaccion = false THEN 'No'
+                        END
+                    ) as lbl_calefaccion,
+                    (
+                        CASE
+                        WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = true THEN 'Si'
+                        WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.ascensor= true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.ascensor = false THEN 'No'
+                        END
+                    ) as lbl_ascensor,
+                    (
+                        CASE
+                        WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = true THEN 'Si'
+                        WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = false THEN 'No'
+                        WHEN ipd.id is NULL and pf.discapacidad = true THEN 'Si'
+                        WHEN ipd.id is NULL and pf.discapacidad = false THEN 'No'
+                        END
+                    ) as lbl_discapacidad
+                FROM (
+                SELECT ipc.id, ipc.estado_general, 
+                p.etiqueta AS a_etiqueta, p.id as idpiso, plfc.plataformas,
+                COALESCE(vc.variablesreserva, '[]') as variablesreserva,
+                p.ciudad as a_localidad, p.codigo_postal as a_codigo_postal, 
+                (p.direccion || ', Nro ' || p.nro_edificio || ', ' || p.nro_piso) as a_full_direccion, p.ubicacion_mapa,
+                vc.total_str,p.ocupacion_maxima, p.m2, p.nro_dormitorios, p.nro_camas, p.nro_banios, p.nro_sofacama,
+                p.etiqueta, p.discapacidad , p.ascensor , p.calefaccion , p.aire_acondicionado
+                FROM ${Constants.tbl_piso_sql} p
+                LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON p.id = ipd.id
+                LEFT JOIN ${Constants.tbl_info_piso_comercial_myd_sql} ipc ON (p.id = ipc.idpiso)
+                LEFT JOIN (
+                    SELECT p.id,
+                    (CASE
+                        WHEN count(pc.*) > 0 THEN jsonb_agg(json_build_object(  'id', pc.id,
+                                                                                'codigo', COALESCE(pc.codigo, ''), 
+                                                                                'nombre', COALESCE(pc.nombre, ''),
+                                                                                'link', COALESCE(pi.link, '') ))
+                        WHEN count(pc.*) = 0 THEN '[]'
+                    END
+                    ) as plataformas
+                    FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
+                    RIGHT JOIN ${Constants.tbl_piso_sql} p ON (p.id = ipc.idpiso)
+                    LEFT JOIN ${Constants.tbl_plataforma_comercial_myd_sql} pc ON (pc.estado = 1)
+                    LEFT JOIN ${Constants.tbl_plataforma_infopiso_myd_sql} pi ON (pc.id = pi.idplataformacom AND pi.estado = 1 AND ipc.id = pi.idinfopisocom)
+                    GROUP BY p.id
+                ) plfc ON plfc.id = p.id
+                LEFT JOIN (
+                    SELECT ipc.idpiso,
+                    (CASE
+                        WHEN count(vr.*) > 0 THEN jsonb_agg(json_build_object(  'id', vr.id, 
+                                                                                'precio_limite', vr.precio_limite,
+                                                                                'precio_alquiler', vr.precio_alquiler,
+                                                                                'precio_muebles', vr.precio_muebles,
+                                                                                'total', vr.total
+                                                                            ))
+                        WHEN count(vr.*) = 0 THEN '[]'
+                    END
+                    ) as variablesreserva,
+                    STRING_AGG( COALESCE(vr.total, 0)::text, ' | ') as total_str
+                    FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
+                    LEFT JOIN (
+                        SELECT * 
+                        FROM ${Constants.tbl_variables_reserva_myd_sql} vr 
+                        WHERE vr.estado = 1 
+                        ORDER BY fecha_creacion DESC, id DESC 
+                    ) vr ON (ipc.id = vr.idinfopisocom)
+                    WHERE ipc.estado = 1
+                    GROUP BY ipc.idpiso
+                ) vc ON (vc.idpiso = p.id)
+                WHERE p.estado = $1 AND 
+                    (ipc.estado = 1 OR ipc.estado IS NULL) AND
+                    p.visible_rmg = 1 AND
+                    (ipc.estado_general = $9 OR $9 = -2) AND 
+                    (
+                        UNACCENT(lower( replace(trim(p.etiqueta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                        UNACCENT(lower( replace(trim(ipd.if_zonas ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                         (
-                         CASE
-                            WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = true THEN 'Si'
-                            WHEN ipd.ca_aire_acondicionado is not NULL AND ipd.ca_aire_acondicionado = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.aire_acondicionado = true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.aire_acondicionado = false THEN 'No'
-                         END
-                     ) as lbl_aire_acondicionado,
-                     (
-                         CASE
-                            WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = true THEN 'Si'
-                            WHEN ipd.ca_calefaccion is not NULL and ipd.ca_calefaccion = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.calefaccion = true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.calefaccion = false THEN 'No'
-                         END
-                     ) as lbl_calefaccion,
-                     (
-                         CASE
-                            WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = true THEN 'Si'
-                            WHEN ipd.cp_ascensor  is not NULL AND ipd.cp_ascensor = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.ascensor= true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.ascensor = false THEN 'No'
-                         END
-                     ) as lbl_ascensor,
-                     (
-                         CASE
-                            WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = true THEN 'Si'
-                            WHEN ipd.ca_discapacidad is not NULL AND ipd.ca_discapacidad = false THEN 'No'
-                            WHEN ipd.id is NULL and pf.discapacidad = true THEN 'Si'
-                            WHEN ipd.id is NULL and pf.discapacidad = false THEN 'No'
-                         END
-                     ) as lbl_discapacidad
-                 FROM (
-                 SELECT ipc.id, ipc.estado_general, 
-                 p.etiqueta AS a_etiqueta, p.id as idpiso, plfc.plataformas,
-                 COALESCE(vc.variablesreserva, '[]') as variablesreserva,
-                 p.ciudad as a_localidad, p.codigo_postal as a_codigo_postal, 
-                 (p.direccion || ', Nro ' || p.nro_edificio || ', ' || p.nro_piso) as a_full_direccion, p.ubicacion_mapa,
-                 vc.total_str,p.ocupacion_maxima, p.m2, p.nro_dormitorios, p.nro_camas, p.nro_banios, p.nro_sofacama,
-                 p.etiqueta, p.discapacidad , p.ascensor , p.calefaccion , p.aire_acondicionado
-                 FROM ${Constants.tbl_piso_sql} p
-                 LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON p.id = ipd.id
-                 LEFT JOIN ${Constants.tbl_info_piso_comercial_myd_sql} ipc ON (p.id = ipc.idpiso)
-                 LEFT JOIN (
-                     SELECT p.id,
-                     (CASE
-                         WHEN count(pc.*) > 0 THEN jsonb_agg(json_build_object(  'id', pc.id,
-                                                                                 'codigo', COALESCE(pc.codigo, ''), 
-                                                                                 'nombre', COALESCE(pc.nombre, ''),
-                                                                                 'link', COALESCE(pi.link, '') ))
-                         WHEN count(pc.*) = 0 THEN '[]'
-                     END
-                     ) as plataformas
-                     FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
-                     RIGHT JOIN ${Constants.tbl_piso_sql} p ON (p.id = ipc.idpiso)
-                     LEFT JOIN ${Constants.tbl_plataforma_comercial_myd_sql} pc ON (pc.estado = 1)
-                     LEFT JOIN ${Constants.tbl_plataforma_infopiso_myd_sql} pi ON (pc.id = pi.idplataformacom AND pi.estado = 1 AND ipc.id = pi.idinfopisocom)
-                     GROUP BY p.id
-                 ) plfc ON plfc.id = p.id
-                 LEFT JOIN (
-                     SELECT ipc.idpiso,
-                     (CASE
-                         WHEN count(vr.*) > 0 THEN jsonb_agg(json_build_object(  'id', vr.id, 
-                                                                                 'precio_limite', vr.precio_limite,
-                                                                                 'precio_alquiler', vr.precio_alquiler,
-                                                                                 'precio_muebles', vr.precio_muebles,
-                                                                                 'total', vr.total
-                                                                             ))
-                         WHEN count(vr.*) = 0 THEN '[]'
-                     END
-                     ) as variablesreserva,
-                     STRING_AGG( COALESCE(vr.total, 0)::text, ' | ') as total_str
-                     FROM ${Constants.tbl_info_piso_comercial_myd_sql} ipc
-                     LEFT JOIN (
-                         SELECT * 
-                         FROM ${Constants.tbl_variables_reserva_myd_sql} vr 
-                         WHERE vr.estado = 1 
-                         ORDER BY fecha_creacion DESC, id DESC 
-                     ) vr ON (ipc.id = vr.idinfopisocom)
-                     WHERE ipc.estado = 1
-                     GROUP BY ipc.idpiso
-                 ) vc ON (vc.idpiso = p.id)
-                 WHERE p.estado = $1 AND 
-                     (ipc.estado = 1 OR ipc.estado IS NULL) AND
-                     p.visible_rmg = 1 AND
-                     (ipc.estado_general = $9 OR $9 = -2) AND 
-                     (
-                         UNACCENT(lower( replace(trim(p.etiqueta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                         UNACCENT(lower( replace(trim(ipd.if_zonas ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                         (
-                             CASE
-                                 WHEN ipc.estado_general = 1 THEN 'activo'
-                                 WHEN ipc.estado_general = 2 THEN 'stopsell'
-                                 WHEN ipc.estado_general = 3 THEN 'nodisponible'
-                                 WHEN ipc.estado_general IS NULL THEN '---'
-                             END
-                         ) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
-                         UNACCENT(lower( replace(trim(   COALESCE(ciudad, '') || ',' ||
-                                                         COALESCE(codigo_postal, '') || ','  || 
-                                                         COALESCE(direccion, '') || ',' || 
-                                                         COALESCE(nro_edificio, '') || ',' ||
-                                                         COALESCE(nro_piso, '') ),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
-                         $2 = ''
-                     ) 
-                     ) AS pf
-                     LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON pf.idpiso = ipd.id
-                     WHERE 
-                     
-                     (
-                         ipd.ds_nro_dormitorios = $3 OR $3 = -1 
-                     ) AND
-                     (
-                         $4 <= ipd.cp_ocupacion_maxima OR $4 = -1
-                     ) AND
-                     (
-                         ipd.ds_nro_camas = $5 OR $5 = -1
-                     ) AND
-                     (
-                         ipd.bs_nro_banios = $6 OR $6 = -1
-                     ) AND
-                     ( 
-                         ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $7 AND $8 ) OR
-                         ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($7)::integer AND ($8)::integer )
-                     ) 
-                 ORDER BY pf.estado_general ASC, CAST(COALESCE(pf.total_str, '0') as double precision) ASC, pf.etiqueta ASC
-                 LIMIT $10 OFFSET $11
-                    `,
-                values: [   this.filterStatus,
-                            _search_all === '' ? '' : `%${_search_all}%`,
-                            _nro_habitaciones,
-                            _capacidad_maxima,
-                            _nro_camas,
-                            _nro_banios,
-                            _total_start,
-                            _total_end,
-                            _estado_general,
-                            limit,
-                            offset
-                        ]
+                            CASE
+                                WHEN ipc.estado_general = 1 THEN 'activo'
+                                WHEN ipc.estado_general = 2 THEN 'stopsell'
+                                WHEN ipc.estado_general = 3 THEN 'nodisponible'
+                                WHEN ipc.estado_general IS NULL THEN '---'
+                            END
+                        ) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
+                        UNACCENT(lower( replace(trim(   COALESCE(ciudad, '') || ',' ||
+                                                        COALESCE(codigo_postal, '') || ','  || 
+                                                        COALESCE(direccion, '') || ',' || 
+                                                        COALESCE(nro_edificio, '') || ',' ||
+                                                        COALESCE(nro_piso, '') ),' ','') )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
+                        $2 = ''
+                    ) 
+                    ) AS pf
+                    LEFT JOIN ${Constants.tbl_info_piso_da_sql} ipd ON pf.idpiso = ipd.id
+                    WHERE 
+                    
+                    (ipd.ds_nro_dormitorios = $3 OR $3 = -1 
+                    ) AND
+                    
+                    ($4 <= ipd.cp_ocupacion_maxima OR $4 = -1
+                    ) AND
+                    
+                    (ipd.ds_nro_camas = $5 OR $5 = -1
+                    ) AND
+                    (ipd.bs_nro_banios = $6 OR $6 = -1
+                    ) AND
+                    
+                    ( 
+                        ( CAST(COALESCE(pf.total_str, '0') as double precision) BETWEEN $7 AND $8 ) OR
+                        ( CAST(COALESCE(pf.total_str, '0') as double precision)::integer BETWEEN ($7)::integer AND ($8)::integer )
+                    ) 
+                ORDER BY pf.estado_general ASC, CAST(COALESCE(pf.total_str, '0') as double precision) ASC, pf.etiqueta ASC
+                LIMIT $10 OFFSET $11
+                `,
+            values: [   this.filterStatus,
+                    _search_all === '' ? '' : `%${_search_all}%`,
+                    _nro_habitaciones,
+                    _capacidad_maxima,
+                    _nro_camas,
+                    _nro_banios,
+                    _total_start,
+                    _total_end,
+                    _estado_general,
+                    limit,
+                    offset
+            ]
         }
 
         // UNACCENT(lower( replace(trim(vc.total_str ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR

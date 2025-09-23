@@ -36,32 +36,32 @@ class KeyDataAccess implements IDataAccess<IKey> {
             const queryData = {
                   name: 'get-keys',
                   text: `SELECT ll.id, ll.ubicacion, ll.tipo_tarjeta, ll.idqr, ll.qr, ll.fecha_creacion, ll.observacion,
-                         (CASE
+                        (CASE
                               WHEN count(dll.*) > 0 THEN jsonb_agg(dll.id_dispositivo_ref)
                               WHEN count(dll.*) = 0 THEN '[]'
-                         END) AS pisos
-                         FROM ${Constants.tbl_llave_sql} ll
-                         LEFT JOIN (	SELECT llm.idllave, 
-                                          (CASE
-                                                WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
-                                                WHEN p.id_dispositivo_ref IS NULL THEN 'Libre'
-                                          END) AS id_dispositivo_ref
-                                          FROM ${Constants.tbl_llave_x_manija_sql} llm
-                                          INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
-                                          INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo AND d.estado = 1)
-                                          LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
-                         ) dll ON dll.idllave = ll.id
-                         WHERE ll.estado >= $1 AND ll.estado IS NOT NULL 
-                         AND ( 
+                        END) AS pisos
+                        FROM ${Constants.tbl_llave_sql} ll
+                        LEFT JOIN (	SELECT llm.idllave, 
+                              (CASE
+                                    WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
+                                    WHEN p.id_dispositivo_ref IS NULL THEN 'Libre'
+                              END) AS id_dispositivo_ref
+                              FROM ${Constants.tbl_llave_x_manija_sql} llm
+                              INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
+                              INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo AND d.estado = 1)
+                              LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
+                        ) dll ON dll.idllave = ll.id
+                        WHERE ll.estado >= $1 AND ll.estado IS NOT NULL 
+                        AND ( 
                               UNACCENT(lower( replace(trim(ll.idqr ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR 
                               UNACCENT(lower( replace(trim(ll.tipo_tarjeta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                               UNACCENT(lower( replace(trim(ll.ubicacion ),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                               UNACCENT(lower( replace(trim(dll.id_dispositivo_ref),' ','')  )) LIKE UNACCENT(lower( replace(trim($2),' ','') )) OR
                               $2 = '')
-                         GROUP BY ll.id
-                         ORDER BY id ASC
-                         LIMIT 50 
-                         `,
+                        GROUP BY ll.id
+                        ORDER BY id ASC
+                        LIMIT 50 
+                        `,
                   values: [
                         this.filterStatus,
                         search_all === '' ? '' : `%${search_all}%`
@@ -141,28 +141,28 @@ class KeyDataAccess implements IDataAccess<IKey> {
                         ll.estado
                         FROM ${Constants.tbl_llave_sql} ll
                         LEFT JOIN (	
-                                    SELECT llm.idllave, 
-                                    (CASE
-                                          WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
-                                          WHEN p.id_dispositivo_ref IS NULL THEN 'Libre'
-                                    END) AS id_dispositivo_ref
-                                    FROM ${Constants.tbl_llave_x_manija_sql} llm
-                                    INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
-                                    INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo AND d.estado = 1)
-                                    LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
+                              SELECT llm.idllave, 
+                              (CASE
+                                    WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
+                                    WHEN p.id_dispositivo_ref IS NULL THEN 'Libre'
+                              END) AS id_dispositivo_ref
+                              FROM ${Constants.tbl_llave_x_manija_sql} llm
+                              INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
+                              INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo AND d.estado = 1)
+                              LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
                         ) dll ON dll.idllave = ll.id
                         GROUP BY ll.id
                   ) keys
-                   WHERE keys.estado >= 1 AND keys.estado IS NOT NULL AND 
-                   ( 
+                  WHERE keys.estado >= 1 AND keys.estado IS NOT NULL AND 
+                  ( 
                         UNACCENT(lower( replace(trim(keys.idqr ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR 
                         UNACCENT(lower( replace(trim(keys.tipo_tarjeta ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
                         UNACCENT(lower( replace(trim(keys.ubicacion ),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
                         UNACCENT(lower( replace(trim(keys.pisos_str),' ','')  )) LIKE UNACCENT(lower( replace(trim($1),' ','') )) OR
                         $1 = '')
-                   ORDER BY keys.estado DESC , keys.id ASC
-                   LIMIT $2 OFFSET $3
-                   `,
+                  ORDER BY keys.estado DESC , keys.id ASC
+                  LIMIT $2 OFFSET $3
+                  `,
                   values: [
                         search_all === '' ? '' : `%${search_all}%`,
                         limit,
@@ -181,9 +181,9 @@ class KeyDataAccess implements IDataAccess<IKey> {
             const queryData = {
                   name: 'get-keys-x-id',
                   text: `SELECT * 
-                         FROM ${Constants.tbl_llave_sql} ll 
-                         WHERE id = $1 AND ll.estado <= $2 AND ll.estado IS NOT NULL 
-                         ORDER BY id ASC`,
+                        FROM ${Constants.tbl_llave_sql} ll 
+                        WHERE id = $1 AND ll.estado <= $2 AND ll.estado IS NOT NULL 
+                        ORDER BY id ASC`,
                   values: [id, this.filterStatus]
             }
 
@@ -211,13 +211,13 @@ class KeyDataAccess implements IDataAccess<IKey> {
                         idusuario)
                         VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
                   values: [data.ubicacion,
-                  data.tipo_tarjeta,
-                  data.idqr,
-                  data.qr,
-                  timeStampCurrent,
-                  timeStampCurrent,
-                  data.observacion,
-                  this.idUserLogin
+                        data.tipo_tarjeta,
+                        data.idqr,
+                        data.qr,
+                        timeStampCurrent,
+                        timeStampCurrent,
+                        data.observacion,
+                        this.idUserLogin
                   ]
             }
 
@@ -242,16 +242,16 @@ class KeyDataAccess implements IDataAccess<IKey> {
                         idusuario = $9
                         WHERE id = $10 AND estado <= $11 RETURNING *`,
                   values: [data.ubicacion,
-                  data.tipo_tarjeta,
-                  data.idqr,
-                  data.qr,
-                  data.imagenqr,
-                  data.estado,
-                  data.observacion,
+                        data.tipo_tarjeta,
+                        data.idqr,
+                        data.qr,
+                        data.imagenqr,
+                        data.estado,
+                        data.observacion,
                         timeStampCurrent,
-                  this.idUserLogin,
+                        this.idUserLogin,
                         id,
-                  this.filterStatus
+                        this.filterStatus
                   ]
             }
 
@@ -271,9 +271,9 @@ class KeyDataAccess implements IDataAccess<IKey> {
                         WHERE id = $4 AND estado <= $5 RETURNING *`,
                   values: [Constants.code_status_delete,
                         timeStampCurrent,
-                  this.idUserLogin,
+                        this.idUserLogin,
                         id,
-                  this.filterStatus
+                        this.filterStatus
                   ]
             }
 
@@ -287,11 +287,11 @@ class KeyDataAccess implements IDataAccess<IKey> {
             const queryData = {
                   name: 'get-lock-x-key',
                   text: `SELECT d.id, d.codigo, d.nombre, m.mac, d.ubicacion 
-                         FROM tbl_llave_x_manija llm
-                         JOIN tbl_manija m ON (m.iddispositivo = llm.idmanija)
-                         JOIN tbl_dispositivo d ON (d.id = m.iddispositivo)
-                         WHERE llm.idllave = $1 AND d.estado >= $2 AND d.estado IS NOT NULL 
-                         ORDER BY d.id ASC`,
+                        FROM tbl_llave_x_manija llm
+                        JOIN tbl_manija m ON (m.iddispositivo = llm.idmanija)
+                        JOIN tbl_dispositivo d ON (d.id = m.iddispositivo)
+                        WHERE llm.idllave = $1 AND d.estado >= $2 AND d.estado IS NOT NULL 
+                        ORDER BY d.id ASC`,
                   values: [id, this.filterStatus]
             }
 
@@ -325,15 +325,15 @@ class KeyDataAccess implements IDataAccess<IKey> {
                               FROM ${Constants.tbl_llave_sql} ll
                               LEFT JOIN ${Constants.tbl_llave_x_manija_sql} llm ON (ll.id = llm.idllave) 
                               WHERE ll.idqr LIKE $2 AND ll.idqr NOT IN ( 
-                                          SELECT ll.idqr 
-                                          FROM ${Constants.tbl_llave_sql} ll
-                                          INNER JOIN ${Constants.tbl_llave_x_manija_sql} llm ON (ll.id = llm.idllave) 
-                                          WHERE llm.idmanija = $1
-                                          GROUP BY ll.idqr)
+                                    SELECT ll.idqr 
+                                    FROM ${Constants.tbl_llave_sql} ll
+                                    INNER JOIN ${Constants.tbl_llave_x_manija_sql} llm ON (ll.id = llm.idllave) 
+                                    WHERE llm.idmanija = $1
+                                    GROUP BY ll.idqr)
                               GROUP BY ll.id
                               ORDER BY ll.qr ASC
                         )
-                         `,
+                        `,
                   values: [idDevice, idqr]
             }
 
@@ -445,28 +445,28 @@ class KeyDataAccess implements IDataAccess<IKey> {
                   name: 'get-keys-by-piso-device',
                   text: `
                         SELECT ll.id, ll.ubicacion, ll.tipo_tarjeta, ll.idqr, ll.qr,ll.observacion,
-                         (CASE
+                        (CASE
                               WHEN count(dll.*) > 0 THEN jsonb_agg(dll.etiqueta)
                               WHEN count(dll.*) = 0 THEN '[]'
-                         END) AS pisos
-                         FROM ${Constants.tbl_llave_sql} ll
-                         LEFT JOIN (	SELECT llm.idllave, 
-                                          (CASE
-                                                WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
-                                                WHEN p.id_dispositivo_ref IS NULL THEN 'Default'
-                                          END) AS etiqueta
-                                          FROM ${Constants.tbl_llave_x_manija_sql} llm
-                                          INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
-                                          INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo)
-                                          LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
-                         ) dll ON dll.idllave = ll.id
-                         WHERE ll.estado = 1 AND 
-                         ll.estado IS NOT NULL AND
-                         (ll.idqr LIKE $1 OR $1 = '')
-                         GROUP BY ll.id
-                         ORDER BY id ASC
-                         LIMIT 50
-                         `,
+                        END) AS pisos
+                        FROM ${Constants.tbl_llave_sql} ll
+                        LEFT JOIN (	SELECT llm.idllave, 
+                              (CASE
+                                    WHEN p.id_dispositivo_ref IS NOT NULL THEN p.id_dispositivo_ref
+                                    WHEN p.id_dispositivo_ref IS NULL THEN 'Default'
+                              END) AS etiqueta
+                              FROM ${Constants.tbl_llave_x_manija_sql} llm
+                              INNER JOIN ${Constants.tbl_manija_sql} m ON m.iddispositivo = llm.idmanija
+                              INNER JOIN ${Constants.tbl_dispositivo_sql} d ON (d.id = m.iddispositivo)
+                              LEFT JOIN ${Constants.tbl_piso_sql} p ON (p.id = d.idpiso)
+                        ) dll ON dll.idllave = ll.id
+                        WHERE ll.estado = 1 AND 
+                        ll.estado IS NOT NULL AND
+                        (ll.idqr LIKE $1 OR $1 = '')
+                        GROUP BY ll.id
+                        ORDER BY id ASC
+                        LIMIT 50
+                        `,
                   values: [_idqr]
             }
 

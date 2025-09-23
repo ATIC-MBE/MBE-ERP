@@ -9,22 +9,22 @@ class TipoOcupacionDataAccess implements IDataAccess<ITipoOcupacion> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
     async get(): Promise<Array<ITipoOcupacion> | IErrorResponse> {
         const queryData  = {
-                name: 'get-tipo-ocupacion',
-                text: ` SELECT ti.*
-                        FROM ${Constants.tbl_tipo_ocupacion_dn_sql} ti
-                        WHERE ti.estado >= $1
-                        ORDER BY ti.codigo asc
-                        `,
-                values: [this.filterStatus]
+            name: 'get-tipo-ocupacion',
+            text: ` SELECT ti.*
+                    FROM ${Constants.tbl_tipo_ocupacion_dn_sql} ti
+                    WHERE ti.estado >= $1
+                    ORDER BY ti.codigo asc
+                    `,
+            values: [this.filterStatus]
         }
 
         let lData: Array<ITipoOcupacion | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array<ITipoOcupacion | IErrorResponse>

@@ -12,10 +12,10 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
     public client: DbConnection
 
     constructor(
-                    public idUserLogin: BigInt,
-                    public filterStatus: StatusDataType,
-                    public isTransactions: boolean,
-                    public infoExtra?: any ) {
+        public idUserLogin: BigInt,
+        public filterStatus: StatusDataType,
+        public isTransactions: boolean,
+        public infoExtra?: any ) {
         this.client = new DbConnection(isTransactions)
     }
 
@@ -56,12 +56,11 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ===== ALL_LEADS =======
                 const queryData = {
                     name : "get-all-leads-report",
-                    text : `
-                            SELECT count(l.*) as total_data 
+                    text : `SELECT count(l.*) as total_data 
                             FROM ${Constants.tbl_lead_dn_sql} l
                             WHERE l.estatus = $1`,
                     values : [
-                        1
+                            1
                     ]
                 }
                 const lDataAllLeads = (await client.query(queryData)).rows as Array <IData | IErrorResponse>
@@ -93,7 +92,7 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                             FROM ${Constants.tbl_prescriptor_dn_sql} p
                             WHERE p.estado = $1`,
                     values : [
-                        1
+                            1
                     ]
                 }
             
@@ -123,8 +122,7 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== NRO WHATSAPP =====
                 const queryNroWhatsapp = {
                     name : "get-whatsapp-count",
-                    text : `
-                            SELECT count(*) as total_data
+                    text : `SELECT count(*) as total_data
                             FROM (
                                 SELECT gp.*, 
                                 REGEXP_MATCHES(gp.whatsapp, '^https://chat.whatsapp.com')::text as whatsappstr
@@ -132,10 +130,9 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                                 WHERE gp.estado = $1 AND 
                                 COALESCE(gp.whatsapp, '') <> ''
                             ) gp
-                            WHERE COALESCE(gp.whatsappstr, '') <> ''
-                            `,
+                            WHERE COALESCE(gp.whatsappstr, '') <> ''`,
                     values : [
-                        1
+                            1
                     ]
                 }
 
@@ -163,18 +160,16 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LEADS ATRASADOS ======
                 const queryLeadAtrasados = {
                     name : "get-all-leads-atrasados-report",
-                    text : `
-                            SELECT l.tipo_lead, count(l.*) as total_data 
+                    text : `SELECT l.tipo_lead, count(l.*) as total_data 
                             FROM ${Constants.tbl_lead_dn_sql} l
                             WHERE l.estatus = $1 AND
                             l.next_step BETWEEN $2 AND $3
                             AND idtipointeresa != 1
-                            GROUP BY l.tipo_lead
-                            `,
+                            GROUP BY l.tipo_lead`,
                     values : [
-                        1,
-                        filter_m_start,
-                        filter_m_end
+                            1,
+                            filter_m_start,
+                            filter_m_end
                     ]
                 }
                 const lDataAllLeadsAtrasados = (await client.query(queryLeadAtrasados)).rows as Array <{tipo_lead: string, total_data: number} | IErrorResponse>
@@ -234,8 +229,7 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                             FROM ${Constants.tbl_historico_lead_dn_sql} hl
                             INNER JOIN ${Constants.tbl_lead_dn_sql} l on hl.idlead = l.id
                             WHERE date(hl.fecha_creacion) = $1 AND hl.ref_historico_lead LIKE 'hl-%'
-                            GROUP BY l.tipo_lead
-                            `,
+                            GROUP BY l.tipo_lead`,
                     values : [
                         _dateCurrent
                     ]
@@ -282,8 +276,7 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                             SELECT count(spre.*) as total_data
                             FROM ${Constants.tbl_suceso_prescriptor_dn_sql} spre
                             WHERE spre.ref_suceso LIKE 'hspre-%' AND
-                            date(spre.fecha_creacion) = $1
-                            `,
+                            date(spre.fecha_creacion) = $1`,
                     values : [
                         _dateCurrent
                     ]
@@ -313,14 +306,12 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ======= LLAMADAS PROPIETARIOS CONTRATADOS =======
                 const queryCallsTodayPropietario = {
                     name : "get-all-calls-today-propietario-report",
-                    text : `
-                            SELECT count(spro.*) as total_datos 
+                    text : `SELECT count(spro.*) as total_datos 
                             FROM ${Constants.tbl_suceso_propietario_dn_sql} spro
                             WHERE spro.ref_suceso LIKE 'hspro-%' AND
-                            date(spro.fecha_creacion) = $1
-                            `,
+                            date(spro.fecha_creacion) = $1`,
                     values : [
-                        _dateCurrent
+                            _dateCurrent
                     ]
                 }
                 const lDataCallTodayPropietario = (await client.query(queryCallsTodayPropietario)).rows as Array <{tipo_lead: string, total_data: number} | IErrorResponse>
@@ -348,15 +339,13 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LEADS PENDIENTES TODAY ======
                 const queryLeadPendiente = {
                     name : "get-all-leads-pendientes-today-report",
-                    text : `
-                            SELECT count(l.*) as total_data 
+                    text : `SELECT count(l.*) as total_data 
                             FROM ${Constants.tbl_lead_dn_sql} l
                             WHERE l.estatus = $1 
-                            AND l.next_step = $2
-                            `,
+                            AND l.next_step = $2`,
                     values : [
-                        1,
-                        _dateCurrent
+                            1,
+                            _dateCurrent
                     ]
                 }
                 const lDataAllLeadsPendientesToday = (await client.query(queryLeadPendiente)).rows as Array <IData | IErrorResponse>
@@ -413,13 +402,12 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ===== ALL_LEADS ======= [SI APLICA A TOTAL]
                 const queryData = {
                     name : "get-all-leads-report",
-                    text : `
-                            SELECT count(l.*) as total_data 
+                    text : `SELECT count(l.*) as total_data 
                             FROM ${Constants.tbl_lead_dn_sql} l
                             WHERE l.estatus = $1 AND date(l.fecha_creacion) <= $2`,
                     values : [
-                        1,
-                        _dateFilter
+                            1,
+                            _dateFilter
                     ]
                 }
                 const lDataAllLeads = (await client.query(queryData)).rows as Array <IData | IErrorResponse>
@@ -446,13 +434,12 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ===== NRO PRESCRIPTORES ===== [SI APLICA A TOTAL]
                 const queryPrescriptores ={
                     name : "get-prescriptores-count",
-                    text : `
-                            SELECT count(p.*) as total_data
+                    text : `SELECT count(p.*) as total_data
                             FROM ${Constants.tbl_prescriptor_dn_sql} p
                             WHERE p.estado = $1 AND date(p.fecha_creacion) <= $2`,
                     values : [
-                        1,
-                        _dateFilter
+                            1,
+                            _dateFilter
                     ]
                 }
             
@@ -482,8 +469,7 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== NRO WHATSAPP ===== [NO APLICA A FILTAR POR DIA]
                 const queryNroWhatsapp = {
                     name : "get-whatsapp-count",
-                    text : `
-                            SELECT count(*) as total_data
+                    text : `SELECT count(*) as total_data
                             FROM (
                                 SELECT gp.*, 
                                 REGEXP_MATCHES(gp.whatsapp, '^https://chat.whatsapp.com')::text as whatsappstr
@@ -491,10 +477,9 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                                 WHERE gp.estado = $1 AND 
                                 COALESCE(gp.whatsapp, '') <> ''
                             ) gp
-                            WHERE COALESCE(gp.whatsappstr, '') <> ''
-                            `,
+                            WHERE COALESCE(gp.whatsappstr, '') <> ''`,
                     values : [
-                        1
+                            1
                     ]
                 }
 
@@ -522,17 +507,15 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LEADS RETRASADOS ====== [SI APLICA]
                 const queryLeadAtrasados = {
                     name : "get-all-leads-atrasados-report",
-                    text : `
-                            SELECT l.tipo_lead, count(l.*) as total_data 
+                    text : `SELECT l.tipo_lead, count(l.*) as total_data 
                             FROM ${Constants.tbl_lead_dn_sql} l
                             WHERE l.estatus = $1 AND
                             l.next_step <= $2
                             AND l.idtipointeresa IN (1, 2, 3)
-                            GROUP BY l.tipo_lead
-                            `,
+                            GROUP BY l.tipo_lead`,
                     values : [
-                        1,
-                        _dateFilter
+                            1,
+                            _dateFilter
                     ]
                 }
                 const lDataAllLeadsAtrasados = (await client.query(queryLeadAtrasados)).rows as Array <{tipo_lead: string, total_data: number} | IErrorResponse>
@@ -586,15 +569,13 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LLAMADAS LEADS TOTAL GENERAL ======= [ SI APLICA ]
                 const queryCallsToday = {
                     name : "get-all-calls-today-report",
-                    text : `
-                            SELECT l.tipo_lead, count(hl.*) as total_data
+                    text : `SELECT l.tipo_lead, count(hl.*) as total_data
                             FROM ${Constants.tbl_historico_lead_dn_sql} hl
                             INNER JOIN ${Constants.tbl_lead_dn_sql} l on hl.idlead = l.id
                             WHERE date(hl.fecha_creacion) = $1 AND hl.ref_historico_lead LIKE 'hl-%'
-                            GROUP BY l.tipo_lead
-                            `,
+                            GROUP BY l.tipo_lead`,
                     values : [
-                        _dateFilter
+                            _dateFilter
                     ]
                 }
                 const lDataCallToday = (await client.query(queryCallsToday)).rows as Array <{tipo_lead: string, total_data: number} | IErrorResponse>
@@ -635,14 +616,12 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LLAMADAS PRESCRIPTORES CONTRATADOS TOTAL GENERAL ======= [ SI APLICA ]
                 const queryCallsTodayPrescriptor = {
                     name : "get-all-calls-today-prescriptor-report",
-                    text : `
-                            SELECT count(spre.*) as total_data
+                    text : `SELECT count(spre.*) as total_data
                             FROM ${Constants.tbl_suceso_prescriptor_dn_sql} spre
                             WHERE spre.ref_suceso LIKE 'hspre-%' AND
-                            date(spre.fecha_creacion) = $1
-                            `,
+                            date(spre.fecha_creacion) = $1`,
                     values : [
-                        _dateFilter
+                            _dateFilter
                     ]
                 }
                 const lDataCallTodayPrescriptor = (await client.query(queryCallsTodayPrescriptor)).rows as Array <IData | IErrorResponse>
@@ -670,14 +649,12 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ======= LLAMADAS PROPIETARIOS CONTRATADOS TOTAL GENERAL ======= [ SI APLICA ]
                 const queryCallsTodayPropietario = {
                     name : "get-all-calls-today-propietario-report",
-                    text : `
-                            SELECT count(spro.*) as total_data 
+                    text : `SELECT count(spro.*) as total_data 
                             FROM ${Constants.tbl_suceso_propietario_dn_sql} spro
                             WHERE spro.ref_suceso LIKE 'hspro-%' AND
-                            date(spro.fecha_creacion) = $1
-                            `,
+                            date(spro.fecha_creacion) = $1`,
                     values : [
-                        _dateFilter
+                            _dateFilter
                     ]
                 }
                 const lDataCallTodayPropietario = (await client.query(queryCallsTodayPropietario)).rows as Array <IData | IErrorResponse>
@@ -706,15 +683,13 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LLAMADAS LEADS X USER ======= [ SI APLICA ]
                 const queryCallsUserToday = {
                     name : "get-all-calls-user-today-report",
-                    text : `
-                            SELECT l.tipo_lead, hl.idusuario_resp, count(hl.*) as total_data
+                    text : `SELECT l.tipo_lead, hl.idusuario_resp, count(hl.*) as total_data
                             FROM ${Constants.tbl_historico_lead_dn_sql} hl
                             INNER JOIN ${Constants.tbl_lead_dn_sql} l on hl.idlead = l.id
                             WHERE date(hl.fecha_creacion) = $1 AND hl.ref_historico_lead LIKE 'hl-%'
-                            GROUP BY l.tipo_lead, hl.idusuario_resp
-                            `,
+                            GROUP BY l.tipo_lead, hl.idusuario_resp`,
                     values : [
-                        _dateFilter
+                            _dateFilter
                     ]
                 }
                 const lDataCallUserToday = (await client.query(queryCallsUserToday)).rows as Array <{tipo_lead: string, idusuario_resp: number, total_data: number} | IErrorResponse>
@@ -738,15 +713,13 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== LLAMADAS PRESCRIPTORES CONTRATADOS X USER ======= [ SI APLICA ]
                 const queryCallsUserTodayPrescriptor = {
                     name : "get-all-calls-today-prescriptor-x-user-report",
-                    text : `
-                            SELECT 'Prescriptor' as tipo_lead, spre.idusuario as idusuario_resp, count(spre.*) as total_data
+                    text : `SELECT 'Prescriptor' as tipo_lead, spre.idusuario as idusuario_resp, count(spre.*) as total_data
                             FROM ${Constants.tbl_suceso_prescriptor_dn_sql} spre
                             WHERE spre.ref_suceso LIKE 'hspre-%' AND
                             date(spre.fecha_creacion) = $1
-                            GROUP BY spre.idusuario
-                            `,
+                            GROUP BY spre.idusuario`,
                     values : [
-                        _dateFilter
+                            _dateFilter
                     ]
                 }
                 const lDataCallUserTodayPrescriptor = (await client.query(queryCallsUserTodayPrescriptor)).rows as Array <{tipo_lead: string, idusuario_resp: number, total_data: number} | IErrorResponse>
@@ -771,13 +744,11 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ======= LLAMADAS PROPIETARIOS CONTRATADOS X USER ======= [ SI APLICA ]
                 const queryCallsUserTodayPropietario = {
                     name : "get-all-calls-today-propietario-x-user-report",
-                    text : `
-                            SELECT 'Propietario' as tipo_lead, spro.idusuario as idusuario_resp, count(spro.*) as total_data 
+                    text : `SELECT 'Propietario' as tipo_lead, spro.idusuario as idusuario_resp, count(spro.*) as total_data 
                             FROM ${Constants.tbl_suceso_propietario_dn_sql} spro
                             WHERE spro.ref_suceso LIKE 'hspro-%' AND
                             date(spro.fecha_creacion) = $1
-                            GROUP BY spro.idusuario
-                            `,
+                            GROUP BY spro.idusuario`,
                     values : [
                         _dateFilter
                     ]
@@ -804,13 +775,12 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ===== NRO PROPIETARIOS ===== [SI APLICA A TOTAL]
                 const queryPropietarios ={
                     name : "get-propietarios-count",
-                    text : `
-                            SELECT count(p.*) as total_data
+                    text : `SELECT count(p.*) as total_data
                             FROM ${Constants.tbl_propietario_dn_sql} p
                             WHERE p.estado = $1 AND date(p.fecha_creacion) <= $2`,
                     values : [
-                        1,
-                        _dateFilter
+                            1,
+                            _dateFilter
                     ]
                 }
         
@@ -839,16 +809,14 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // Procesar-Eliminar, Prescriptor-to-Lead, Procesar-Contratar
                 const queryActionsOnLeadsToday = {
                     name : "get-all-action-on-leads-today-report",
-                    text : `
-                            SELECT hl.tipo_accion, l.tipo_lead, count(*) as total_data
+                    text : `SELECT hl.tipo_accion, l.tipo_lead, count(*) as total_data
                             FROM ${Constants.tbl_historico_lead_dn_sql} hl
                             INNER JOIN ${Constants.tbl_lead_dn_sql} l on l.id = hl.idlead
                             WHERE hl.tipo_accion in ('Procesar-Eliminar', 'Prescriptor-to-Lead', 'Procesar-Contratar') AND
                             date(hl.fecha_creacion) = $1
-                            group by hl.tipo_accion, l.tipo_lead
-                            `,
+                            group by hl.tipo_accion, l.tipo_lead`,
                     values : [
-                        _dateFilter
+                            _dateFilter
                     ]
                 }
                 const lDataActionsOnLeadsToday = (await client.query(queryActionsOnLeadsToday)).rows as Array <{tipo_accion: string, tipo_lead: string, total_data: number} | IErrorResponse>
@@ -1008,12 +976,13 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                                 idusuario = $3,
                                 idusuresp = $4
                                 WHERE tipo LIKE $5 AND fecha = $6 AND (idusuresp = $4 OR $4 IS NULL) RETURNING *`,
-                        values: [   timeStampCurrent, 
-                                    dataResult[i].estadistica, 
-                                    this.idUserLogin,
-                                    dataResult[i].idusuresp || null, 
-                                    dataResult[i].tipo, 
-                                    _dateFilter ]
+                        values: [   
+                                timeStampCurrent, 
+                                dataResult[i].estadistica, 
+                                this.idUserLogin,
+                                dataResult[i].idusuresp || null, 
+                                dataResult[i].tipo, 
+                                _dateFilter ]
                     }
                     let _resultUpdate = (await client.query(queryDataUpdateEstadistica)).rows as Array<IEstadisticaDn>
                     
@@ -1023,15 +992,16 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                             name: 'insert-estadistica',
                             text: `INSERT INTO ${Constants.tbl_estadistica_dn_sql} ( fecha_creacion, tipo, idusuario, data, estadistica, fecha_ultimo_cambio, fecha, idusuresp)
                                     VALUES($1, $2, $3, $4, $5, $6, $7, $8)`,
-                            values: [   timeStampCurrent,            
-                                        dataResult[i].tipo,
-                                        this.idUserLogin,
-                                        {},
-                                        dataResult[i].estadistica,
-                                        timeStampCurrent,
-                                        _dateFilter,
-                                        dataResult[i].idusuresp || null
-                                    ]
+                            values: [
+                                timeStampCurrent,            
+                                    dataResult[i].tipo,
+                                    this.idUserLogin,
+                                    {},
+                                    dataResult[i].estadistica,
+                                    timeStampCurrent,
+                                    _dateFilter,
+                                    dataResult[i].idusuresp || null
+                            ]
                         }
                         await client.query(queryInsertEstadistica)
                     }
@@ -1072,15 +1042,13 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // Query para sacar una sumatoria de los valores diarios
             const queryEstadisticaHistorico = {
                 name : "get-all-estadisticas-historico",
-                text : `
-                        SELECT e.tipo, count(e.*) as nro_elements, sum(e.estadistica) as total_estadistica
+                text : `SELECT e.tipo, count(e.*) as nro_elements, sum(e.estadistica) as total_estadistica
                         FROM ${Constants.tbl_estadistica_dn_sql} e
                         WHERE e.fecha BETWEEN $1 AND $2
-                        GROUP BY e.tipo
-                    `,
+                        GROUP BY e.tipo`,
                 values : [
-                    filter_m_start,
-                    filter_m_end
+                        filter_m_start,
+                        filter_m_end
                 ]
             }
             const lDataHistorico = (await client.query(queryEstadisticaHistorico)).rows as Array <DataEstadistica | IErrorResponse>
@@ -1111,8 +1079,7 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
             // ====== QUERY QUE CONSULTA LLAMADAS POR USUARIO =======
             const queryEstadisticaHistoricoXUserCalls = {
                 name : "get-all-estadisticas-historico-x-user",
-                text : `
-                        SELECT usu.nombre_completo as usr_responsable, 'calls_users' as tipo, hxusu.* 
+                text : `SELECT usu.nombre_completo as usr_responsable, 'calls_users' as tipo, hxusu.* 
                         FROM (
                             SELECT e.idusuresp, count(e.*) as nro_elements, sum(e.estadistica) as total_estadistica
                             FROM ${Constants.tbl_estadistica_dn_sql} e
@@ -1122,11 +1089,10 @@ class EstadisticaDnDataAccess implements IDataAccess<IEstadisticaDn> {
                                     'llamadas_propietarios_contratados_x_user')
                             GROUP BY e.idusuresp) hxusu
                         INNER JOIN ${Constants.tbl_usuario_sql} usu ON usu.id = hxusu.idusuresp
-                        ORDER BY usu.nombre_completo ASC
-                    `,
+                        ORDER BY usu.nombre_completo ASC`,
                 values : [
-                    filter_m_start,
-                    filter_m_end
+                        filter_m_start,
+                        filter_m_end
                 ]
             }
             const lDataHistoricoXUserCalls = (await client.query(queryEstadisticaHistoricoXUserCalls)).rows as Array <DataEstadistica | IErrorResponse>

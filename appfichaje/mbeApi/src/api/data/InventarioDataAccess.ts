@@ -33,9 +33,7 @@ class InventarioDataAccess implements IDataAccess<IInventario>{
                     INNER JOIN ${Constants.tbl_piso_sql} pi
                     ON inv.id_piso = pi.id
                     ORDER BY pi.etiqueta ASC`,
-            
             values : [this.filterStatus]
-            
         }
         let lData : Array<IInventario | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array <IInventario | IErrorResponse>
         
@@ -48,7 +46,7 @@ class InventarioDataAccess implements IDataAccess<IInventario>{
 
         if(!this.infoExtra) this.infoExtra = {filter : {}}
         else if (!this.infoExtra!.filter) this.infoExtra = {filter :{}}
-       
+
         let limit = this.infoExtra.filter.limit  || 50
         let offset = this.infoExtra.filter.offset  || 0 // inicia en 0 ... n-1
         let search_all = this.infoExtra.filter.search_all  || ''
@@ -72,9 +70,9 @@ class InventarioDataAccess implements IDataAccess<IInventario>{
                         LIMIT $1 OFFSET $2
                         `,
                 values : [
-                    limit,
-                    offset,
-                    search_all === '' ? '' : `%${search_all}%`
+                        limit,
+                        offset,
+                        search_all === '' ? '' : `%${search_all}%`
                 ]                     
                     
             }
@@ -83,14 +81,10 @@ class InventarioDataAccess implements IDataAccess<IInventario>{
             if ( ( {...lData[0] } as IErrorResponse).error) return lData[0] as IErrorResponse
 
             return lData as Array<IInventario>
-        
     }
     async getById(id: BigInt): Promise <IInventario| IErrorResponse> {
         throw new Error("Method not implemented.")
     }
-
-    
-
 
     async getByIdPiso(id : BigInt) : Promise <Array<IInventario> | IErrorResponse > {
         let limit = this.infoExtra.filter.limit  || 50
@@ -99,18 +93,18 @@ class InventarioDataAccess implements IDataAccess<IInventario>{
         const queryData = {
             name : 'get-inventario-x-piso',
             text : `SELECT inv.id_piso, inv.id_articulo, inv.cantidad, ar.mobiliario, ar.stock, ar.total , pi.id_dispositivo_ref, pi.etiqueta
-            FROM ${Constants.tbl_inventario_da_sql} inv
-            INNER JOIN ${Constants.tbl_piso_sql} pi
-            ON pi.id = inv.id_piso
-            INNER JOIN ${Constants.tbl_articulos_da_sql} ar
-            ON ar.id = inv.id_articulo
-            WHERE id_piso = $3
-            ORDER BY tag DESC
-            LIMIT $1 OFFSET $2` ,
+                    FROM ${Constants.tbl_inventario_da_sql} inv
+                    INNER JOIN ${Constants.tbl_piso_sql} pi
+                    ON pi.id = inv.id_piso
+                    INNER JOIN ${Constants.tbl_articulos_da_sql} ar
+                    ON ar.id = inv.id_articulo
+                    WHERE id_piso = $3
+                    ORDER BY tag DESC
+                    LIMIT $1 OFFSET $2` ,
             values : [
-                limit,
-                offset,
-                id
+                    limit,
+                    offset,
+                    id
             ]
         }
         let lData : Array <IInventario | IErrorResponse> = (await this.client.exeQuery(queryData)) as Array <IInventario | IErrorResponse>

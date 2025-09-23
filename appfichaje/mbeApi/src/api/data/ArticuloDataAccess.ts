@@ -47,13 +47,11 @@ class ArticuloDataAccess implements IDataAccess<IArticulo> {
                         $3 = ''
                     )
                     ORDER BY tag DESC
-                    LIMIT $1 OFFSET  $2
-                    `,
-            
+                    LIMIT $1 OFFSET  $2`,
             values : [
-                limit,
-                offset,
-                search_all === '' ? '' : `%${search_all}%`
+                    limit,
+                    offset,
+                    search_all === '' ? '' : `%${search_all}%`
             ]
         }
 
@@ -100,21 +98,21 @@ class ArticuloDataAccess implements IDataAccess<IArticulo> {
                             RETURNING *`,
 
             values : [
-                data.tag,
-                data.mobiliario,
-                data.descripcion,
-                data.precio,
-                timeStampCurrent,
-                data.fecha_compra,
-                data.meses_antiguedad,
-                data.depreciacion,
-                data.valor_depreciacion,
-                data.propietario,
-                data.notas,
-                data.url_imagen,
-                data.stock,
-                data.total,
-                data.estado
+                    data.tag,
+                    data.mobiliario,
+                    data.descripcion,
+                    data.precio,
+                    timeStampCurrent,
+                    data.fecha_compra,
+                    data.meses_antiguedad,
+                    data.depreciacion,
+                    data.valor_depreciacion,
+                    data.propietario,
+                    data.notas,
+                    data.url_imagen,
+                    data.stock,
+                    data.total,
+                    data.estado
             ]
             }
 
@@ -142,7 +140,7 @@ class ArticuloDataAccess implements IDataAccess<IArticulo> {
 
     async update(id: BigInt, data: IArticulo): Promise<IArticulo | IErrorResponse> {
         
-       let responseD = await this.client.execQueryPool(async (client): Promise <Array <IModel | IErrorResponse>> =>{
+        let responseD = await this.client.execQueryPool(async (client): Promise <Array <IModel | IErrorResponse>> =>{
         let queryData = {
             name : "update-articulos",
             text : `UPDATE ${Constants.tbl_articulos_da_sql} SET
@@ -162,31 +160,30 @@ class ArticuloDataAccess implements IDataAccess<IArticulo> {
                     estado = $14
                     WHERE id = $15  AND estado >= $16 RETURNING *`,
             values : [
-                data.tag,
-                data.mobiliario,
-                data.descripcion,
-                data.precio,
-                data.fecha_compra,
-                data.meses_antiguedad,
-                data.depreciacion,
-                data.valor_depreciacion,
-                data.propietario,
-                data.notas,
-                data.url_imagen,
-                data.stock,
-                data.total,
-                data.estado,
-                id,
-                this.filterStatus
+                    data.tag,
+                    data.mobiliario,
+                    data.descripcion,
+                    data.precio,
+                    data.fecha_compra,
+                    data.meses_antiguedad,
+                    data.depreciacion,
+                    data.valor_depreciacion,
+                    data.propietario,
+                    data.notas,
+                    data.url_imagen,
+                    data.stock,
+                    data.total,
+                    data.estado,
+                    id,
+                    this.filterStatus
             ]
         }
 
-      
         let lData = (await client.query(queryData)).rows as Array <IArticulo | IErrorResponse>
-      
+
         return lData
-       });
-       return ( responseD[0] ) as IArticulo | IErrorResponse
+        });
+        return ( responseD[0] ) as IArticulo | IErrorResponse
     }
 
     async delete(id: BigInt): Promise<IArticulo | IErrorResponse> {
@@ -213,11 +210,11 @@ class ArticuloDataAccess implements IDataAccess<IArticulo> {
                         WHERE id = $4 AND estado >= $5 RETURNING *`,
 
                 values : [
-                    Constants.code_status_delete,
-                    `${aritucloDB.stock}`,
-                    `${aritucloDB.total}`,
-                    id,
-                    this.filterStatus
+                        Constants.code_status_delete,
+                        `${aritucloDB.stock}`,
+                        `${aritucloDB.total}`,
+                        id,
+                        this.filterStatus
                 ]
             }
             
@@ -228,9 +225,6 @@ class ArticuloDataAccess implements IDataAccess<IArticulo> {
         return ( responseD[0]) as IArticulo | IErrorResponse
 }
 
-        
-
-    
 }
 
 export default ArticuloDataAccess
