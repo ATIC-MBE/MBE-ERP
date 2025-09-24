@@ -142,10 +142,10 @@ body {
   background-attachment: fixed;
 }
 
-.c-bg-main-100 {
+/* .c-bg-main-100 {
   background-image: url(/img/bg/mBg100.svg);
   background-attachment: fixed;
-}
+} */
 
 .c-rounded-large {
   border-radius: 0.8rem;
