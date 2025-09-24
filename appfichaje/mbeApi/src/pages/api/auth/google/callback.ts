@@ -10,6 +10,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    // AGREGAR ESTAS LÍNEAS DE DEBUG:
+    console.log('=== CALLBACK DEBUG ===');
+    console.log('Full URL:', req.url);
+    console.log('Query params:', req.query);
+    console.log('Code:', req.query.code);
+    console.log('State:', req.query.state);
+    console.log('Error:', req.query.error);
+    console.log('======================');
+
     const { code, state } = req.query;
 
     if (!code) {
@@ -18,15 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    let department: string;
-    try {
-      const stateData = JSON.parse(state as string);
-      department = stateData.department;
-    } catch (error) {
-      return res.status(400).json({
-        error: 'State inválido'
-      });
-    }
+    const department = state as string;
 
     if (!department) {
       return res.status(400).json({
