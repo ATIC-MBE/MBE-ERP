@@ -1,5 +1,4 @@
 
-import { loadDefaultErrorComponents } from "next/dist/server/load-components"
 import { ActionType, CityType, CountryType, LocationDataType, ResultType, StatusDataType, TypeActionCardType, TypeCardType, TypeDeviceType, etapaType, horarioType, jornadaType } from "../types/GlobalTypes"
 
 import Constants from "./Constants"
