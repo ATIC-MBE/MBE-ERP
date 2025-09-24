@@ -11,7 +11,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     const { department } = req.query;
 
     // Validar departamento
-    const validDepartments = ['admin', 'aca', 'atic', 'rrhh', 'ceo', 'ade', 'myd', 'propietario', 'superadmin'];
+    const validDepartments = ['admin', 'aca', 'atic', 'rrhh','rrhhmaster', 'ceo', 'ade', 'myd', 'propietario', 'superadmin'];
     if (!department || !validDepartments.includes(department as string)) {
       return res.status(400).json({
         error: 'Departamento no válido o no especificado',
