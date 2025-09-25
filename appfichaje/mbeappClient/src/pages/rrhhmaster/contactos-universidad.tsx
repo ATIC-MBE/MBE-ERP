@@ -5,7 +5,6 @@ import ContactosUniversidadPage from '../rrhh/contactos-universidad';
 
 const menuData = [
   { key: 'inicio', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhhmaster', codeIcon: 'home' },
-  { key: 'pisos', isActive: false, propID: 'Pisos', order: 2, menuPath: '/rrhhmaster/apartments', codeIcon: 'apartment' },
   { key: 'usuarios', isActive: false, propID: 'Usuarios', order: 3, menuPath: '/rrhhmaster/users', codeIcon: 'user' },
   { key: 'contactos-universidad', isActive: true, propID: 'Universidades', order: 4, menuPath: '/rrhhmaster/contactos-universidad', codeIcon: 'birrete' },
   { key: 'fichaje', isActive: false, propID: 'Fichaje', order: 5, menuPath: '/rrhhmaster/fichaje', codeIcon: 'fichaje' },

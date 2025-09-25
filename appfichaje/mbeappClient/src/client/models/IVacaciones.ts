@@ -10,5 +10,6 @@ export interface IVacaciones extends IModel{
     dias ? : string
     fecha_creacion ? : string
     estado_solicitud ? : number
-    idsolicitud ? : number
+    tipo_ausencia_permiso ? : string
+    idsolicitud: number // Added for backend foreign key
 }

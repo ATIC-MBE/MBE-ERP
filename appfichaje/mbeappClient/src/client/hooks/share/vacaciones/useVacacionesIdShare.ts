@@ -12,122 +12,67 @@ import FetchApiServiceInstance from '@/client/services/FetchApiService';
 import { IVacaciones } from '@/client/models/IVacaciones';
 
 const useVacacionesIddShare = (pathGoToBack: string) => {
-
+        const AUSENCIAS = [
+            '', // para indexar desde 1
+            'Enfermedad común',
+            'Renovar el DNI, pasaporte o visado',
+            'Enfermedad laboral',
+            'Citas médicas',
+            'Cuidado de menores',
+            'Vacaciones',
+            'Días de asuntos propios',
+            'Hospitalización o intervención quirúrgica de familiar',
+            'Permisos formación',
+            'Permiso por nacimiento de hijo',
+            'Permiso por lactancia',
+            'Permiso por fuerza mayor',
+            'Permiso matrimonio o pareja de hecho',
+            'Permiso por fallecimiento familiar',
+            'Permiso por exámenes',
+            'Permiso por traslado del domicilio habitual',
+            'Permiso para el cumplimiento de un deber público y personal'
+        ];
     const router = useRouter()
-
-    let dateIniF: string
-    let dateEndF: string
-    let fecha1: string
-    let fecha2: string
-
-    let hoy = Date.now()
-    let fechaHoy = hoy.toString
-
-    let diasG: string
-    let mesesG: string
-    let years: string
-    
-    let id = BigInt((router.query.id as string) || 0)
+    const { id } = router.query
 
     const [dataDB, setDataDB] = useState<IVacaciones>({
+        nombre_completo: '',
+        fecha_inicio: '',
+        fecha_final: '',
+        descripcion: '',
+        fecha_creacion: '',
+        estado_solicitud: 0,
+        tipo_ausencia_permiso: '',
+        idsolicitud: 0 // Asegúrate de incluir este campo si es requerido por IVacaciones
+    });
 
-        nombre_completo : '',
-        fecha_inicio : '',
-        fecha_final : '',
-        descripcion : '',
-        fecha_creacion : '',
-        estado_solicitud : 0,
-        estado : 1,
-        idsolicitud : 0
-    })
+    const [errorValidate, setErrorValidate] = useState(false)
+    const [msgError, setMsgError] = useState('')
+    const [roles, setRoles] = useState<Array<{ key: string, name: string }>>([]);
 
-    const [roles, setRoles] = useState<Array<{ key:string, name: string }>>([])
-    
-    const [errorValidate, setErrorValidate] = useState<boolean>(false)
-
-    const [msgError, setMsgError] = useState<string>(MSG_ERROR_SAVE)
-
-    // Var for Model
-    const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen)
-    }    
-
-    const handleChange = (e: any) => {
-
-        let totalMilisegundos = 0
-        let horas = 0
-        let dias = 0
-        let meses = 0
-        let años = 0
-
-        //Validamos (falta validar tipo fecha) y comprobamos que el data opuesto este añadido y procedemos a realizar el cálculo
-
-        /*if(["fecha_inicio"].includes(e.target.name)){
-            
-            fecha1 = e.target.value
-
-            setDataDB({
-                ...dataDB,
-                [e.target.name]: e.target.value
-            })
-            
-            
+    useEffect(() => {
+        // Si hay un id en la URL, es una edición
+        if (id) {
+            // Carga los datos actuales de la solicitud
+            FetchApiServiceInstance.getSingleData(`/api/share/vacaciones/${id}`)
+                .then(data => {
+                    if (data) {
+                        setDataDB({
+                            ...data,
+                            tipo_ausencia_permiso: AUSENCIAS[data.idsolicitud] ?? '',
+                        });
+                    }
+                })
+                .catch(err => {
+                    const { status } = err.response!;
+                    // Si no se encuentra el recurso, redirige
+                    if (status === 404) router.push('/404');
+                });
         }
-        if(["fecha_fin"].includes(e.target.name)&& fecha1.length > 0) {
-            
-            fecha2 = e.target.value
+    }, [id]);
 
-            
-            
-            setDataDB({
 
-                ...dataDB,
-                [e.target.name]: e.target.value
 
-            })
-            
-        }*/
-
-        // console.log("milisegundos: " + totalMilisegundos + " / horas: " + horas + " / dias: " + dias + " / meses: " + meses + " / años: " + anos )
-        
-        //dateCalculator(e)
-
-        //console.log(fecha1,fecha2)
-        
-        // console.log(UtilCustomInstance.dateCalculator(fecha2,fecha1).dias)
-        // console.log(UtilCustomInstance.dateCalculator(fecha2,fecha1).meses)
-        // console.log(UtilCustomInstance.dateCalculator(fecha2,fecha1).anos)
-
-        // if (["fecha_fin", "fecha_inicio"].includes(e.target.name as string)) {
-        //     let _valueFechaInicio = ((e.target.name as string === "fecha_inicio")? e.target.value as string : dataDB.fecha_inicio?.toString()) || ''
-        //     let _valueFechaFin = ((e.target.name as string === "fecha_fin")? e.target.value as string : dataDB.fecha_final?.toString()) || ''
-
-        //     console.info('son fechas')
-            
-        //     if( ValidationsInstance.checkFormatDateSQL(_valueFechaInicio) && 
-        //         ValidationsInstance.checkFormatDateSQL(_valueFechaFin) && (((Date.parse(_valueFechaFin as string))-(Date.parse(_valueFechaInicio as string)))/1000 >= 0 )){
-        //             dataDB.dias = UtilCustomInstance.dateCalculator(_valueFechaInicio,_valueFechaFin).dias
-
-        //     }else{
-
-        //         dataDB.dias = '0'
-
-        //     }
-
-        // }else{
-        //     console.error('ERROR NO FECHAS')
-        // }
-
-        setDataDB({           
-            ...dataDB,
-            [e.target.name]: e.target.value
-        })
-        
-
-        //dataUpload(e)
-    }
 
     const dataUpload = (e:any) =>{
         setDataDB({
@@ -177,50 +122,35 @@ const useVacacionesIddShare = (pathGoToBack: string) => {
         }
     }
 
-    useEffect(() => {
-        let statusHttpSById = 200
-        id && FetchApiServiceInstance.getSingleData(`/api/share/vacaciones/${id}`, (err) => {
-            const { status } = err.response!
-            statusHttpSById = status
-        }).then( data => {
-            if ( statusHttpSById === 200 && data ) {
-                let _data = data as IVacaciones
-                setDataDB(_data)
-                //Variables de prueba
-                // let _fini = '2024-01-01'
-                // let _fend = ''
-                // let _fend2 = ''
+    const handleChange = (e: any) => {
+        if (e.target.name === 'idsolicitud') {
+            const id = parseInt(e.target.value, 10);
+            setDataDB({
+                ...dataDB,
+                idsolicitud: id,
+                tipo_ausencia_permiso: AUSENCIAS[id]
+            });
+        } else {
+            setDataDB({
+                ...dataDB,
+                [e.target.name]: e.target.value
+            });
+        }
+    }
 
-                // if(_fend.length <= 0){
-                //     _fend = UtilCustomInstance.getDateCurrent().fecha
-                // }
-                // else if(_fend.length != 0){
-                //     _fend = _fend
-                // }
-                
-            }
-        }).catch(err => {
-            console.log('err: ', err)
-        }).finally(()=>{})
-
-        RoleServiceInstance.getAll().then( data => {
-            data && setRoles( data.filter(el => (el.id.toString() !== 'propietario' && el.id.toString() !== 'colaborador')).map(el => ({ key: el.id.toString(), name: `${el.nombre}`})) )
-        }).catch(err => {
-            console.log('err: ', err)
-        }).finally(()=>{})
-    }, [id])
-
+    const handleDelete = () => {
+        router.push(pathGoToBack)
+    }
     return {
         dataDB,
-        handleChange,
-        handleSave,
-        handleCancel: () => handleCancel(`${pathGoToBack}`, router),
-        handleDelete: () => toggleModal(),
         errorValidate,
         msgError,
-        roles,
-        isModalOpen,
-        toggleModal,
+        handleChange,
+        handleSave,
+        dataUpload,
+        handleCancel: () => router.push(pathGoToBack),
+        handleDelete,
+        roles
     }
 }
 

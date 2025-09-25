@@ -19,7 +19,6 @@ const VacacionesEsquema = () =>{
             <div className="h-100 bg-image p-5 pt-2 flex ">
                 <MenuLeftContainer data={menu_rrhh_master} itemSelected={_itemSelected} />
                 <ContentContainer>
-                    
                     {/* <UsersContainer pathAdd={`${_path}/new`} pathEdit={`${_path}`} typeTotalData={_typeTotalData} pathGetData={_pathGetDataApi} /> */}
                     <VacacionesContainer pathAdd={`${_path}`} pathEdit={`${_path}`} typeTotalData={_typeTotalData} pathGetData={_pathGetDataApi}  />
                 </ContentContainer>

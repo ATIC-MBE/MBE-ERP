@@ -119,7 +119,7 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
         
         const queryData = {
             name : 'get-vacaciones-x-id',
-            text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final ,sv.fecha_creacion, sv.estado_solicitud, ap.tipo_ausencia_permiso
+            text: `SELECT sv.id, sv.idusuario, sv.descripcion, usu.nombre_completo, sv.fecha_inicio, sv.fecha_final ,sv.fecha_creacion, sv.estado_solicitud, sv.idsolicitud, ap.tipo_ausencia_permiso
                     FROM ${Constants.tbl_solicitud_rrhh_sql} sv
                     INNER JOIN ${Constants.tbl_usuario_sql} usu on (usu.id = sv.idusuario)
                     LEFT JOIN ${Constants.tbl_ausencia_permiso_sql} ap ON ap.id = sv.idsolicitud
@@ -233,29 +233,29 @@ class VacacionesDataAccess implements IDataAccess<IVacaciones>{
 
             const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
 
-            let queryData = {
-                name : 'update-solicitud-vacaciones',
-                text: `UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
-                        fecha_inicio = $1, 
-                        fecha_final = $2,
-                        fecha_ultimo_cambio = $3,
-                        idrrhh = $4,
-                        descripcion = $5,
-                        estado_solicitud = $6
-                        idsolicitud = $7
-                        WHERE id = $8
-                        RETURNING *`,
-                values : [
-                        data.fecha_inicio,
-                        data.fecha_final,
-                        timeStampCurrent,
-                        this.idUserLogin,
-                        data.descripcion,
-                        data.estado_solicitud,
-                        data.idsolicitud,
-                        id
-                ]
-            }
+        let queryData = {
+        name : 'update-solicitud-vacaciones',
+        text: `UPDATE ${Constants.tbl_solicitud_rrhh_sql} SET
+            fecha_inicio = $1, 
+            fecha_final = $2,
+            fecha_ultimo_cambio = $3,
+            idrrhh = $4,
+            descripcion = $5,
+            estado_solicitud = $6,
+            idsolicitud = $7
+            WHERE id = $8
+            RETURNING *`,
+        values : [
+            data.fecha_inicio,
+            data.fecha_final,
+            timeStampCurrent,
+            this.idUserLogin,
+            data.descripcion,
+            data.estado_solicitud,
+            data.idsolicitud,
+            id
+        ]
+        }
 
             let lData = (await client.query(queryData)).rows as Array <IVacaciones | IErrorResponse>
 

@@ -31,13 +31,14 @@ const useVacacionesIdd = (pathGoToBack: string) => {
     let id = BigInt((router.query.id as string) || 0)
 
     const [dataDB, setDataDB] = useState<IVacaciones>({
-
         nombre_completo : '',
         fecha_inicio : '',
         fecha_final : '',
         descripcion : '',
         fecha_creacion : '',
-        estado_solicitud : 0
+        estado_solicitud : 0,
+        tipo_ausencia_permiso : '',
+        idsolicitud: 0 // <-- Agrega esta línea
     })
 
     const [roles, setRoles] = useState<Array<{ key:string, name: string }>>([])
@@ -61,94 +62,38 @@ const useVacacionesIdd = (pathGoToBack: string) => {
         let meses = 0
         let años = 0
 
-        //Validamos (falta validar tipo fecha) y comprobamos que el data opuesto este añadido y procedemos a realizar el cálculo
-
-        /*if(["fecha_inicio"].includes(e.target.name)){
-           
-            
-            fecha1 = e.target.value
-
-            setDataDB({
-
-           
-                ...dataDB,
-                [e.target.name]: e.target.value
-            })
-            
-            
-        }
-        if(["fecha_fin"].includes(e.target.name)&& fecha1.length > 0) {
-            
-            fecha2 = e.target.value
-
-            
-            
-            setDataDB({
-
-                ...dataDB,
-                [e.target.name]: e.target.value
-
-            })
-            
-        }*/
-
-        // console.log("milisegundos: " + totalMilisegundos + " / horas: " + horas + " / dias: " + dias + " / meses: " + meses + " / años: " + anos )
-        
-        //dateCalculator(e)
-
-        //console.log(fecha1,fecha2)
-        
-        // console.log(UtilCustomInstance.dateCalculator(fecha2,fecha1).dias)
-        // console.log(UtilCustomInstance.dateCalculator(fecha2,fecha1).meses)
-        // console.log(UtilCustomInstance.dateCalculator(fecha2,fecha1).anos)
-
-        // if (["fecha_fin", "fecha_inicio"].includes(e.target.name as string)) {
-        //     let _valueFechaInicio = ((e.target.name as string === "fecha_inicio")? e.target.value as string : dataDB.fecha_inicio?.toString()) || ''
-        //     let _valueFechaFin = ((e.target.name as string === "fecha_fin")? e.target.value as string : dataDB.fecha_final?.toString()) || ''
-
-        //     console.info('son fechas')
-            
-        //     if( ValidationsInstance.checkFormatDateSQL(_valueFechaInicio) && 
-        //         ValidationsInstance.checkFormatDateSQL(_valueFechaFin) && (((Date.parse(_valueFechaFin as string))-(Date.parse(_valueFechaInicio as string)))/1000 >= 0 )){
-        //             dataDB.dias = UtilCustomInstance.dateCalculator(_valueFechaInicio,_valueFechaFin).dias
-
-        //     }else{
-
-        //         dataDB.dias = '0'
-           
-
-        //     }
-
-        // }else{
-        //     console.error('ERROR NO FECHAS')
-        // }
-
         setDataDB({           
             ...dataDB,
             [e.target.name]: e.target.value
         })
-        
-
-        //dataUpload(e)
     }
 
     const dataUpload = (e:any) =>{
         setDataDB({
-
             ...dataDB,
             [e.target.name]: e.target.value
-
         })
     }
+
+    // El input type=date ya entrega yyyy-mm-dd, así que solo devolvemos el valor
+    const formatDateToBackend = (dateStr: string) => {
+        return dateStr || '';
+    };
 
     const handleSave = async() => {
         setErrorValidate(() => false)
         // Validacion previa para el formulario [PENDIENTE]
 
-        // console.log(dataDB)
-        // return
+        // Formatear fechas antes de enviar
+        const dataToSend = {
+            ...dataDB,
+            fecha_inicio: formatDateToBackend(dataDB.fecha_inicio),
+            fecha_final: formatDateToBackend(dataDB.fecha_final),
+        };
+        // Log para ver el objeto que se envía al backend
+        console.log('handleSave dataToSend:', dataToSend);
         
-        const result = await ( id ?  FetchApiServiceInstance.update(`/api/rrhh/vacaciones/${id}`, dataDB as IVacaciones, (err) => {
+        const result = await ( id ?  FetchApiServiceInstance.update(`/api/rrhh/vacaciones/${id}`, dataToSend as IVacaciones, (err) => {
                 // Se ejecuta para status diferente de 200
                 const { status, data } = err.response!
                 // Errores de validación del servidor [API]
@@ -160,7 +105,7 @@ const useVacacionesIdd = (pathGoToBack: string) => {
                 }
             })
             : 
-            FetchApiServiceInstance.create('/api/rrhh/vacaciones', dataDB as IVacaciones, (err) => {
+            FetchApiServiceInstance.create('/api/rrhh/vacaciones', dataToSend as IVacaciones, (err) => {
                 // Se ejecuta para status diferente de 200
                 const { status, data } = err.response!
                 // Errores de validación del servidor [API]
@@ -190,18 +135,6 @@ const useVacacionesIdd = (pathGoToBack: string) => {
                 let _data = data as IVacaciones
                 setDataDB(_data)
                 console.log(_data)
-                //Variables de prueba
-                // let _fini = '2024-01-01'
-                // let _fend = ''
-                // let _fend2 = ''
-
-                // if(_fend.length <= 0){
-                //     _fend = UtilCustomInstance.getDateCurrent().fecha
-                // }
-                // else if(_fend.length != 0){
-                //     _fend = _fend
-                // }
-                
             }
         }).catch(err => {
             console.log('err: ', err)
@@ -213,9 +146,6 @@ const useVacacionesIdd = (pathGoToBack: string) => {
             console.log('err: ', err)
         }).finally(()=>{})
     }, [id])
-
-
- 
 
     return {
         dataDB,

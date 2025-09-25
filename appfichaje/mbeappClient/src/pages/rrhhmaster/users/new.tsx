@@ -39,287 +39,234 @@ const UserNew = () => {
     return (
         <Layout>
             <div className="w-auto min-h-[10rem] grid grid-flow-col">
-            <div className="w-[80rem] w-min-[80rem] min-h-[10rem] pl-[6rem] ">
                 <div className="w-[80rem] w-min-[80rem] min-h-[10rem] pl-[6rem] ">
-                    <div className="bg-[#ffffff72] h-full w-full rounded-2xl shadow-2xl p-5">
-                        { errorValidate ?
-                            <AlertContainer typeAlert={ALERT_DANGER}>
-                                <div dangerouslySetInnerHTML={{ __html: msgError }} />
-                            </AlertContainer>:<></>
-                        }
-                        <input type="hidden" name='id' value={dataDB.id?.toString()} />
-
-                        <div className="min-h-[10rem] grid grid-cols-1n space-x-5">
-                            <div className="h-full grid space-y-2">
-                                <div className=" min-h-[16rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-3">
-                                    <h1 className='text-lg text-[#0077bd] font-bold'>Usuario</h1>
-                                    <div className='grid grid-cols-2 space-x-3'>
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineContacts title='Nombre completo' size={'1.3rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Nombre completo' 
-                                                        type="text" 
-                                                        onChange={handleChange}
-                                                        name='nombre_completo' 
-                                                        value={dataDB.nombre_completo} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                    <div className="w-[80rem] w-min-[80rem] min-h-[10rem] pl-[6rem] ">
+                        <div className="bg-[#ffffff72] h-full w-full rounded-2xl shadow-2xl p-5">
+                            { errorValidate ?
+                                <AlertContainer typeAlert={ALERT_DANGER}>
+                                    <div dangerouslySetInnerHTML={{ __html: msgError }} />
+                                </AlertContainer>:<></>
+                            }
+                            <input type="hidden" name='id' value={dataDB.id?.toString()} />
+                            <div className="min-h-[10rem] grid grid-cols-1n space-x-5">
+                                <div className="h-full grid space-y-2">
+                                    <div className=" min-h-[16rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-3">
+                                        <h1 className='text-lg text-[#0077bd] font-bold'>Usuario</h1>
+                                        <div className='grid grid-cols-2 space-x-3'>
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineContacts title='Nombre completo' size={'1.3rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Nombre completo' 
+                                                    type="text" 
+                                                    onChange={handleChange}
+                                                    name='nombre_completo' 
+                                                    value={dataDB.nombre_completo} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineUser title='Usuario' color='white' size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Usuario' 
+                                                    type="text" 
+                                                    onChange={handleChange}
+                                                    name='username' 
+                                                    value={dataDB.username} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
                                         </div>
-
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineUser title='Usuario' color='white' size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Usuario' 
-                                                        type="text" 
-                                                        onChange={handleChange}
-                                                        name='username' 
-                                                        value={dataDB.username} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                        <div className='grid grid-cols-2 space-x-3' border-style={2} border-Color="red-600">
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <MdEmail title="Correo personal" color={'white'} size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Correo personal' 
+                                                    type="email" 
+                                                    onChange={handleChange}
+                                                    name='correo_personal' 
+                                                    //value={dataDB.email} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineMail title='Correo MCH' size={'1.3rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Correo MCH' 
+                                                    type="text" 
+                                                    onChange={handleChange}
+                                                    name='email' 
+                                                    value={dataDB.email} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
                                         </div>
-                                        
-                                    </div>
-
-                                    <div className='grid grid-cols-2 space-x-3' border-style={2} border-Color="red-600">
-
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <MdEmail title="Correo personal" color={'white'} size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Correo personal' 
-                                                        type="email" 
-                                                        onChange={handleChange}
-                                                        name='correo_personal' 
-                                                        //value={dataDB.email} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                        <div className='grid grid-cols-2 space-x-3'>
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineBars title="Roles" color={'white'} size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <select value={dataDB.idrol?.toString() || 0} onChange={handleChange} name='idrol' className="rounded-r-full p-1 w-[100%] col-span-6">
+                                                    { useMemo(() => drawListOnSelect(roles, 'roles', 'Seleccionar rol'), [roles]) }
+                                                </select>
+                                            </div>
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineLock title='Contraseña' color='white' size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Contraseña' 
+                                                    type="password" 
+                                                    onChange={handleChange}
+                                                    name='password' 
+                                                    value={dataDB.password} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
                                         </div>
-                                   
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineMail title='Correo MCH' size={'1.3rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Correo MCH' 
-                                                        type="text" 
-                                                        onChange={handleChange}
-                                                        name='email' 
-                                                        value={dataDB.email} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                        <div className='grid grid-cols-2 space-x-3'>
+                                            <div className=" w-full flex text-sm">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineCalendar title='Fecha de inicio' size={'1.3rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Fecha de inicio' 
+                                                    type="date" 
+                                                    onChange={handleChange}
+                                                    name='fecha_inicio' 
+                                                    value={dataDB.fecha_inicio} 
+                                                    className=" px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <span>a</span>
+                                                    </span>
+                                                </label> 
+                                                <input  placeholder='Fecha final' 
+                                                    type="date" 
+                                                    onChange={handleChange}
+                                                    name='fecha_fin' 
+                                                    value={dataDB.fecha_fin} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
+                                            <div className=" w-full flex text-sm">
+                                                {/* <label className='px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                        <span className='display-icon-error'>
+                                                            <BsCalendar2Date title="Departamento" color={'white'} size={'1.2rem'} /> <span style={{color: 'white'}}></span><span></span>
+                                                        </span>
+                                                </label> */}
+                                                <div className='w-full flex text-sm'>
+                                                    <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                        <span className = 'display-icon-error'>
+                                                            <AiOutlineBars title = "Jornada" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
+                                                        </span>
+                                                    </label>
+                                                    <select value = {dataDB.jornada?.toString()|| ''} onChange={handleHorario} name = 'jornada' className="rounded-r-full p-1 w-[100%] col-span-6" >
+                                                        <option value = ''>Seleccione una jornada</option>
+                                                        <option value="Jornada Completa" >Jornada Completa</option>
+                                                        <option value="Media Jornada" >Media Jornada</option>
+                                                    </select>
+                                                </div>
+                                                {/* <span className=" px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6 bg-white">{dataDB.dias}</span>
+                                                <label className='px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-red col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <BsCalendar2Month title="Departamento" color={'white'} size={'1.2rem'} /> <span style={{color: 'white'}}></span><span></span>
+                                                    </span>
+                                                </label>
+                                                <span className=" px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6 bg-white">{dataDB.meses}</span>
+                                                <label className='px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-red col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <BsCalendar2Minus title="Departamento" color={'white'} size={'1.2rem'} /> <span style={{color: 'white'}}></span><span></span>
+                                                    </span>
+                                                </label>
+                                                <span className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6 bg-white">{dataDB.years}</span> */}
+                                            </div>
                                         </div>
-
-                                    </div>
-
-                                    <div className='grid grid-cols-2 space-x-3'>
-                                
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineBars title="Roles" color={'white'} size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
+                                        <div className='grid grid-cols-2 space-x-3'>
+                                            <div className=" w-full flex text-sm ">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <span>SS</span> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Alta Seguridad Social' 
+                                                    type="date" 
+                                                    onChange={handleChange}
+                                                    name='alta_ss' 
+                                                    value={dataDB.alta_ss} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
+                                            <div className='w-full flex text-sm'>
+                                                <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                    <span className = 'display-icon-error'>
+                                                        <AiOutlineBars title = "Etapa" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <select value = {dataDB.horario?.toString()|| ''} onChange={handleChange} name = 'horario' className="rounded-r-full p-1 w-[100%] col-span-6" >
+                                                    <option value = ''>Seleccione un Horario</option>
+                                                    <option value='HM' >Horario de Mañanas</option>
+                                                    <option value='HT' >Horario de tardes</option>
+                                                    <option value='HC' >Horario Completo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className='grid grid-cols-2 space-x-3'>
+                                            <div className=" w-full flex text-sm ">
+                                                <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <span>BD</span> <span style={{color: 'red'}} className='field-required'> * </span>
+                                                    </span>
+                                                </label>
+                                                <input  placeholder='Cumpleaños' 
+                                                            type="date" 
+                                                            onChange={handleChange}
+                                                            name='cumpleanyos' 
+                                                            value={dataDB.cumpleanyos} 
+                                                            className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                            </div>
+                                            <div className='w-full flex text-sm'>
+                                            <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                <span className = 'display-icon-error'>
+                                                    <AiOutlineBars title = "Etapa" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
                                                 </span>
                                             </label>
-                                            <select value={dataDB.idrol?.toString() || 0} onChange={handleChange} name='idrol' className="rounded-r-full p-1 w-[100%] col-span-6">
-                                                { useMemo(() => drawListOnSelect(roles, 'roles', 'Seleccionar rol'), [roles]) }
+                                            <select value = {dataDB.etapa?.toString()|| ''} onChange={handleChange} name = 'etapa' className="rounded-r-full p-1 w-[100%] col-span-6" >
+                                                <option value = ''>Seleccione una etapa</option>
+                                                <option value="Prácticas Estudiantes" >Prácticas Estudiantes</option>
+                                                <option value="Período de Prueba" >Período de Prueba</option>
+                                                <option value="Profesional" >Profesional</option>
+                                                <option value="Empleado Categoría 1" >Empleado Categoría 1</option>
+                                                <option value="Empleado Categoría 2" >Empleado Categoría 2</option>
                                             </select>
                                         </div>
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineLock title='Contraseña' color='white' size={'1.2rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Contraseña' 
-                                                        type="password" 
-                                                        onChange={handleChange}
-                                                        name='password' 
-                                                        value={dataDB.password} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
-                                        </div>
-    
-                                        
                                     </div>
-
-                           
-                                    
-                                    <div className='grid grid-cols-2 space-x-3'>
-                                        <div className=" w-full flex text-sm">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineCalendar title='Fecha de inicio' size={'1.3rem'} /> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Fecha de inicio' 
-                                                        type="date" 
-                                                        onChange={handleChange}
-                                                        name='fecha_inicio' 
-                                                        value={dataDB.fecha_inicio} 
-                                                        className=" px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
-                                                 <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <span>a</span>
-                                                </span>
-                                            </label> 
-                                             <input  placeholder='Fecha final' 
-                                                        type="date" 
-                                                        onChange={handleChange}
-                                                        name='fecha_fin' 
-                                                        value={dataDB.fecha_fin} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
-                                        </div>
-                                        
-                                        <div className=" w-full flex text-sm">
-                                        {/* <label className='px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <BsCalendar2Date title="Departamento" color={'white'} size={'1.2rem'} /> <span style={{color: 'white'}}></span><span></span>
-                                                </span>
-                                        </label> */}
-
-                                    <div className='w-full flex text-sm'>
-                                        <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                            <span className = 'display-icon-error'>
-                                                <AiOutlineBars title = "Jornada" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
-                                            </span>
-                                        </label>
-
-                                        <select value = {dataDB.jornada?.toString()|| ''} onChange={handleHorario} name = 'jornada' className="rounded-r-full p-1 w-[100%] col-span-6" >
-                                            <option value = ''>Seleccione una jornada</option>
-                                            <option value="Jornada Completa" >Jornada Completa</option>
-                                            <option value="Media Jornada" >Media Jornada</option>
-
-                                        </select>
-
-                                    </div>
-                                        
-
-                                            {/* <span className=" px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6 bg-white">{dataDB.dias}</span>
-                                            <label className='px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-red col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <BsCalendar2Month title="Departamento" color={'white'} size={'1.2rem'} /> <span style={{color: 'white'}}></span><span></span>
-                                                </span>
-                                            </label>
-                                            <span className=" px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6 bg-white">{dataDB.meses}</span>
-                                            <label className='px-3 py-2 h-auto w-[3rem] bg-[#0077bd] text-red col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <BsCalendar2Minus title="Departamento" color={'white'} size={'1.2rem'} /> <span style={{color: 'white'}}></span><span></span>
-                                                </span>
-                                            </label>
-                                            <span className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6 bg-white">{dataDB.years}</span> */}
-                                        </div>
-                                        
-                                     
-                                        
-                                    </div>
-
-                                    
-                                    <div className='grid grid-cols-2 space-x-3'>
-                                    <div className=" w-full flex text-sm ">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <span>SS</span> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Alta Seguridad Social' 
-                                                        type="date" 
-                                                        onChange={handleChange}
-                                                        name='alta_ss' 
-                                                        value={dataDB.alta_ss} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
-                                        </div>
-
-                                        <div className='w-full flex text-sm'>
-                                        <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                            <span className = 'display-icon-error'>
-                                                <AiOutlineBars title = "Etapa" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
-                                            </span>
-                                        </label>
-
-                                        <select value = {dataDB.horario?.toString()|| ''} onChange={handleChange} name = 'horario' className="rounded-r-full p-1 w-[100%] col-span-6" >
-                                             <option value = ''>Seleccione un Horario</option>
-                                            <option value='HM' >Horario de Mañanas</option>
-                                            <option value='HT' >Horario de tardes</option>
-                                            <option value='HC' >Horario Completo</option>
-                                        </select>
-
-                                    </div>
-
-                                        
-                        
-                                    </div>
-                                    
-                                    <div className='grid grid-cols-2 space-x-3'>
-                                        <div className=" w-full flex text-sm ">
-                                            <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <span>BD</span> <span style={{color: 'red'}} className='field-required'> * </span>
-                                                </span>
-                                            </label>
-                                            <input  placeholder='Cumpleaños' 
-                                                        type="date" 
-                                                        onChange={handleChange}
-                                                        name='cumpleanyos' 
-                                                        value={dataDB.cumpleanyos} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
-                                        </div>
-
-                                        <div className='w-full flex text-sm'>
-                                        <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
-                                            <span className = 'display-icon-error'>
-                                                <AiOutlineBars title = "Etapa" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
-                                            </span>
-                                        </label>
-
-                                        <select value = {dataDB.etapa?.toString()|| ''} onChange={handleChange} name = 'etapa' className="rounded-r-full p-1 w-[100%] col-span-6" >
-                                            <option value = ''>Seleccione una etapa</option>
-                                            <option value="Prácticas Estudiantes" >Prácticas Estudiantes</option>
-                                            <option value="Período de Prueba" >Período de Prueba</option>
-                                            <option value="Profesional" >Profesional</option>
-                                            <option value="Empleado Categoría 1" >Empleado Categoría 1</option>
-                                            <option value="Empleado Categoría 2" >Empleado Categoría 2</option>
-
-                                        </select>
-
-                                    </div>
-                                    </div>
-
-                                   
-
-                                   
-                                    
-                                 
                                     <div className='grid grid-cols-1 space-x-3'>
-                                        
-                                   
                                         <div className='grid grid-cols-1 space-x-3'>
-                                        <div className="w-full flex text-sm">
-                                            <label className='px-4 py-2 h-auto w-[3.0rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                <span className='display-icon-error'>
-                                                    <AiOutlineComment title='Observaciones' size={'1.5rem'} />
-                                                </span>
-                                            </label>
-                                            <textarea placeholder='Ingresar obervaciones adicionales' defaultValue={dataDB.detalles} onChange={handleChange} className="rounded-r-full p-3 w-[100%] outline-blue-800" name="detalles"></textarea>
+                                            <div className="w-full flex text-sm">
+                                                <label className='px-4 py-2 h-auto w-[3.0rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
+                                                    <span className='display-icon-error'>
+                                                        <AiOutlineComment title='Observaciones' size={'1.5rem'} />
+                                                    </span>
+                                                </label>
+                                                <textarea placeholder='Ingresar obervaciones adicionales' defaultValue={dataDB.detalles} onChange={handleChange} className="rounded-r-full p-3 w-[100%] outline-blue-800" name="detalles"></textarea>
+                                            </div>
                                         </div>
                                     </div>
-                                     
-                                        
-                                    </div>
-
                                 </div>
                             </div>
-                            
                         </div>
-                        
                     </div>
-                    
                 </div>
-                     
-                </div>
-                
+            </div>
                 <ButtonContainerVertical>
                     <FloatButton title='Guardar' handler={handleSave} Icon={AiFillSave} />
                     <FloatButton title='Cancelar' handler={handleCancel} Icon={MdCancel} />

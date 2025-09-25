@@ -1,13 +1,13 @@
 import { Layout } from "@/components/Layout";
 import React from "react";
 import MenuLeftContainer from "@/components/MenuLeftContainer";
-import { menu_atic_master} from "@/client/helpers/constants";
+import { menu_atic_master, menu_rrhh_master} from "@/client/helpers/constants";
 import ContentContainer from "@/components/ContentContainer";
 import VacacionesContainerShare from "@/components/share/vacaciones/VacacionesShare";
 
 const VacacionesShare = () =>{
-    const _itemSelected = 'atic_solicitudes'
-    const _path = '/atic/solicitudes'
+    const _itemSelected = 'atic_master_solicitudes'
+    const _path = '/aticmaster/solicitudes'
     const _typeTotalData = 'all_vacaciones'
     const _pathGetDataApi = '/api/share/vacaciones/'
 
@@ -17,7 +17,6 @@ const VacacionesShare = () =>{
             <div className="h-100 bg-image p-5 pt-2 flex ">
                 <MenuLeftContainer data={menu_atic_master} itemSelected={_itemSelected} />
                 <ContentContainer>
-                    
                     <VacacionesContainerShare pathAdd={`${_path}/new`} pathEdit={`${_path}`} typeTotalData={_typeTotalData} pathGetData={_pathGetDataApi}  />
                 </ContentContainer>
             </div>

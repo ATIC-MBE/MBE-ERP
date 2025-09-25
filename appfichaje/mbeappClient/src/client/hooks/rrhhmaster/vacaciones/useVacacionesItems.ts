@@ -23,13 +23,11 @@ const useVacacionesItem = (  item: IVacaciones, pathEdit: string ) => {
         e.stopPropagation();
     }
 
-  
-
     return {
         itemContent,
         goEditData,
         eventMap,
-        
+
     }
 }
 

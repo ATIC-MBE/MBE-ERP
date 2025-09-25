@@ -18,7 +18,7 @@ import useVacacionesIddShare from '@/client/hooks/share/vacaciones/useVacaciones
 
 
 const SolicitudNew = () => {
-    const _pathGoToBack = '/mydmaster/solicitudes'
+    const _pathGoToBack = '/myd/solicitudes'
     const { dataDB, 
             handleChange, 
             handleSave,

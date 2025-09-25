@@ -102,6 +102,7 @@ const useVacaciones = ( typeTotalData: string, pathGetData: string) => {
                 }).then( data => {
                     if ( statusHttpUS === 200 && data ) {
                         let _data = (data as Array<IVacaciones>)
+                        console.log(_data) // <-- aquí
                         setListData([ ..._data ])
                     }
                 }).catch(err => {
@@ -168,10 +169,10 @@ const useVacaciones = ( typeTotalData: string, pathGetData: string) => {
         // window.addEventListener('mousemove', handleMouseMove);
     
         return () => {
-          window.removeEventListener(
-            'mousemove',
-            handleMouseMove
-          )
+            window.removeEventListener(
+                'mousemove',
+                handleMouseMove
+            )
         }
     }, [])
 

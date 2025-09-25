@@ -44,7 +44,9 @@ const UserById = () => {
                             <div className="min-h-[10rem] grid grid-cols-1n space-x-5">
                                 <div className="h-full grid space-y-2">
                                     <div className=" min-h-[16rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-3">
-                                        <h1 className='text-lg text-[#0077bd] font-bold'>Solicitud</h1>
+                                        <div className="flex justify-between items-center">
+                                            <h1 className='text-lg text-[#0077bd] font-bold'>Solicitud</h1>
+                                        </div>
                                         <div className='grid grid-cols-2 space-x-3'>
                                             <div className=" w-full flex text-sm">
                                                 <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
@@ -85,7 +87,7 @@ const UserById = () => {
                                                     </span>
                                                 </label>
                                                 <input  placeholder='Fecha de inicio'
-                                                        disabled 
+                                                        disabled
                                                             type="date" 
                                                             onChange={handleChange}
                                                             name='fecha_inicio' 
@@ -111,11 +113,34 @@ const UserById = () => {
                                                             <AiOutlineBars title = "Solicitud" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
                                                         </span>
                                                     </label>
-                                                    <select value = {dataDB.estado_solicitud} name = 'estado_solicitud' className="rounded-r-full p-1 w-[100%] col-span-6"  onChange={handleChange}>
-                                                        {/* <option value = ''>Seleccione un Estado</option> */}
-                                                        <option value= "0" >En Espera</option>
-                                                        <option value= "1" >Aprobada</option>
-                                                        <option value= "2" >Rechazada</option>
+                                                    <select value={dataDB.estado_solicitud} name='estado_solicitud' className="rounded-r-full p-1 w-[100%] col-span-6" onChange={handleChange}>
+                                                        <option value={0}>En Espera</option>
+                                                        <option value={1}>Aprobada</option>
+                                                        <option value={2}>Rechazada</option>
+                                                    </select>
+                                                    <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
+                                                        <span className = 'display-icon-error' >
+                                                            <AiOutlineBars title = "Tipo de solicitud" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
+                                                        </span>
+                                                    </label>
+                                                    <select value={dataDB.idsolicitud} name='idsolicitud' className="rounded-r-full p-1 w-[100%] col-span-6" onChange={handleChange}>
+                                                        <option value={1}>Enfermedad común</option>
+                                                        <option value={2}>Renovar el DNI, pasaporte o visado</option>
+                                                        <option value={3}>Enfermedad laboral</option>
+                                                        <option value={4}>Citas médicas</option>
+                                                        <option value={5}>Cuidado de menores</option>
+                                                        <option value={6}>Vacaciones</option>
+                                                        <option value={7}>Días de asuntos propios</option>
+                                                        <option value={8}>Hospitalización o intervención quirúrgica de familiar</option>
+                                                        <option value={9}>Permisos formación</option>
+                                                        <option value={10}>Permiso por nacimiento de hijo</option>
+                                                        <option value={11}>Permiso por lactancia</option>
+                                                        <option value={12}>Permiso por fuerza mayor</option>
+                                                        <option value={13}>Permiso matrimonio o pareja de hecho</option>
+                                                        <option value={14}>Permiso por fallecimiento familiar</option>
+                                                        <option value={15}>Permiso por exámenes</option>
+                                                        <option value={16}>Permiso por traslado del domicilio habitual</option>
+                                                        <option value={17}>Permiso para el cumplimiento de un deber público y personal</option>
                                                     </select>
                                                 </div>
                                             </div>

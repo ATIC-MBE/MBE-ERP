@@ -28,7 +28,6 @@ import { GoKey } from "react-icons/go";
 import { AiOutlineClear, AiOutlineContainer, AiOutlineSnippets, AiOutlineTeam } from 'react-icons/ai'
 import { BiDevices } from 'react-icons/bi'
 import { MdMarkunreadMailbox } from 'react-icons/md'
-import ChatBot from './ChatBot'
 import DailyTasksNotification from './DailyTasksNotification'
 
 
@@ -210,10 +209,6 @@ export const Layout = (props: JSONObject) => {
             <div className="p-0 min-h-[85vh] lg:min-h-[85vh] min-h-[90vh] pb-10 c-bg-main-opac bg-cover bg-no-repeat">
                 {props.children}
             </div>
-            
-            {/* ChatBot flotante - aparece en todas las páginas */}
-            <ChatBot />
-
             {/* Notificación de tareas diarias */}
             {showDailyTasks && (
                 <DailyTasksNotification onClose={() => setShowDailyTasks(false)} />
@@ -228,39 +223,39 @@ export const PropBox = (props: JSONObject) => {
     const getIcon = (key: any, codeIcon: string, isActive: any) => {
         switch(codeIcon) {
             case 'birrete':
-                return <BirreteIco color={isActive ? '#0077bd' : 'white'} size={38} />
+                return <BirreteIco color={isActive ? 'white' : 'white'} size={38} />
             case 'user':
-                return <Logos22 color={isActive?'#0077bd':'white'} />
+                return <Logos22 color={isActive?'white':'white'} />
             case 'apartment':
-                return <Logos23 color={isActive?'#0077bd':'white'} />
+                return <Logos23 color={isActive?'white':'white'} />
             case 'office':
-                return <Logos21 color={isActive?'#0077bd':'white'} />
+                return <Logos21 color={isActive?'white':'white'} />
             case 'leads': // pendiente
-                return <WEBMCH_22_22 color={isActive?'#0077bd':'white'} />
+                return <WEBMCH_22_22 color={isActive?'white':'white'} />
             case 'prescriptor':
-                return <AgenteIcon title="Prescriptor" color={isActive?'#0077bd':'white'} className='w-[2.5rem] h-[3.5rem]' />
+                return <AgenteIcon title="Prescriptor" color={isActive?'white':'white'} className='w-[2.5rem] h-[3.5rem]' />
             case 'reports':
-                return <AiOutlineContainer title="Reportes" color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <AiOutlineContainer title="Reportes" color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'limpieza':
-                return <AiOutlineClear title="Limpieza" color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <AiOutlineClear title="Limpieza" color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'perfil':
-                return <AiOutlineTeam title="Perfil" color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <AiOutlineTeam title="Perfil" color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'propietario':
-                return <PropietarioIcon title="Propietario" color={isActive?'#0077bd':'white'} className='w-[2.5rem] h-[3.5rem]' />
+                return <PropietarioIcon title="Propietario" color={isActive?'white':'white'} className='w-[2.5rem] h-[3.5rem]' />
             case 'devices':
-                return <BiDevices title='Dispositivos' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <BiDevices title='Dispositivos' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'fichaje':
-                return <FaCalendarCheck title='Fichajes' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <FaCalendarCheck title='Fichajes' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'vacaciones':
-                return <MdMarkunreadMailbox title='Vacaciones' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <MdMarkunreadMailbox title='Gestión de Solicitudes' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'solicitudes':
-                return <FaMailchimp title='Solicitudes' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <FaMailchimp title='Solicitudes' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'esquema':
-                return <FaBusinessTime title='Esquema' color={isActive?'#738e9eff':'white'} style={{border: 1}} size={35} />
+                return <FaBusinessTime title='Esquema' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'calendario':
-                return <FaCalendarAlt title='Calendario' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return <FaCalendarAlt title='Calendario' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'key':
-                return  <GoKey title='Llaves' color={isActive?'#0077bd':'white'} style={{border: 1}} size={35} />
+                return  <GoKey title='Llaves' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             default:
                 return isActive ?   <CustomHouseIcoBlue key={`ch-${key}`} className='w-[2.4rem]' /> :
                                     <CustomHouseIcoWhite key={`ch-${key}`} className='w-[2.4rem]' />
