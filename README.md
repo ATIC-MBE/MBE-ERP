@@ -79,6 +79,7 @@ MBE-ERP/
 │   │   │   │   │   ├── Constants       **BARRA LATERAL y BOTONES por su ROL**
 │   │   │   ├── components/             **Cada carpeta se accede por su ROL**
 │   │   │   │   ├── AccesoDirectoContainer.tsx   **Iconos de los botones**
+│   │   │   │   ├── Layout.tsx                   **Iconos de la barra lateral**
 │   │   │   ├── data/
 │   │   │   ├── pages/
 │   │   │   │   ├── atic/
