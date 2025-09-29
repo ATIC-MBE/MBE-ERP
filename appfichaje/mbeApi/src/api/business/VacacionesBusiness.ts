@@ -78,16 +78,6 @@ class VacacionesBusiness implements IDataAccess<IVacaciones>{
             } 
             )
         }
-
-        if(new Date(data.fecha_inicio) < new Date(UtilInstance.getDateCurrent().fecha)){
-            error.data?.push( {type : Constants.error_type_custom as ErrorFieldType,
-            code : '',
-            field: 'fecha_inicio',
-            label: 'Fecha Inicio',
-            msg : 'La fecha inicial ha de ser superior a la fecha actual'
-            }
-            )
-        }
     }
 
     async insert(data: IVacaciones): Promise<IVacaciones | IErrorResponse> {
