@@ -67,20 +67,20 @@ class DbConnection {
                   .connect()
                   .then(async () => {
                         await (     this._connection.query(query)
-                                          .then(result => {
-                                                dataDB = [ ...result.rows ]
-                                          })
-                                          .catch(err => {
-                                                let errorCustom: IErrorSql = err as IErrorSql
-                                                let errorDB = UtilInstance.getErrorSql(errorCustom.code, errorCustom.detail)
-                                                // console.log(errorCustom)
-                                                if ( errorDB ) dataDB = [ { error: 'Error sql', data: [ errorDB ] } ]
-                                                else dataDB = [ { error: 'Error sql desconocido!', data: [] } ]
-                                          })
-                                          .then(() => {
-                                                this._connection.end()
-                                          })
-                              )
+                              .then(result => {
+                                    dataDB = [ ...result.rows ]
+                              })
+                              .catch(err => {
+                                    let errorCustom: IErrorSql = err as IErrorSql
+                                    let errorDB = UtilInstance.getErrorSql(errorCustom.code, errorCustom.detail)
+                                    // console.log(errorCustom)
+                                    if ( errorDB ) dataDB = [ { error: 'Error sql', data: [ errorDB ] } ]
+                                    else dataDB = [ { error: 'Error sql desconocido!', data: [] } ]
+                              })
+                              .then(() => {
+                                    this._connection.end()
+                              })
+                        )
                   })
                   .catch(err => {
                         console.log('Connection error!!')

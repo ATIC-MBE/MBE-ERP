@@ -44,16 +44,16 @@ const Login = () => {
                     <div className="c-login-form c-rounded-large c-shadow-large">
                         <div className="card-body flex flex-col items-center text-primary">
                             <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-                                    <img
-                                            src="/img/ico/LogoWhite.svg"
-                                            className='c-logo-login'
-                                            style={{width: 150}}
-                                            alt="Logo"
-                                    />
-                                    <div className="login-claim mb-6">
-                                        <span>Formamos emprendedores,</span>
-                                        <span>Creamos realidades</span>
-                                    </div>
+                                <img
+                                        src="/img/ico/LogoWhite.svg"
+                                        className='c-logo-login'
+                                        style={{width: 150}}
+                                        alt="Logo"
+                                />
+                                <div className="login-claim mb-6">
+                                    <span>Formamos emprendedores,</span>
+                                    <span>Creamos realidades</span>
+                                </div>
                                 <div className="w-full mb-4 px-4">
                                     <input
                                         type="text"

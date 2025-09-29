@@ -1,18 +1,18 @@
 const TemplateEmails = {
-    getHtmlDefault: () => {
-          return `
-                <div>
-                      <img width="50%" style="text-align: center;" class="txt-center" src="https://i.ibb.co/FxhfMzh/Logo-4.png" alt="MyCityHome">
-                      <div>
-                            <b>Bienvenido a MyCityHome!!</b>
-                            <br />
-                            <br />
-                            <p class="msg-no-respo" style="font-size: 12px;">Por favor, no responda a este mensaje, ha sido enviada de forma automática. Gracias</p>
-                      </div>
-                </div>`
-    },
+      getHtmlDefault: () => {
+            return `
+                  <div>
+                        <img width="50%" style="text-align: center;" class="txt-center" src="https://i.ibb.co/FxhfMzh/Logo-4.png" alt="MyCityHome">
+                        <div>
+                              <b>Bienvenido a MyCityHome!!</b>
+                              <br />
+                              <br />
+                              <p class="msg-no-respo" style="font-size: 12px;">Por favor, no responda a este mensaje, ha sido enviada de forma automática. Gracias</p>
+                        </div>
+                  </div>`
+      },
 
-    getHtmlSendSolicituLimitePrecio: (piso: string, precioLimite: string, porcentajepl: string) => {
+      getHtmlSendSolicituLimitePrecio: (piso: string, precioLimite: string, porcentajepl: string) => {
       return `
             <div>
                   <img width="80%" style="text-align: center;" class="txt-center" src="https://i.ibb.co/FxhfMzh/Logo-4.png" alt="MyCityHome">
@@ -31,9 +31,9 @@ const TemplateEmails = {
                   </div>
             </div>
       `
-    },
+      },
 
-    getHtmlResponseSolicituLimitePrecio: (piso: string, precioLimite: string, porcentajepl: string, estado: string, observaciones: string) => {
+      getHtmlResponseSolicituLimitePrecio: (piso: string, precioLimite: string, porcentajepl: string, estado: string, observaciones: string) => {
       return `
             <div>
                   <img width="80%" style="text-align: center;" class="txt-center" src="https://i.ibb.co/FxhfMzh/Logo-4.png" alt="MyCityHome">
@@ -54,7 +54,7 @@ const TemplateEmails = {
                   </div>
             </div>
       `
-    }
+      }
 }
 
 export default TemplateEmails

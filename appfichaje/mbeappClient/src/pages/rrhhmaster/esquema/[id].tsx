@@ -153,12 +153,12 @@ const UserById = () => {
                                                 </span>
                                             </label>
                                             <input  placeholder='Fecha final' 
-                                                        disabled
-                                                        type="date" 
-                                                        onChange={handleChange}
-                                                        name='fecha_fin' 
-                                                        value={dataDB.fecha_fin} 
-                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                                    disabled
+                                                    type="date" 
+                                                    onChange={handleChange}
+                                                    name='fecha_fin' 
+                                                    value={dataDB.fecha_fin} 
+                                                    className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
                                         </div>
                                             <div className=" w-full flex text-sm">
                                                 <div className='w-full flex text-sm'>
@@ -184,11 +184,11 @@ const UserById = () => {
                                                 </label>
                                                 <input  placeholder='Alta Seguridad Social' 
                                                         disabled
-                                                            type="date" 
-                                                            onChange={handleChange}
-                                                            name='alta_ss' 
-                                                            value={dataDB.alta_ss} 
-                                                            className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                                        type="date" 
+                                                        onChange={handleChange}
+                                                        name='alta_ss' 
+                                                        value={dataDB.alta_ss} 
+                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
                                             </div>
                                             <div className='w-full flex text-sm'>
                                                 <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
@@ -213,11 +213,11 @@ const UserById = () => {
                                                 </label>
                                                 <input  placeholder='Cumpleaños' 
                                                         disabled
-                                                            type="date" 
-                                                            onChange={handleChange}
-                                                            name='cumpleanyos' 
-                                                            value={dataDB.cumpleanyos} 
-                                                            className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
+                                                        type="date" 
+                                                        onChange={handleChange}
+                                                        name='cumpleanyos' 
+                                                        value={dataDB.cumpleanyos} 
+                                                        className="rounded-r-full px-1  w-[100%] border border-l-0 border-[#0077bd] col-span-6" />
                                             </div>
                                             <div className='w-full flex text-sm'>
                                                 <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>

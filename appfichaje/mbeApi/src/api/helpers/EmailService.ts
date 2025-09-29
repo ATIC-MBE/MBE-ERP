@@ -12,7 +12,7 @@ class EmailService {
 
     private transporter = nodemailer.createTransport({
         tls: {
-              rejectUnauthorized: false
+            rejectUnauthorized: false
         },
         host: 'smtp.gmail.com',
         port: 587,

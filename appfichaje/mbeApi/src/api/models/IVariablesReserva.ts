@@ -22,7 +22,7 @@ export interface IVariablesReserva extends IModel {
     fecha_creacion?: string
     fecha_ultimo_cambio?: string
     tipo_operacion?: string
-   
+
     // Relaciones
     idusuario_ult_cambio?: BigInt
     idinfopisocom?: BigInt

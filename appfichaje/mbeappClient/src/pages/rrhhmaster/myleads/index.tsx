@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout"
 import React from 'react'
 import MenuLeftContainer from '@/components/MenuLeftContainer'
-import { menu_dn_master, menu_rrhh_master } from '@/client/helpers/constants'
+import { menu_rrhh_master } from '@/client/helpers/constants'
 import ContentContainer from "@/components/ContentContainer"
 import MyLeadsContainer from "@/components/share/myleads/MyLeadsContainer"
 

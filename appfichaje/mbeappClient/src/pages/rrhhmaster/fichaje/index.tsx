@@ -5,7 +5,6 @@ import React, { useContext, useEffect } from 'react'
 import { menu_ade, menu_rrhh_master } from '@/client/helpers/constants'
 import MenuLeftContainer from '@/components/MenuLeftContainer'
 import ContentContainer from '@/components/ContentContainer'
-import ControlLimpiezaContainer from '@/components/ade/controllimpieza/ControlLimpiezaContainer'
 import FichajeContainer from '@/components/rrhh/fichaje/FichajeContainer'
 
 const FichajeRRHH = () => {

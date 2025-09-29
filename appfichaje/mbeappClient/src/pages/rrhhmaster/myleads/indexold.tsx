@@ -2,7 +2,7 @@ import { Layout } from "@/components/Layout"
 import TableContainer from "@/components/TableContainer"
 import React from 'react'
 import MenuLeftContainer from '@/components/MenuLeftContainer'
-import { menu_dn_master, menu_rrhh_master } from '@/client/helpers/constants'
+import { menu_rrhh_master } from '@/client/helpers/constants'
 import ContentContainer from "@/components/ContentContainer"
 // import useMyLead from "@/client/hooks/dnmaster/myleads/useMyLead"
 import OptionsOnSelect from "@/components/OptionsOnSelect"
