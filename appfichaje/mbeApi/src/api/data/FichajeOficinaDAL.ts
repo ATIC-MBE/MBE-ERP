@@ -47,8 +47,10 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                     fo.observacion,
                     COALESCE(to_char(fo.entrada, 'YYYY-MM-DD HH24:MI'), '') as entrada,
                     COALESCE(to_char(fo.salida, 'YYYY-MM-DD HH24:MI'), '') as salida,
+                    COALESCE(to_char(fo.first_login, 'YYYY-MM-DD HH24:MI'), '') as first_login,
                     COALESCE(to_char(fo.entrada, 'HH24:MI'), '') as h_entrada,
-                    COALESCE(to_char(fo.salida, 'HH24:MI'), '') as h_salida
+                    COALESCE(to_char(fo.salida, 'HH24:MI'), '') as h_salida,
+                    COALESCE(to_char(fo.first_login, 'HH24:MI'), '') as h_first_login
                     FROM ${Constants.tbl_fichaje_oficina_sql} fo
                     WHERE fo.estado = 1 AND
                     fo.id = $1`,
@@ -259,6 +261,101 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
     return (responseD[0]) as IFichajeOficina | IErrorResponse;
 }
 
+    async ensureDailyFirstLogin(params: {
+        usuario: string
+        idusuario: number
+        firstLoginAt?: string
+        ip?: string | null
+    }): Promise<IFichajeOficina | IErrorResponse | undefined> {
+        const firstLoginTimestamp = params.firstLoginAt || UtilInstance.getDateCurrentForSQL()
+        const response = await this.client.execQueryPool(async (client): Promise<Array<IModel | IErrorResponse>> => {
+            const { fecha: dateCurrent } = UtilInstance.getDateCurrent()
+            const timeStampCurrent = UtilInstance.getDateCurrentForSQL()
+
+            console.log('[ensureDailyFirstLogin] params ->', {
+                usuario: params.usuario,
+                idusuario: params.idusuario,
+                firstLoginAt: firstLoginTimestamp,
+                dateCurrent
+            })
+
+            const queryGetExisting = {
+                name: 'get-fichaje-daily-first-login',
+                text: `SELECT id, first_login
+                        FROM ${Constants.tbl_fichaje_oficina_sql}
+                        WHERE idusuario = $1 AND fecha = $2
+                        LIMIT 1`,
+                values: [params.idusuario, dateCurrent]
+            }
+
+            const existing = (await client.query(queryGetExisting)).rows as Array<IFichajeOficina>
+
+            console.log('[ensureDailyFirstLogin] existing ->', existing)
+            if (existing.length > 0) {
+                const current = existing[0]
+                if (!current.first_login) {
+                    const queryUpdate = {
+                        name: 'update-fichaje-first-login',
+                        text: `UPDATE ${Constants.tbl_fichaje_oficina_sql} SET
+                                first_login = $1,
+                                fecha_ultimo_cambio = $2,
+                                idusuario_ultimo_cambio = $3
+                                WHERE id = $4 RETURNING *`,
+                        values: [firstLoginTimestamp, timeStampCurrent, this.idUserLogin, current.id]
+                    }
+                    return (await client.query(queryUpdate)).rows as Array<IFichajeOficina | IErrorResponse>
+                }
+
+                console.log('[ensureDailyFirstLogin] first_login already present, skipping update')
+                return existing as unknown as Array<IFichajeOficina | IErrorResponse>
+            }
+
+            const queryGetUserRrhh = {
+                name: 'get-user-rrhh-first-login',
+                text: ` SELECT urh.id, urh.jornada, urh.horario
+                        FROM ${Constants.tbl_usuario_rrhh_sql} urh
+                        WHERE urh.id = $1
+                        LIMIT 1`,
+                values: [params.idusuario]
+            }
+            const userRrhh = (await client.query(queryGetUserRrhh)).rows as Array<IUser>
+            const jornada = userRrhh.length !== 0 ? userRrhh[0].jornada || 'NA' : 'NA'
+            const horario = userRrhh.length !== 0 ? userRrhh[0].horario || 'NA' : 'NA'
+
+            console.log('[ensureDailyFirstLogin] inserting new fichaje row for first login')
+            const queryInsert = {
+                name: 'insert-fichaje-first-login',
+                text: `INSERT INTO ${Constants.tbl_fichaje_oficina_sql}(
+                        usuario, fecha, entrada, salida, first_login, token, ip, tipo_ejecucion,
+                        observacion, fecha_ultimo_cambio, idusuario, idusuario_ultimo_cambio,
+                        jornada, horario
+                        )
+                        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
+                values: [
+                    params.usuario,
+                    dateCurrent,
+                    null,
+                    null,
+                    firstLoginTimestamp,
+                    UtilInstance.getUUID(),
+                    params.ip || null,
+                    'auto-first-login',
+                    'Registro automático de primer login',
+                    timeStampCurrent,
+                    params.idusuario,
+                    this.idUserLogin,
+                    jornada,
+                    horario
+                ]
+            }
+
+            return (await client.query(queryInsert)).rows as Array<IFichajeOficina | IErrorResponse>
+        })
+
+        console.log('[ensureDailyFirstLogin] response ->', response)
+        return response[0] as IFichajeOficina | IErrorResponse | undefined
+    }
+
     private async sendLateArrivalNotification(usuario: string, entryTime: Date): Promise<void> {
         try {
             // Verificar si la tabla tbl_notificaciones existe
@@ -338,8 +435,10 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
                     REPLACE(REPLACE(REPLACE(REPLACE(to_char(fo.fecha, 'DD/mon/YYYY'), 'dec', 'dic'), 'aug', 'ago'),'jan','ene'),'apr','abr') AS fecha_str,
                     COALESCE(to_char(fo.entrada, 'YYYY-MM-DD HH24:MI'), '') as entrada,
                     COALESCE(to_char(fo.salida, 'YYYY-MM-DD HH24:MI'), '') as salida,
+                    COALESCE(to_char(fo.first_login, 'YYYY-MM-DD HH24:MI'), '') as first_login,
                     COALESCE(to_char(fo.entrada, 'HH24:MI'), '') as h_entrada,
-                    COALESCE(to_char(fo.salida, 'HH24:MI'), '') as h_salida
+                    COALESCE(to_char(fo.salida, 'HH24:MI'), '') as h_salida,
+                    COALESCE(to_char(fo.first_login, 'HH24:MI'), '') as h_first_login
                     FROM tbl_fichaje_oficina fo
                     INNER JOIN tbl_usuario usu ON (usu.id = fo.idusuario)
                     INNER JOIN tbl_usuario_x_rol uxr ON (uxr.idusuario = usu.id AND uxr.ismain = true)

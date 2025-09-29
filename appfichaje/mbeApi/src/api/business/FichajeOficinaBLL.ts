@@ -65,6 +65,24 @@ class FichajeOficinaBLL implements IDataAccess<IFichajeOficina> {
         return this.dataAcces.delete(id)
     }
 
+    async ensureDailyFirstLogin(data: {
+        idusuario: number
+        usuario: string
+        firstLoginAt?: string
+        ip?: string | null
+    }): Promise<IFichajeOficina | IErrorResponse | undefined> {
+        if (!data.idusuario || !data.usuario) {
+            return undefined
+        }
+
+        return this.dataAcces.ensureDailyFirstLogin({
+            idusuario: data.idusuario,
+            usuario: data.usuario,
+            firstLoginAt: data.firstLoginAt,
+            ip: data.ip ?? null
+        })
+    }
+
     private validate(data: IFichajeOficina, error: IErrorResponse) {
         // personal limpieza [user] (*)
         if (  !(ValidationsInstance.checkNumberMayorCero(parseInt(data.idusuario.toString())) ) ) {

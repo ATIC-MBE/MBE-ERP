@@ -43,7 +43,7 @@ const FichajeItem = ({ item, index } :
 
     return (
         <div className={`w-full h-auto`}>
-            <div className={`data-table-row-nopointer grid grid-cols-7 p-1 pl-2 ${rowBgColor}`}>
+            <div className={`data-table-row-nopointer grid grid-cols-8 p-1 pl-2 ${rowBgColor}`}>
                 {/* Departamento en mayúsculas */}
                 <div>
                     <span className='flex'>
@@ -66,6 +66,12 @@ const FichajeItem = ({ item, index } :
                 <div>
                     <span className='flex'>
                         {itemContent.h_entrada}
+                    </span>
+                </div>
+                {/* Primer login */}
+                <div>
+                    <span className={`flex${!itemContent.h_first_login ? ' text-red-600 font-bold' : ''}`}>
+                        {itemContent.h_first_login || '—'}
                     </span>
                 </div>
                 {/* Salida, rojo si vacío */}

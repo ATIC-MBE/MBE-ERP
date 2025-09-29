@@ -73,11 +73,12 @@ const FichajeContainer = () => {
 
             <div>
                 <div className={`w-full h-auto table-header`}>
-                    <div className="grid grid-cols-7 p-2 pl-2 text-bold text-white bg-[#005360]">
+                    <div className="grid grid-cols-8 p-2 pl-2 text-bold text-white bg-[#005360]">
                         <div className=""><span className='flex'>Departamento</span></div>
                         <div className="grid col-span-2"><span className=''>Persona</span></div>
                         <div className=""><span className='flex'>Fecha</span></div>
                         <div className=""><span className='flex'>Entrada</span></div>
+                        <div className=""><span className='flex'>Primer login</span></div>
                         <div className=""><span className='flex'>Salida</span></div>
                         <div className=""><span className='grid text-right'>&nbsp;</span></div>
                     </div>

@@ -139,9 +139,9 @@ class Filter {
      * @param data 
      */
      setFichaje(data: JSONObject): void {
-        localStorage.setItem("search_all_fo", data.search_all || '')
-        localStorage.setItem("m_start_fo", data.m_start || '')
-        localStorage.setItem("m_end_fo", data.m_end || '')
+          localStorage.setItem("search_all_fo", data.search_all || '')
+          localStorage.setItem("m_start_fo", UtilCustomInstance.normalizeDateInput(data.m_start as string) || '')
+          localStorage.setItem("m_end_fo", UtilCustomInstance.normalizeDateInput(data.m_end as string) || '')
         
     }
 
@@ -150,10 +150,14 @@ class Filter {
      * @returns 
      */
         getFichaje(): JSONObject {
+            const storedStart = localStorage.getItem('m_start_fo')
+            const storedEnd = localStorage.getItem('m_end_fo')
+            const normalizedStart = UtilCustomInstance.normalizeDateInput(storedStart)
+            const normalizedEnd = UtilCustomInstance.normalizeDateInput(storedEnd)
             return {
                 search_all: localStorage.getItem('search_all_fo') === undefined || localStorage.getItem('search_all_fo') === null ? '' : localStorage.getItem('search_all_fo'),
-                m_start: localStorage.getItem('m_start_fo') === undefined || localStorage.getItem('m_start_fo') === null ? UtilCustomInstance.getDateCurrentString() : localStorage.getItem('m_start_fo'),
-                m_end: localStorage.getItem('m_end_fo') === undefined || localStorage.getItem('m_end_fo') === null ? UtilCustomInstance.getDateCurrentString() : localStorage.getItem('m_end_fo'),
+                m_start: normalizedStart || UtilCustomInstance.getDateCurrentISO(),
+                m_end: normalizedEnd || UtilCustomInstance.getDateCurrentISO(),
             
             }
         }

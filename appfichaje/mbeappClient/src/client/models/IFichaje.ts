@@ -6,6 +6,7 @@ export interface IFichaje extends IModel {
     fecha?: string
     entrada?: string
     salida?: string
+    first_login?: string
     idusuario?: number
     observacion?: string
 
@@ -15,6 +16,7 @@ export interface IFichaje extends IModel {
     
     h_entrada?: string
     h_salida?: string
+    h_first_login?: string
 
     fecha_str?: string
     

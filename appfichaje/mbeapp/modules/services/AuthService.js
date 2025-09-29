@@ -3,7 +3,7 @@ const ApiConfigurationInstance = require('./ApiConfiguration');
 const UtilCustomInstance = require('../js/UtilCustom');
 
 class AuthService {
-    async login(user, password) {
+    async login(user, password, metadata = {}) {
         let endPointApi = `${ApiConfigurationInstance.pathApi}/api/auth/login`
         if ( !endPointApi ) return []
         let dataResult = undefined
@@ -11,7 +11,7 @@ class AuthService {
             const res = await fetch( endPointApi,{
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify({user, password})
+                body: JSON.stringify({user, password, metadata})
             })
 
             if (res.status === 200) dataResult = await res.json()

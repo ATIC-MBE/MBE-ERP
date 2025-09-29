@@ -27,6 +27,41 @@ class UtilCustom {
             }
       }
 
+      getDateCurrentISO(dCurrent = new Date()): string {
+            try {
+                  const date = new Date(dCurrent);
+                  if (isNaN(date.getTime())) return '';
+                  const year = date.getFullYear();
+                  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+                  const day = `${date.getDate()}`.padStart(2, '0');
+                  return `${year}-${month}-${day}`;
+            } catch {
+                  return '';
+            }
+      }
+
+      normalizeDateInput(value?: string | null): string {
+            const raw = (value || '').trim();
+            if (!raw) return '';
+
+            if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+
+            const match = raw.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+            if (match) {
+                  const day = match[1].padStart(2, '0');
+                  const month = match[2].padStart(2, '0');
+                  const year = match[3];
+                  return `${year}-${month}-${day}`;
+            }
+
+            const parsed = new Date(raw);
+            if (!isNaN(parsed.getTime())) {
+                  return this.getDateCurrentISO(parsed);
+            }
+
+            return '';
+      }
+
       /**
        * Calcula la diferencia entre dos fechas (YYYY-MM-DD) y retorna { dias, meses, anos }
        */

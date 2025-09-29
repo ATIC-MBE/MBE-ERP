@@ -10,11 +10,37 @@ export default class UserService {
     /*--------------- General ---------------*/
 
     // Get token by login in
-    async authUser(credentials: { user: string, password: string }, handleError: RequestErrorHandler): Promise<profile> {
-        return (
-            await postRequest(`${AUTH_LOGIN_PATH}`, { ...credentials }, {}, handleError)
-            // await postRequest(`${process.env.pathApiRestClient}${AUTH_LOGIN_PATH}`, { ...credentials }, {}, handleError)
-        )?.data.data as profile
+    async authUser(
+        credentials: { user: string, password: string },
+        handleError: RequestErrorHandler,
+        metadata?: JSONObject
+    ): Promise<profile> {
+        console.groupCollapsed('[UserService.authUser] Sending login request')
+        console.info('Endpoint:', AUTH_LOGIN_PATH)
+        console.info('User:', credentials.user)
+        console.debug('Metadata payload:', metadata)
+
+        const response = await postRequest(
+            `${AUTH_LOGIN_PATH}`,
+            metadata ? { ...credentials, metadata } : { ...credentials },
+            {},
+            (error) => {
+                console.error('[UserService.authUser] Request failed', error)
+                handleError(error)
+            }
+        )
+
+        if (!response) {
+            console.warn('[UserService.authUser] No response received')
+            console.groupEnd()
+            return undefined as unknown as profile
+        }
+
+        console.info('[UserService.authUser] Response status:', response.status)
+        console.debug('[UserService.authUser] Response.data:', response.data)
+        console.groupEnd()
+
+        return response.data?.data as profile
     }
 
     async resetPasswordUser (path: string, handleError?: RequestErrorHandler): Promise<boolean> {

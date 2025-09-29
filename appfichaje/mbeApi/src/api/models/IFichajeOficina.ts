@@ -7,6 +7,7 @@ export interface IFichajeOficina extends IModel {
     fecha?: string
     entrada?: string
     salida?: string
+    first_login?: string
     token: string
     ip?: string
     tipo_ejecucion: string
@@ -26,6 +27,7 @@ export interface IFichajeOficina extends IModel {
     full_name?: ''
     h_entrada?: ''
     h_salida?: ''
+    h_first_login?: ''
 
     caballo?: ''
     caballogh?: ''
