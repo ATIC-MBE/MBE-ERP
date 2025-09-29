@@ -11,6 +11,8 @@
             
             { "method": "POST", "path": "/api/admin/users", "filterstatus": 1 },
             { "method": "GET", "path": "/api/admin/users", "filterstatus": -1 },
+            { "method": "GET", "path": "/api/admin/users/first-login", "filterstatus": -1 },
+            { "method": "GET", "path": "/api/admin/users/first-login-daily", "filterstatus": -1 },
             { "method": "GET", "path": "/api/admin/users/[id]", "filterstatus": -1 },
             { "method": "PATCH", "path": "/api/admin/users/[id]", "filterstatus": -1 },
             { "method": "DELETE", "path": "/api/admin/users/[id]", "filterstatus": -1 },
@@ -44,6 +46,8 @@
 
             { "method": "GET", "path": "/api/admin/users", "filterstatus": -1 },
             { "method": "POST", "path": "/api/admin/users", "filterstatus": 1 },
+            { "method": "GET", "path": "/api/admin/users/first-login", "filterstatus": -1 },
+            { "method": "GET", "path": "/api/admin/users/first-login-daily", "filterstatus": -1 },
             { "method": "GET", "path": "/api/admin/users/[id]", "filterstatus": -1 },
             { "method": "PATCH", "path": "/api/admin/users/[id]", "filterstatus": -1 },
             { "method": "DELETE", "path": "/api/admin/users/[id]", "filterstatus": -1 },

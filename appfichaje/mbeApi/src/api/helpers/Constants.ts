@@ -146,6 +146,7 @@ const Constants = {
 
       // Tabla fichaje Oficina
       tbl_fichaje_oficina_sql: 'tbl_fichaje_oficina',
+      tbl_usuario_first_login_sql: 'tbl_usuario_first_login',
 
       // country
       country_espania: 'España',

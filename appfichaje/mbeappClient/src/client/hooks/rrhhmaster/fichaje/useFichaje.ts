@@ -29,7 +29,7 @@ const useFichaje = () => {
 
     const [filterFields, setFilterFields] = useState<filterSearchAll>({
         search_all: '',
-    m_start: UtilCustomInstance.getDateCurrentString(),
+	m_start: UtilCustomInstance.getDateCurrentISO(),
         m_end: '',
         limit: limit,
         offset: 0
@@ -60,7 +60,7 @@ const useFichaje = () => {
             statusHttpUS = status
         }).then( data => {
             if ( statusHttpUS === 200 && data ) {
-                let _data = data as IData
+                let _data = data as unknown as IData
                 setTotal(_data.total_data)
                 _total = _data.total_data
                 if (_total === 0) return
@@ -140,7 +140,13 @@ const useFichaje = () => {
 
     useEffect(() => {
         // setFilterFields(FilterInstance.getPisoComercial() as filterSearchAll)
-        setFilterFields((current) => ({...current, ...FilterInstance.getFichaje()}))
+        const savedFilters = FilterInstance.getFichaje()
+        setFilterFields((current) => ({
+            ...current,
+            search_all: (savedFilters.search_all as string) || '',
+            m_start: UtilCustomInstance.normalizeDateInput(savedFilters.m_start as string) || UtilCustomInstance.getDateCurrentISO(),
+            m_end: UtilCustomInstance.normalizeDateInput(savedFilters.m_end as string)
+        }))
         setFlagFilter((flagFilter) => { return flagFilter + 1 })
     }, [])
 

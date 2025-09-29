@@ -36,6 +36,7 @@ const TypeCodeServiceInstance = require("./modules/services/TypeCodeService")
 const EWeLinkServiceInstance = require("./modules/services/EWeLinkService")
 const AuthServiceInstance = require("./modules/services/AuthService")
 const ApiConfigurationInstance = require("./modules/services/ApiConfiguration")
+const FirstLoginServiceInstance = require("./modules/services/FirstLoginService")
 const { Constants, RouteApp, getDataGitHub,
     encryptData, getDevicesServer, getLabelAction,
     formatDateSQLToScreen,
@@ -783,6 +784,151 @@ app.get("/devicesmanagement", auth, checkRole([ "admin",
     }
 })
 
+app.get("/admin/first-login", auth, checkRole(["admin", "superadmin"]), async (req, res) => {
+    const scripts = []
+    let registros = []
+    let warning = ''
+
+    try {
+        const apiResponse = await FirstLoginServiceInstance.getAll(req.session.token)
+        if (apiResponse?.data) {
+            registros = apiResponse.data.map((item, index) => {
+                let fecha = 'N/A'
+                try {
+                    fecha = item.first_login_at ? formatDateSQLToScreen(item.first_login_at) : 'N/A'
+                } catch (err) {}
+
+                let userAgentShort = item.first_login_user_agent || 'N/A'
+                if (userAgentShort.length > 80) userAgentShort = `${userAgentShort.substring(0, 77)}...`
+
+                let metadataJson = '{}'
+                try {
+                    metadataJson = JSON.stringify(item.metadata || {}, null, 2)
+                } catch (err) {}
+
+                return {
+                    index: index + 1,
+                    username: item.username || 'N/A',
+                    nombre_completo: item.nombre_completo || 'N/A',
+                    email: item.email || 'N/A',
+                    department: item.department || 'N/A',
+                    estado: item.estado,
+                    first_login_at: fecha,
+                    ip: item.first_login_ip || 'N/A',
+                    user_agent: userAgentShort,
+                    metadata_json: metadataJson
+                }
+            })
+        } else if (apiResponse?.error) {
+            warning = `<div class="alert alert-danger" role="alert">${apiResponse.error}</div>`
+        }
+    } catch (err) {
+        console.log('Error obteniendo datos de primer acceso', err)
+        warning = `<div class="alert alert-danger" role="alert">Error al obtener los datos, inténtelo más tarde.</div>`
+    }
+
+    res.render('firstLoginReport', {
+        title: 'Primer acceso de usuarios',
+        scripts,
+        warning,
+        registros,
+        existRegistros: registros.length > 0
+    })
+})
+
+app.get("/admin/first-login/daily", auth, checkRole(["admin", "superadmin"]), async (req, res) => {
+    const scripts = []
+    let registros = []
+    let warning = ''
+    const rawDate = typeof req.query.date === 'string' ? req.query.date : undefined
+    let appliedDate = rawDate || ''
+    let appliedDateHuman = ''
+    let total = 0
+
+    const resolveDate = (value) => {
+        const isoPattern = /^\d{4}-\d{2}-\d{2}$/
+        if (value && isoPattern.test(value)) {
+            const parsed = new Date(`${value}T00:00:00Z`)
+            if (!Number.isNaN(parsed.getTime())) return value
+        }
+        return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid' }).format(new Date())
+    }
+
+    const todayIso = resolveDate()
+
+    try {
+        const apiResponse = await FirstLoginServiceInstance.getDaily(req.session.token, rawDate)
+        if (apiResponse?.data) {
+            registros = apiResponse.data.map((item, index) => {
+                let fechaCompleta = 'N/A'
+                let fechaCorta = 'N/A'
+                let hora = '---'
+
+                try {
+                    if (item.first_login_at) {
+                        fechaCompleta = formatDateSQLToScreen(item.first_login_at)
+                        const [fechaLocal, horaLocal] = fechaCompleta.split(' ')
+                        fechaCorta = fechaLocal || 'N/A'
+                        hora = horaLocal || '---'
+                    }
+                } catch (err) {}
+
+                let userAgentShort = item.first_login_user_agent || 'N/A'
+                if (userAgentShort.length > 80) userAgentShort = `${userAgentShort.substring(0, 77)}...`
+
+                let metadataJson = '{}'
+                try {
+                    metadataJson = JSON.stringify(item.metadata || {}, null, 2)
+                } catch (err) {}
+
+                return {
+                    index: index + 1,
+                    username: item.username || 'N/A',
+                    nombre_completo: item.nombre_completo || 'N/A',
+                    email: item.email || 'N/A',
+                    department: item.department || 'N/A',
+                    estado: item.estado,
+                    fechaCompleta,
+                    fechaCorta,
+                    hora,
+                    ip: item.first_login_ip || 'N/A',
+                    user_agent: userAgentShort,
+                    metadata_json: metadataJson
+                }
+            })
+
+            appliedDate = apiResponse.appliedDate || resolveDate(rawDate)
+            total = apiResponse.total || registros.length
+        } else if (apiResponse?.error) {
+            warning = `<div class="alert alert-danger" role="alert">${apiResponse.error}</div>`
+            appliedDate = resolveDate(rawDate)
+        }
+    } catch (err) {
+        console.log('Error obteniendo verificación diaria de primer acceso', err)
+        warning = `<div class="alert alert-danger" role="alert">Error al obtener los datos diarios, inténtelo más tarde.</div>`
+        appliedDate = resolveDate(rawDate)
+    }
+
+    if (!appliedDate) appliedDate = todayIso
+    try {
+        appliedDateHuman = formatDateSQLToScreen(`${appliedDate} 00:00:00`).split(' ')[0]
+    } catch (err) {
+        appliedDateHuman = appliedDate
+    }
+
+    res.render('firstLoginDailyReport', {
+        title: 'Verificación diaria de primeros accesos',
+        scripts,
+        warning,
+        registros,
+        existRegistros: registros.length > 0,
+        appliedDate,
+        appliedDateHuman,
+        total,
+        todayIso
+    })
+})
+
 /**
  * EndPoint: carga el detailsflat
  * ["Root", "Admin", "Propietario"]
@@ -1312,9 +1458,21 @@ app.get("/fichar", auth, checkRole([    "admin",
  * Captura los datos de la persona que hace login
  */
 app.post("/login", async (req, res) => {
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-    console.log(`ip -> ${ip}`)
-    let _userLogin = await checkUser(req.body.name || '', req.body.password || '')
+    const forwardedFor = req.headers['x-forwarded-for']
+    const clientIp = Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor || req.socket.remoteAddress
+    const userAgent = req.get('User-Agent') || ''
+    const originHost = req.get('host') || ''
+    const metadataLogin = {
+        ip: clientIp,
+        userAgent,
+        source: 'mbeapp-web',
+        endpoint: req.originalUrl,
+        host: originHost,
+        forwardedFor: forwardedFor || null
+    }
+
+    console.log(`ip -> ${clientIp}`)
+    let _userLogin = await checkUser(req.body.name || '', req.body.password || '', metadataLogin)
     if ( _userLogin ) {   
             req.session.token = _userLogin.token
             req.session.name = _userLogin.data.username
@@ -1360,10 +1518,10 @@ function checkUserOld(username, pass) {
     return out;
 }
 
-async function checkUser(user, password) {
+async function checkUser(user, password, metadata = {}) {
     let _result = undefined
     try {
-        _result = await AuthServiceInstance.login(user, password)
+        _result = await AuthServiceInstance.login(user, password, metadata)
     }catch(err) {
         console.log('Error al consumir API')
     }

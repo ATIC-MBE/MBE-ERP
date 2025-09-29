@@ -1,5 +1,3 @@
-declare module 'react-reveal/Fade'
-
 // Daily tasks notification system
 declare global {
   interface Window {

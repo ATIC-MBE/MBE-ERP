@@ -96,6 +96,11 @@ The system is organized into main modules with RESTful endpoints:
 - `PUT /api/share/users/:id` - Update user
 - `DELETE /api/share/users/:id` - Deactivate user
 
+**Admin Audit: `/api/admin/users/first-login`**
+
+- `GET /api/admin/users/first-login` - List the first access metadata registered per user (admin/superadmin only)
+- `GET /api/admin/users/first-login-daily?date=YYYY-MM-DD` - Retrieve first login records for a specific day (defaults to current day)
+
 **Roles: `/api/share/roles`**
 
 - `GET /api/share/roles` - List roles
