@@ -10,7 +10,7 @@ class TypeCodeService {
                   const res = await fetch(endPointApi)
                   if (res.status === 200) dataResult = await res.json()
             } catch(err) {
-                  console.log('Error http on API')
+                  console.log('Error http en la API')
             }
             
             return dataResult

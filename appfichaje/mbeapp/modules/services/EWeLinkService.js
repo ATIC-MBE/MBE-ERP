@@ -11,7 +11,7 @@ class EWeLinkService {
                   const res = await fetch(endPointApi)
                   if (res.status === 200) dataResult = await res.json()
             } catch(err) {
-                  console.log('Error https on API')
+                  console.log('Error https en la API')
             }
             
             return dataResult
@@ -29,7 +29,7 @@ class EWeLinkService {
                   })
                   if (res.status === 200) dataResult = await res.json()
             } catch(err) {
-                  console.log('Error https on API')
+                  console.log('Error https en la API')
             }
             
             return dataResult
