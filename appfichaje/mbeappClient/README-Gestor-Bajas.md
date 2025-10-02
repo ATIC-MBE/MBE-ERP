@@ -20,6 +20,14 @@ Programa para la automatización y seguimiento de los procesos de baja de los em
 
     * Email: Cambio de contraseñas en correos de RRHH distintos a RRHH2.
     * LinkedIn: Cambio de contraseña o ceder admin.
+    * Lider departamento:
+          * Cambiar contraseña de MYD2 o MYD1 (El que haya usado)
+          * Quitar acceso de administrador a META
+          * Quitar acceso de administrador a Linkedin 
+          * Quitar Acceso a Capcut 
+          * Sacar de los Grupos de WPP (TODOS) 
+          * Cambiar el Código de la Puerta (TODOS)
+          * Hacerle Entrevista de Salida (TODOS)
 
 3. ATIC
 
@@ -29,9 +37,24 @@ Programa para la automatización y seguimiento de los procesos de baja de los em
         - hommy
     * GITHUB: Sacarle del equipo de trabajo en la cuenta de github de ATIC.
     * Email: Cambiar la contraseña del correo ATIC1.
+    * Cambiar contraseña de MYD2 o MYD1 (El que haya usado)
+    * Quitar acceso de administrador a META
+    * Quitar acceso de administrador a Linkedin 
+    * Quitar Acceso a Capcut 
+    * Sacar de los Grupos de WPP (TODOS) 
+    * Cambiar el Código de la Puerta (TODOS)
+    * Hacerle Entrevista de Salida (TODOS)
   
 4. MYD
    
      * Email: Cambiar la contraseña del correo MYD1.
+     * Lider departamento:
+          * Cambiar contraseña de MYD2 o MYD1 (El que haya usado)
+          * Quitar acceso de administrador a META
+          * Quitar acceso de administrador a Linkedin 
+          * Quitar Acceso a Capcut 
+          * Sacar de los Grupos de WPP (TODOS) 
+          * Cambiar el Código de la Puerta (TODOS)
+          * Hacerle Entrevista de Salida (TODOS)
 
    
