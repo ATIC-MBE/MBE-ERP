@@ -36,7 +36,7 @@ const LeadId = () => {
                 <div className="min-h-[35rem] grid grid-cols-2 space-x-5">
                     <div className="h-full grid space-y-5">
                         <div className=" min-h-[18rem] bg-[#5da7d5c0] rounded-2xl p-5 space-y-4">
-                            <h1 className='text-lg text-[#0077bd] font-bold'>Datos Personales</h1>
+                            <h1 className='text-lg text-primary font-bold'>Datos Personales</h1>
 
                             <div className=" w-full flex text-xs">
                                 <label className='p-2 h-min w-[5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>Tipo lead</label>
@@ -125,7 +125,7 @@ const LeadId = () => {
                         </div>
                         { dataDB.tipo_lead === 'Propietario' ?
                             <div className=" row-span-4 bg-[#5da7d5c0] p-5 rounded-2xl space-y-2 h-[15rem]">
-                                <h1 className='text-lg text-[#0077bd] font-bold'>Datos Propiedad</h1>
+                                <h1 className='text-lg text-primary font-bold'>Datos Propiedad</h1>
                                 <div className='grid grid-cols-2 space-x-2'>
                                     <div className=" w-full flex text-xs">
                                         <label className='p-2 h-min w-[6rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>Precio</label>
@@ -170,7 +170,7 @@ const LeadId = () => {
 
 
                     <div className="bg-[#ffffff5f] rounded-2xl p-5 space-y-2 h-full">
-                        <h1 className='text-lg text-[#0077bd] font-bold'>Datos Leads</h1>
+                        <h1 className='text-lg text-primary font-bold'>Datos Leads</h1>
                         <div className='grid grid-cols-2 space-x-2'>
                             <div className=" w-full flex text-xs">
                                 <label className='p-2 h-min w-[8rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>Nro llamadas</label>

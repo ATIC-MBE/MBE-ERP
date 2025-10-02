@@ -8,7 +8,7 @@ MBE-ERP/
 │
 ├── appfichaje/
 │   ├── database-setup-fichaje.sql
-│   ├── ecosystem.config.js            //Ejecuta los tres programas necesarios: frontend, backend, BBDD
+│   ├── ecosystem.config.js            //Ejecuta los tres programas necesarios en pm2: frontend, backend, BBDD
 │   ├── logs/
 │   │
 │   ├── mbeApi/                         **API DEL PROYECTO**
@@ -147,6 +147,10 @@ npm install
 npm run dev
 ```
 
-
+### 4. Ejecución
+```bash
+cd ../MBE-ERP/appfichaje
+pm2 start ecosystem.config.js
+```
 
 Desarrollado para uso interno del máster MBE Madrid – https://mbe.madrid

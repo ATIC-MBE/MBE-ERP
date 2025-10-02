@@ -36,7 +36,7 @@ const LeadId = () => {
                 <div className="min-h-[35rem] grid grid-cols-2 space-x-5">
                     <div className="h-full grid space-y-2">
                         <div className=" min-h-[18rem] bg-[#5da7d5c0] rounded-2xl p-5 space-y-4">
-                            <h1 className='text-lg text-[#0077bd] font-bold'>Información del Grupo</h1>
+                            <h1 className='text-lg text-primary font-bold'>Información del Grupo</h1>
 
                             <div className='grid space-x-2'>
                                 <div className=" w-full flex text-ms">
@@ -112,7 +112,7 @@ const LeadId = () => {
                     </div>
 
                     <div className="bg-[#c7dfee] rounded-2xl p-5 space-y-2 h-full">
-                        <h1 className='text-lg text-[#0077bd] font-bold'>Histórico sucesos</h1>
+                        <h1 className='text-lg text-primary font-bold'>Histórico sucesos</h1>
 
                         <div className='grid grid-cols-2 space-x-2'>
                             <div className=" w-full flex text-xs">

@@ -38,7 +38,7 @@ const DatosPropietario = () => {
                 <div className="min-h-[40rem] grid grid-cols-2 space-x-5">
                     <div className="h-full grid space-y-5">
                         <div className=" min-h-[23rem] bg-[#5da7d5c0] rounded-2xl p-5 space-y-4">
-                            <h1 className='text-lg text-[#0077bd] font-bold'>Datos Personales</h1>
+                            <h1 className='text-lg text-primary font-bold'>Datos Personales</h1>
                             <div className='grid grid-cols-2 space-x-2'>
                                 <DataInput name='name' placeholder='Nombre' />
                                 <DataInput />
@@ -65,7 +65,7 @@ const DatosPropietario = () => {
                             
                         </div>
                         <div className=" row-span-4 bg-[#5da7d5c0] p-5 rounded-2xl space-y-2 h-[15rem]">
-                            <h1 className='text-lg text-[#0077bd] font-bold'>Datos Propiedad</h1>
+                            <h1 className='text-lg text-primary font-bold'>Datos Propiedad</h1>
                             <div className='grid grid-cols-2 space-x-2'>
                                 <DataInput />
                                 <DataInput />
@@ -82,7 +82,7 @@ const DatosPropietario = () => {
                         </div>
                     </div>
                     <div className="bg-[#ffffff5f] rounded-2xl p-5 space-y-2 h-full">
-                        <h1 className='text-lg text-[#0077bd] font-bold'>Datos Leads</h1>
+                        <h1 className='text-lg text-primary font-bold'>Datos Leads</h1>
                         <div className='grid grid-cols-2 space-x-2'>
                             <DataInput />
                             <DataInput />

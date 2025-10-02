@@ -28,7 +28,7 @@ const TableContainerL = ( { header,
             <div className="w-[80rem] h-auto bg-[#badaed] border border-blue rounded-t-3xl grid">
                 <div className="w-full p-4 flex">
                     <div className="w-full flex">
-                        <h1 className="w-full text-bold text-blue" style={{fontSize:'22px'}}>{ title }</h1>
+                        <h1 className='text-lg text-primary font-bold'>{ title }</h1>
                     </div>
                     <div className="w-min flex justify-end">
                         { drawactions ? drawactions() : '' }

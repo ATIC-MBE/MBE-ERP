@@ -25,7 +25,7 @@ const KeyContainer = () => {
       <div className="w-full bg-[#badaed] border border-blue rounded-t-3xl grid gap-4 p-4">
 
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue mb-2 md:mb-0">LLaves</h1>
+          <h1 className="text-2xl font-bold text-primary mb-2 md:mb-0">LLaves</h1>
           <Link 
             href="/atic/keys/new" 
             className="px-4 py-2 rounded-xl bg-[#0077bd] border border-blue text-white text-base"

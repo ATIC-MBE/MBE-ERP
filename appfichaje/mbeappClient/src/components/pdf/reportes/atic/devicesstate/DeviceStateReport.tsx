@@ -216,10 +216,10 @@ const MarcacionReport = (props: propsInput) => {
                   <div className=" flex flex-col items-center space-y-2">
                     <AiOutlineFilePdf
                       title={"Reporte dispositivos"}
-                      color="#0077BD"
+                      color="#005360"
                       size={"5rem"}
                     />
-                    <h1 className="text-ms text-[#0077bd] text-center hover:text-[#ef8221] hover:text-[#ef8221]">
+                    <h1 className="text-ms text-primary text-center hover:text-[#ef8221] hover:text-[#ef8221]">
                       <b>Reporte dispositivos</b>
                     </h1>
                   </div>

@@ -141,6 +141,8 @@
             { "method": "PATCH", "path": "/api/rrhh/users/[id]", "filterstatus": 0 },
             { "method": "DELETE", "path": "/api/rrhh/users/[id]", "filterstatus": 0 },
 
+            { "method": "GET", "path": "/api/admin/users/[id]", "filterstatus": 0 },
+
 
             { "method": "DELETE", "path": "/api/rrhh/users/delete/[id]", "filterstatus": 0 },
 

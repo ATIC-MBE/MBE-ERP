@@ -34,7 +34,7 @@ const LeadsContainer = ({ pathAdd, pathEdit }: {pathAdd: string, pathEdit: strin
             <div className="w-[80rem] h-auto bg-[#badaed] border border-blue rounded-t-3xl grid table-filter">
                 <div className="w-full pt-4 pl-2 pr-1 flex">
                     <div className="w-full flex">
-                        <h1 className="w-full text-bold text-blue" style={{fontSize:'22px'}}>{ `All Leads` }</h1>
+                        <h1 className='text-lg text-primary font-bold'>{ `All Leads` }</h1>
                     </div>
                     <div className="w-min flex justify-end">
                         <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#0077bd] border border-blue text-white" href={`${pathAdd}`}>Nuevo</Link>

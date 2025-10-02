@@ -51,7 +51,7 @@ const UserNew = () => {
                             <div className="min-h-[10rem] grid grid-cols-1n space-x-5">
                                 <div className="h-full grid space-y-2">
                                     <div className=" min-h-[16rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-3">
-                                        <h1 className='text-lg text-[#0077bd] font-bold'>Usuario</h1>
+                                        <h1 className='text-lg text-bold text-primary'>Usuario</h1>
                                         <div className='grid grid-cols-2 space-x-3'>
                                             <div className=" w-full flex text-sm">
                                                 <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
@@ -194,7 +194,7 @@ const UserNew = () => {
                                         <div className='grid grid-cols-2 space-x-3'>
                                             <div className=" w-full flex text-sm ">
                                                 <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
-                                                    <span className='display-icon-error'>
+                                                    <span className='display-icon-error' title='Seguridad Social'>
                                                         <span>SS</span> <span style={{color: 'red'}} className='field-required'> * </span>
                                                     </span>
                                                 </label>
@@ -208,7 +208,7 @@ const UserNew = () => {
                                             <div className='w-full flex text-sm'>
                                                 <label className = 'px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-red rounded-l-full col-span-2'>
                                                     <span className = 'display-icon-error'>
-                                                        <AiOutlineBars title = "Etapa" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
+                                                        <AiOutlineBars title = "Horario" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
                                                     </span>
                                                 </label>
                                                 <select value = {dataDB.horario?.toString()|| ''} onChange={handleChange} name = 'horario' className="rounded-r-full p-1 w-[100%] col-span-6" >
@@ -220,7 +220,7 @@ const UserNew = () => {
                                             </div>
                                         </div>
                                         <div className='grid grid-cols-2 space-x-3'>
-                                            <div className=" w-full flex text-sm ">
+                                            <div className=" w-full flex text-sm " title='Cumpleaños'>
                                                 <label className='px-3 py-2 h-auto w-[2.5rem] bg-[#0077bd] text-white rounded-l-full col-span-2'>
                                                     <span className='display-icon-error'>
                                                         <span>BD</span> <span style={{color: 'red'}} className='field-required'> * </span>

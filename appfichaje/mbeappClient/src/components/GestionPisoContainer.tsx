@@ -7,7 +7,7 @@ const GestionPisoContainer = () => {
         <div className="w-full h-[75vh] grid items-center justify-items-center px-[5rem]">
             <div className="w-full h-full grid grid-cols-3 space-x-5">
                 <div className="bg-neutral/30 rounded-3xl shadow-2xl p-5 space-y-9">
-                    <h1 className="text-center text-2xl font-bold text-blue"> Control del piso</h1>
+                    <h1 className="text-center text-2xl font-bold text-primary"> Control del piso</h1>
                     <div className="w-full text-white grid justify-items-center p-5">
                         <BsLightbulbFill size={80} />
                         <span className='text-lg font-bold text-blue'>[Encendido]</span>
