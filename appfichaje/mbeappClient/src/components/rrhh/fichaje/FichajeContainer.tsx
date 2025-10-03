@@ -31,7 +31,7 @@ const FichajeContainer = () => {
             <div className="w-[80rem] h-auto bg-[#005360]/10 border border-[#005360] rounded-t-3xl grid table-filter">
                 <div className="w-full pt-4 pl-2 pr-1 flex">
                     <div className="w-full flex">
-                        <h1 className="w-full text-bold text-blue" style={{fontSize:'22px'}}>{ `Fichaje Oficina` }</h1>
+                        <h1 className='text-lg text-primary font-bold'>{ `Fichaje Oficina` }</h1>
                     </div>
                     <div className="w-min flex justify-end">
                         <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#005360] border border-[#005360] text-white" href='/rrhhmaster/fichaje/new'>Nuevo</Link>

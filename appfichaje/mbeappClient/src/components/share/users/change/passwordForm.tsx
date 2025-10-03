@@ -35,7 +35,7 @@ const PasswordForm = ({ pathToBack, id }: { pathToBack: string, id: number }) =>
                     <div className="min-h-[15rem] grid grid-cols-2m space-x-5">
                         <div className="h-full grid space-y-5">
                             <div className=" min-h-[14rem] bg-[#5da7d5c0] rounded-2xl p-5 space-y-4">
-                                <h1 className='text-lg text-[#0077bd] font-bold'>Cambiar contraseña</h1>
+                                <h1 className='text-lg text-primary font-bold'>Cambiar contraseña</h1>
                                 <div className='grid grid-cols-1 space-x-2'>
                                     <div className=" w-full flex text-lg">{userDB.nombre_completo}</div>
                                 </div>

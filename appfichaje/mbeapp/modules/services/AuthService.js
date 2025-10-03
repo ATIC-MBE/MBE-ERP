@@ -17,7 +17,7 @@ class AuthService {
             if (res.status === 200) dataResult = await res.json()
             else throw 'Error api'
         } catch(err) {
-            console.log('Error http/https on API')
+            console.log('Error http/https en la API')
         }
             
         return dataResult

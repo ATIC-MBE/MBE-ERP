@@ -141,6 +141,8 @@
             { "method": "PATCH", "path": "/api/rrhh/users/[id]", "filterstatus": 0 },
             { "method": "DELETE", "path": "/api/rrhh/users/[id]", "filterstatus": 0 },
 
+            { "method": "GET", "path": "/api/admin/users/[id]", "filterstatus": 0 },
+
 
             { "method": "DELETE", "path": "/api/rrhh/users/delete/[id]", "filterstatus": 0 },
 
@@ -192,9 +194,10 @@
             { "method" : "GET" , "path" : "/api/share/data/totaldata" , "filterstatus" : 1},
 
             { "method": "GET", "path": "/api/auth/users/[id]/password/reset", "filterstatus": 0 },
+            { "method": "PATCH", "path": "/api/auth/users/[id]/password/change", "filterstatus": 0 },
 
             { "method": "GET", "path": "/api/reports/ratic/devicereport/[id]", "filterstatus": 1 },
-            { "method": "GET", "path": "/api/share/reportdevices/lastreport", "filterstatus" : 1},
+            { "method": "GET", "path": "/api/share/reportdevices/lastreport", "filterstatus": 1 },
 
             { "method": "POST", "path": "/api/share/app/mch/fichar", "filterstatus": 1 },
 

@@ -61,7 +61,7 @@ class FirstLoginService {
                         }
                   }
             } catch (err) {
-                  console.log('Error http/https on API FirstLogin Daily')
+                  console.log('Error http/https en el API FirstLogin Daily')
                   dataResult = {
                         error: 'Error de conexión con el API',
                         data: []

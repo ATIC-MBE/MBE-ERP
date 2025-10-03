@@ -43,13 +43,13 @@ class Filter {
 
     getMyLead(): JSONObject {
         return {
-                ns_start: localStorage.getItem('ml_ns_start') === undefined || localStorage.getItem('ml_ns_start') === null ? '' : localStorage.getItem('ml_ns_start'),
-                ns_end: localStorage.getItem('ml_ns_end') === undefined || localStorage.getItem('ml_ns_end') === null ? '' : localStorage.getItem('ml_ns_end'),
-                idresponsable: localStorage.getItem('ml_idresponsable') === undefined || localStorage.getItem('ml_idresponsable') === null ? 0 : parseInt(localStorage.getItem('ml_idresponsable')!),
-                tipo_lead: localStorage.getItem('ml_tipo_lead') === undefined || localStorage.getItem('ml_tipo_lead') === null ? '' : localStorage.getItem('ml_tipo_lead'),
-                telefono: localStorage.getItem('ml_telefono') === undefined || localStorage.getItem('ml_telefono') === null ? '' : localStorage.getItem('ml_telefono'),
-                persona: localStorage.getItem('ml_persona') === undefined || localStorage.getItem('ml_persona') === null ? '' : localStorage.getItem('ml_persona'),
-                search_all: localStorage.getItem('ml_search_all') === undefined || localStorage.getItem('ml_search_all') === null ? '' : localStorage.getItem('ml_search_all'),
+            ns_start: localStorage.getItem('ml_ns_start') === undefined || localStorage.getItem('ml_ns_start') === null ? '' : localStorage.getItem('ml_ns_start'),
+            ns_end: localStorage.getItem('ml_ns_end') === undefined || localStorage.getItem('ml_ns_end') === null ? '' : localStorage.getItem('ml_ns_end'),
+            idresponsable: localStorage.getItem('ml_idresponsable') === undefined || localStorage.getItem('ml_idresponsable') === null ? 0 : parseInt(localStorage.getItem('ml_idresponsable')!),
+            tipo_lead: localStorage.getItem('ml_tipo_lead') === undefined || localStorage.getItem('ml_tipo_lead') === null ? '' : localStorage.getItem('ml_tipo_lead'),
+            telefono: localStorage.getItem('ml_telefono') === undefined || localStorage.getItem('ml_telefono') === null ? '' : localStorage.getItem('ml_telefono'),
+            persona: localStorage.getItem('ml_persona') === undefined || localStorage.getItem('ml_persona') === null ? '' : localStorage.getItem('ml_persona'),
+            search_all: localStorage.getItem('ml_search_all') === undefined || localStorage.getItem('ml_search_all') === null ? '' : localStorage.getItem('ml_search_all'),
         }
     }
 
@@ -134,33 +134,31 @@ class Filter {
         }
     }
 
-     /**
+    /**
      * Filtros SET Layout Fichaje
      * @param data 
      */
-     setFichaje(data: JSONObject): void {
-          localStorage.setItem("search_all_fo", data.search_all || '')
-          localStorage.setItem("m_start_fo", UtilCustomInstance.normalizeDateInput(data.m_start as string) || '')
-          localStorage.setItem("m_end_fo", UtilCustomInstance.normalizeDateInput(data.m_end as string) || '')
-        
+    setFichaje(data: JSONObject): void {
+        localStorage.setItem("search_all_fo", data.search_all || '')
+        localStorage.setItem("m_start_fo", UtilCustomInstance.normalizeDateInput(data.m_start as string) || '')
+        localStorage.setItem("m_end_fo", UtilCustomInstance.normalizeDateInput(data.m_end as string) || '')
     }
 
-     /**
+    /**
      * Filtros GET Layout Control limpieza [RMG]
      * @returns 
      */
-        getFichaje(): JSONObject {
-            const storedStart = localStorage.getItem('m_start_fo')
-            const storedEnd = localStorage.getItem('m_end_fo')
-            const normalizedStart = UtilCustomInstance.normalizeDateInput(storedStart)
-            const normalizedEnd = UtilCustomInstance.normalizeDateInput(storedEnd)
-            return {
-                search_all: localStorage.getItem('search_all_fo') === undefined || localStorage.getItem('search_all_fo') === null ? '' : localStorage.getItem('search_all_fo'),
-                m_start: normalizedStart || UtilCustomInstance.getDateCurrentISO(),
-                m_end: normalizedEnd || UtilCustomInstance.getDateCurrentISO(),
-            
-            }
+    getFichaje(): JSONObject {
+        const storedStart = localStorage.getItem('m_start_fo')
+        const storedEnd = localStorage.getItem('m_end_fo')
+        const normalizedStart = UtilCustomInstance.normalizeDateInput(storedStart)
+        const normalizedEnd = UtilCustomInstance.normalizeDateInput(storedEnd)
+        return {
+            search_all: localStorage.getItem('search_all_fo') === undefined || localStorage.getItem('search_all_fo') === null ? '' : localStorage.getItem('search_all_fo'),
+            m_start: normalizedStart || UtilCustomInstance.getDateCurrentISO(),
+            m_end: normalizedEnd || UtilCustomInstance.getDateCurrentISO(),
         }
+    }
 
     /**
     * Filtros SET layout Devices

@@ -47,7 +47,7 @@ const SolicitudNew = () => {
                             <div className="min-h-[10rem] grid grid-cols-1n space-x-5">
                                 <div className="h-full grid space-y-2">
                                     <div className=" min-h-[16rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-3">
-                                        <h1 className='text-lg text-[#0077bd] font-bold'>Solicitud</h1>
+                                        <h1 className='text-lg text-primary font-bold'>Solicitud</h1>
                                         <div className='grid grid-cols-2 space-x-3'>
                                             <div className=" w-full flex text-sm">
                                                 <div className=" w-full flex text-sm">

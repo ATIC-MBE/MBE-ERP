@@ -7,7 +7,7 @@ import { BsFillHouseDoorFill, BsFillHouseFill } from "react-icons/bs"
 const PisoComercialContainer = ({ data, title = 'Información general' }: { data: any, title?: string }) => {
     return (
         <div className="min-h-[20rem] bg-[#5da7d5c0] rounded-2xl p-6 space-y-4">
-            <h1 className='text-lg text-[#005360] font-bold'>{title}</h1>
+            <h1 className='text-lg text-primary font-bold'>{title}</h1>
 
             <div className='grid'>
                 <div className=" w-full flex text-sm">

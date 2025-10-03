@@ -41,7 +41,7 @@ const PerfilContainerAtic = ({
         
         {/* Título y botones */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-          <h1 className="text-2xl font-bold text-blue">Perfiles DN</h1>
+          <h1 className="text-2xl font-bold text-primary">Perfiles DN</h1>
 
           <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
             <Link
