@@ -430,7 +430,7 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
         }}>
           📅 <strong style={{ color: '#20c997' }}>{events.length}</strong> eventos cargados
         </div>
-        {userRole && ['admin', 'superadmin', 'master'].some(role =>
+        {userRole && typeof userRole === 'string' && ['admin', 'superadmin', 'master'].some(role =>
           userRole.includes(role) || userRole.endsWith('master')
         ) && (
           <div style={{
