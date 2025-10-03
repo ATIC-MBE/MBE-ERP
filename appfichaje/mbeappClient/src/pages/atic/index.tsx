@@ -64,7 +64,7 @@ const Atic = () => {
                         />
                     )}
                     <span style={{ textShadow: '0 1px 0 #fff' }} className="font-bold">
-                        &#128526; ATIC &#128526;
+                        &#128526; ATIC - Semper Fines Transire Audeant &#128526;
                     </span>
                     <HomeContainer data={userData()}>
                     </HomeContainer>
