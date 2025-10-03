@@ -58,10 +58,36 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
       let timeMin: string;
       let timeMax: string;
 
-      // Usar rango fijo amplio para cargar todos los eventos
-      // Septiembre completo más un margen
-      timeMin = '2025-09-01T00:00:00.000Z';
-      timeMax = '2025-09-30T23:59:59.999Z';
+      // Calcular rango dinámico basado en la fecha actual y vista
+      const currentDate = new Date(date);
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+
+      if (view === 'month') {
+        // Para vista de mes, cargar el mes completo
+        const startOfMonth = new Date(currentYear, currentMonth, 1);
+        const endOfMonth = new Date(currentYear, currentMonth + 1, 0, 23, 59, 59);
+        timeMin = startOfMonth.toISOString();
+        timeMax = endOfMonth.toISOString();
+      } else if (view === 'week') {
+        // Para vista de semana, cargar la semana completa
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setHours(23, 59, 59, 999);
+        timeMin = startOfWeek.toISOString();
+        timeMax = endOfWeek.toISOString();
+      } else {
+        // Para vista de día, cargar solo ese día
+        const startOfDay = new Date(currentDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(currentDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        timeMin = startOfDay.toISOString();
+        timeMax = endOfDay.toISOString();
+      }
 
       console.log('🗓️ Loading events for:', department);
       console.log('📅 Date range:', { timeMin, timeMax });

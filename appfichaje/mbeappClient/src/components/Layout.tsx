@@ -23,7 +23,7 @@ import WebMCH24 from './webMCH24'
 import WEBMCH_22_22 from './WEBMCH_22_22'
 import AgenteIcon from './Iconos/AgenteIcon'
 import PropietarioIcon from './Iconos/PropietarioIcon'
-import { FaBusinessTime, FaCalendarCheck, FaMailchimp, FaCalendarAlt } from "react-icons/fa";
+import { FaBusinessTime, FaCalendarCheck, FaMailchimp, FaCalendarAlt, FaChartLine } from "react-icons/fa";
 import { GoKey } from "react-icons/go";
 import { AiOutlineClear, AiOutlineContainer, AiOutlineSnippets, AiOutlineTeam } from 'react-icons/ai'
 import { BiDevices } from 'react-icons/bi'
@@ -254,6 +254,8 @@ export const PropBox = (props: JSONObject) => {
                 return <FaBusinessTime title='Esquema' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'calendario':
                 return <FaCalendarAlt title='Calendario' color={isActive?'white':'white'} style={{border: 1}} size={35} />
+            case 'progreso':
+                return <FaChartLine title='Progreso' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'key':
                 return  <GoKey title='Llaves' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             default:
