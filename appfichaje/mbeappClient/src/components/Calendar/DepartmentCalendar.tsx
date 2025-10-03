@@ -244,7 +244,7 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
 
   // Manejar selección de slot (crear evento)
   const handleSelectSlot = (slotInfo: any) => {
-    if (userRole && ['admin', 'superadmin', 'master'].some(role =>
+    if (userRole && typeof userRole === 'string' && ['admin', 'superadmin', 'master'].some(role =>
       userRole.includes(role) || userRole.endsWith('master')
     )) {
       // TODO: Abrir modal para crear evento
