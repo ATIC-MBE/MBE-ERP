@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
 /* Overlay background with blur and opacity for contrast */
 .c-bg-blur-overlay {
   position: absolute;
@@ -84,6 +87,47 @@ body {
   display: block;
   margin: 0;
   padding: 0;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
+  text-shadow:
+    1px 0 0 rgba(0, 0, 0, 0.85),
+    -1px 0 0 rgba(0, 0, 0, 0.85),
+    0 1px 0 rgba(0, 0, 0, 0.85),
+    0 -1px 0 rgba(0, 0, 0, 0.85),
+    1px 1px 0 rgba(0, 0, 0, 0.75),
+    -1px -1px 0 rgba(0, 0, 0, 0.75),
+    1px -1px 0 rgba(0, 0, 0, 0.75),
+    -1px 1px 0 rgba(0, 0, 0, 0.75);
+}
+
+.text-outline-dark {
+  color: #fff;
+  -webkit-text-stroke: 1.2px rgba(0, 0, 0, 0.9);
+  text-shadow:
+    1px 0 0 rgba(0, 0, 0, 0.85),
+    -1px 0 0 rgba(0, 0, 0, 0.85),
+    0 1px 0 rgba(0, 0, 0, 0.85),
+    0 -1px 0 rgba(0, 0, 0, 0.85),
+    1px 1px 0 rgba(0, 0, 0, 0.75),
+    -1px -1px 0 rgba(0, 0, 0, 0.75),
+    1px -1px 0 rgba(0, 0, 0, 0.75),
+    -1px 1px 0 rgba(0, 0, 0, 0.75);
+}
+
+.date-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #0b4f73;
+  border: 1px solid rgba(10, 79, 115, 0.35);
+  box-shadow: 0 6px 18px rgba(5, 49, 60, 0.16);
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.75);
 }
 
 /* Remove border and background on hover for login arrow button */
@@ -543,6 +587,13 @@ a.link-menu {
     border-radius: 1.2rem !important;
     border: 2px solid #005360 !important;
     transition: box-shadow 0.2s, border-color 0.2s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+    width: 12rem;
+    min-width: 12rem;
+    max-width: 12rem;
   }
 
   .card-acceso-directo:hover {
@@ -555,6 +606,10 @@ a.link-menu {
     text-shadow: 0 2px 8px #00536099, 0 1px 0 #fff;
   }
 
+  .card-acceso-directo > div {
+    width: 10rem !important;
+  }
+
   .card-ad-icon:hover {
     color: #ef8221;
   }
@@ -562,4 +617,191 @@ a.link-menu {
   /* Custom row background for alternating table rows */
   .bg-custom-teal {
     background-color: rgba(0, 83, 96, 0.08); /* #005360 with 8% opacity for subtle effect */
+  }
+
+  /* Blocking modal animated buttons */
+  .blocking-modal-buttons {
+    gap: 1.5rem;
+  }
+
+  .blocking-modal-button-container {
+    position: relative;
+    width: 140px;
+    height: 50px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid #005461;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    letter-spacing: 1px;
+    transition: 0.5s;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--wide {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--wide button {
+    width: 100% !important;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--compact {
+    width: auto;
+    min-width: 120px;
+    height: 44px;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--medium {
+    width: auto;
+    min-width: 150px;
+    height: 48px;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--light {
+    background: #ffffff;
+    border-color: #005461;
+    box-shadow: 0 0 0 1px rgba(0, 84, 97, 0.08), 0 8px 20px rgba(0, 84, 97, 0.12);
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--icon {
+    width: 44px;
+    height: 44px;
+    margin: 0;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--icon button,
+  .blocking-modal-button-container.blocking-modal-button-container--icon .blocking-modal-button-link {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--icon .blocking-modal-button-label {
+    font-size: 16px;
+  }
+
+  .blocking-modal-button-container button,
+  .blocking-modal-button-container .blocking-modal-button-link {
+    width: 101%;
+    height: 100%;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    letter-spacing: 1px;
+    background: #005461 !important;
+    -webkit-mask: url('https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png');
+    mask: url('https://raw.githubusercontent.com/robin-dela/css-mask-animation/master/img/nature-sprite.png');
+    -webkit-mask-size: 2300% 100%;
+    mask-size: 2300% 100%;
+    border: none !important;
+    color: #fff !important;
+    cursor: pointer;
+    -webkit-animation: blocking-button-hide 0.7s steps(22) forwards;
+    animation: blocking-button-hide 0.7s steps(22) forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 0;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--compact button,
+  .blocking-modal-button-container.blocking-modal-button-container--compact .blocking-modal-button-link {
+    width: auto;
+    padding: 0.35rem 1.2rem;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--medium button,
+  .blocking-modal-button-container.blocking-modal-button-container--medium .blocking-modal-button-link {
+    width: auto;
+    padding: 0.45rem 1.5rem;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--light button,
+  .blocking-modal-button-container.blocking-modal-button-container--light .blocking-modal-button-link {
+    color: #ffffff !important;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--medium .blocking-modal-button-label,
+  .blocking-modal-button-container.blocking-modal-button-container--medium button,
+  .blocking-modal-button-container.blocking-modal-button-container--medium .blocking-modal-button-link {
+    font-size: 16px;
+  }
+
+  .blocking-modal-button-container button:hover,
+  .blocking-modal-button-container .blocking-modal-button-link:hover,
+  .blocking-modal-button-container .blocking-modal-button-link:focus-visible {
+    -webkit-animation: blocking-button-reveal 0.7s steps(22) forwards;
+    animation: blocking-button-reveal 0.7s steps(22) forwards;
+    background: #005461 !important;
+    color: #fff !important;
+  }
+
+  .blocking-modal-button-container .blocking-modal-button-link:focus-visible {
+    outline: 2px solid rgba(0, 83, 96, 0.6);
+    outline-offset: 2px;
+  }
+
+  .blocking-modal-button-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #005461;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    pointer-events: none;
+  }
+
+  .blocking-modal-button-container.blocking-modal-button-container--light .blocking-modal-button-label {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 84, 97, 0.15);
+  }
+
+  @-webkit-keyframes blocking-button-reveal {
+    from {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+    to {
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+  }
+
+  @keyframes blocking-button-reveal {
+    from {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+    to {
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+  }
+
+  @-webkit-keyframes blocking-button-hide {
+    from {
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+    to {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
+  }
+
+  @keyframes blocking-button-hide {
+    from {
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+    to {
+      -webkit-mask-position: 0 0;
+      mask-position: 0 0;
+    }
   }

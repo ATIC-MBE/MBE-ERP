@@ -39,7 +39,18 @@ const VacacionesContainerShare = (
             <h1 className="w-full text-bold text-primary" style={{ fontSize: '22px' }}>{`Solicitudes`}</h1>
           </div>
           <div className="w-min flex justify-end">
-            <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-primary/80 border border-secondary text-white hover:bg-secondary hover:text-primary" href={`${pathAdd}`}>Nuevo</Link>
+            <div className="blocking-modal-button-container blocking-modal-button-container--compact">
+              <span className="blocking-modal-button-label" aria-hidden="true">
+                Nuevo
+              </span>
+              <Link
+                className="blocking-modal-button-link"
+                href={`${pathAdd}`}
+                aria-label="Crear nueva solicitud"
+              >
+                Nuevo
+              </Link>
+            </div>
           </div>
         </div>
 

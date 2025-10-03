@@ -12,7 +12,7 @@
 }
 
 .rbc-header {
-  background-color: #f8f9fa;
+  background-color: #81a4c7d7;
   border-bottom: 1px solid #dee2e6;
   padding: 12px 8px;
   font-weight: 600;
@@ -38,64 +38,53 @@
 }
 
 .rbc-today {
-  background-color: #e3f2fd !important;
-}
-
-/* Eventos */
-.rbc-event {
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
-}
-
-.rbc-event:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
-}
-
-.rbc-event-label {
-  display: none;
-}
-
-.rbc-event-content {
-  font-weight: 500;
+  background-color: #81a4c7d7 !important;
 }
 
 /* Botones de navegación */
-.rbc-btn-group button {
-  background-color: #6c757d;
-  border: 1px solid #6c757d;
-  color: white;
-  padding: 6px 12px;
+.rbc-toolbar .rbc-btn-group button {
+  position: relative;
+  background: linear-gradient(135deg, #005461, #007a8c);
+  border: 1px solid #004652;
+  color: #ffffff !important;
+  padding: 8px 16px;
   font-size: 14px;
-  font-weight: 500;
-  border-radius: 4px;
-  margin-right: 4px;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  border-radius: 9999px;
+  margin-right: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 84, 97, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
 
-.rbc-btn-group button:hover {
-  background-color: #5a6268;
-  border-color: #545b62;
+.rbc-toolbar .rbc-btn-group button:hover,
+.rbc-toolbar .rbc-btn-group button:focus-visible {
+  border-color: black;
+  color: #ffffff !important;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 84, 97, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.6);
 }
 
-.rbc-btn-group button.rbc-active {
-  background-color: #007bff;
-  border-color: #007bff;
+.rbc-toolbar .rbc-btn-group button.rbc-active {
+  background: linear-gradient(135deg, #005461, #00839a);
+  border-color: #003a44;
+  color: #ffffff !important;
+  box-shadow: 0 12px 28px rgba(0, 84, 97, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
-.rbc-btn-group button.rbc-active:hover {
-  background-color: #0056b3;
-  border-color: #004085;
+.rbc-toolbar .rbc-btn-group button.rbc-active:hover,
+.rbc-toolbar .rbc-btn-group button.rbc-active:focus-visible {
+  border-color: black;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 84, 97, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.6);
 }
+
 
 /* Toolbar */
 .rbc-toolbar {
-  background-color: #f8f9fa;
+  background-color: white;
   padding: 16px;
   border-bottom: 1px solid #dee2e6;
   margin-bottom: 0;
@@ -109,8 +98,49 @@
 .rbc-toolbar-label {
   font-size: 24px;
   font-weight: 600;
-  color: #495057;
+  color: #005461 ;
   margin: 0 16px;
+}
+
+/* Hover de fechas estilo BlockingModal */
+.rbc-month-view .rbc-date-cell {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.rbc-month-view .rbc-date-cell button {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #005461;
+  font-weight: 600;
+  border-radius: 9999px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  position: relative;
+}
+
+.rbc-month-view .rbc-date-cell button:hover,
+.rbc-month-view .rbc-date-cell button:focus-visible {
+  color: #ffffff;
+  background: linear-gradient(135deg, #005461, #007a8c);
+  border-color: #003a44;
+  box-shadow: 0 10px 22px rgba(0, 84, 97, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.rbc-month-view .rbc-date-cell.rbc-off-range button {
+  color: #8a9ca5;
+}
+
+.rbc-month-view .rbc-date-cell.rbc-off-range button:hover,
+.rbc-month-view .rbc-date-cell.rbc-off-range button:focus-visible {
+  background: linear-gradient(135deg, #8a9ca5, #a6b3ba);
+  border-color: #6f7d84;
+  color: #ffffff;
 }
 
 /* Vista de agenda */

@@ -149,12 +149,16 @@ const DailyTasksNotification: React.FC<DailyTasksNotificationProps> = ({ onClose
 
         {/* Footer */}
         <div className="border-t border-gray-200 p-4 bg-gray-50">
-          <button
-            onClick={onClose}
-            className="w-full bg-[#005360] text-white py-2 px-4 rounded-lg hover:bg-gray-600 hover:text-white transition-colors font-medium"
-          >
-            Entendido
-          </button>
+          <div className="flex justify-center">
+            <div className="blocking-modal-button-container blocking-modal-button-container--wide">
+              <span className="blocking-modal-button-label" aria-hidden="true">
+                Entendido
+              </span>
+              <button type="button" onClick={onClose} aria-label="Entendido">
+                Entendido
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

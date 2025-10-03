@@ -47,21 +47,25 @@ const BlockingModal = ({
         <p className="text-gray-700 text-lg mb-8">
           {message === 'Sucesos pisos.' ? '' : (message === 'Mensajes.' ? 'Leer mensajes.' : message)}
         </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-x-10 gap-y-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-x-10 gap-y-4 blocking-modal-buttons">
           {showIrButton && (
-            <button
-              onClick={goToLink}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-xl transition"
-            >
-              Ir
-            </button>
+            <div className="blocking-modal-button-container">
+              <span className="blocking-modal-button-label" aria-hidden="true">
+                Ir
+              </span>
+              <button type="button" onClick={goToLink} aria-label="Ir">
+                Ir
+              </button>
+            </div>
           )}
-          <button
-            onClick={onConfirm}
-            className="bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl transition hover:bg-[#004050] hover:!text-white"
-          >
-            OK
-          </button>
+          <div className="blocking-modal-button-container">
+            <span className="blocking-modal-button-label" aria-hidden="true">
+              OK
+            </span>
+            <button type="button" onClick={onConfirm} aria-label="OK">
+              OK
+            </button>
+          </div>
         </div>
       </div>
     </div>

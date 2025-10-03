@@ -107,12 +107,18 @@ const CalendarPage: React.FC = () => {
               <span className="text-sm text-gray-600">
                 Rol: {userRole}
               </span>
-              <button
-                onClick={() => router.push(`/${getCurrentRol()}`)}
-                className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 text-sm"
-              >
-                Volver al ERP
-              </button>
+              <div className="blocking-modal-button-container blocking-modal-button-container--compact blocking-modal-button-container--light">
+                <span className="blocking-modal-button-label" aria-hidden="true">
+                  Volver al ERP
+                </span>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/${getCurrentRol()}`)}
+                  aria-label="Volver al ERP"
+                >
+                  Volver al ERP
+                </button>
+              </div>
             </div>
           </div>
         </div>

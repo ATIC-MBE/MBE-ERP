@@ -142,50 +142,47 @@ const AccesoDirectoContainer = ( {coderol} : {coderol: string} ) => {
         }
     }, [updateSolPendientesRMG, coderol])
 
+    const shared = [...acceso_directos['share']].sort((a, b) => b.orden - a.orden)
+    const specifics = Array.isArray(acceso_directos[coderol])
+        ? [...acceso_directos[coderol]].sort((a, b) => a.orden - b.orden)
+        : []
+
+    const cards = [...shared, ...specifics].map((el, index) => {
+        const highlightRmg = coderol === 'rmg' && el.orden === 0 && solPendientesRMG !== 0
+        return (
+            <Link
+                key={`card-${index}`}
+                href={`${el.link}`}
+                target='_blank'
+                className={`card-acceso-directo h-min text-[1rem] rounded-xl border ${highlightRmg ? 'border-red' : 'border-blue'} text-white`}
+            >
+                <div
+                    className={`w-[10rem] h-[12rem] ${highlightRmg ? 'bg-red-50' : 'bg-[#fffffffb]'} rounded-xl shadow-sm grid grid-rows-3`}
+                >
+                    <div className="row-span-3 grid items-center justify-items-center-xx">
+                        <div className="flex flex-col items-center space-y-2">
+                            <span style={{ color: '#005360' }}>{getIcon(el.codeIcon, el.label)}</span>
+                            <h1 className="text-ms text-[#0077bd] text-center hover:text-[#ef8221] hover:text-[#ef8221]">
+                                <b>
+                                    {el.label}{' '}
+                                    {highlightRmg ? (
+                                        <span className='bg-red font-bold rounded-full px-3 py-2 text-white'>
+                                            {solPendientesRMG}
+                                        </span>
+                                    ) : null}
+                                </b>
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </Link>
+        )
+    })
+
     return (
-        <>
-            {
-            (Array.isArray(acceso_directos[coderol])) ?
-                [ 
-                    ...acceso_directos['share'].sort( (a,b) => b.orden - a.orden ),
-                    ...acceso_directos[coderol].sort( (a,b) => a.orden - b.orden )
-                ].map((el, index) => {
-                    return (
-                        <Link key={`card-${index}`} href={`${el.link}`} target='_blank' 
-                        className={`card-acceso-directo h-min text-[1rem] rounded-xl border ${(coderol === 'rmg' && el.orden === 0 && solPendientesRMG !== 0) ? 'border-red' : 'border-blue'} text-white mt-3`}>
-                            <div key={`card-${index}`} className={`w-[10rem] h-[12rem] ${(coderol === 'rmg' && el.orden === 0 && solPendientesRMG !== 0) ? 'bg-red-50' : 'bg-[#fffffffb]'} rounded-xl shadow-sm grid grid-rows-3`}>
-                                <div className="row-span-3 grid items-center justify-items-center-xx">
-                                    <div className=" flex flex-col items-center space-y-2">
-                                        <span style={{color:'#005360'}}>{getIcon(el.codeIcon, el.label)}</span>
-                                        <h1 className="text-ms text-[#0077bd] text-center hover:text-[#ef8221] hover:text-[#ef8221]">
-                                            <b>{el.label} { (coderol === 'rmg' && el.orden === 0 && solPendientesRMG !== 0) ? <span className='bg-red font-bold rounded-full px-3 py-2 text-white'>{solPendientesRMG}</span> : '' }</b>
-                                        </h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-                    )
-                })
-            : 
-                [ 
-                    ...acceso_directos['share'].sort( (a,b) => b.orden - a.orden )
-                ].map((el, index) => {
-                    return (
-                        <Link key={`card-${index}`} href={`${el.link}`} target='_blank' 
-                        className="card-acceso-directo h-min text-[1rem] rounded-xl border border-blue text-white mt-3">
-                            <div key={`card-${index}`} className="w-[10rem] h-[12rem] bg-[#fffffffb] rounded-xl shadow-sm grid grid-rows-3">
-                                <div className="row-span-3 grid items-center justify-items-center-xx">
-                                    <div className=" flex flex-col items-center space-y-2">
-                                        {getIcon(el.codeIcon, el.label)}
-                                        <h1 className="text-ms text-[#0077bd] text-center hover:text-[#ef8221] hover:text-[#ef8221]"><b>{el.label}</b></h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-                    )
-                })
-            }
-        </>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center">
+            {cards}
+        </div>
     )
 }
 

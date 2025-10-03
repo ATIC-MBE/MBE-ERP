@@ -317,16 +317,18 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
         <div className={styles.calendarError}>
           <h4>Error al cargar el calendario</h4>
           <p>{error}</p>
-          <button onClick={loadEvents}>
-            Reintentar
-          </button>
+          <div className="blocking-modal-button-container blocking-modal-button-container--compact blocking-modal-button-container--light">
+            <span className="blocking-modal-button-label" aria-hidden="true">
+              Reintentar
+            </span>
+            <button type="button" onClick={loadEvents} aria-label="Reintentar carga de eventos">
+              Reintentar
+            </button>
+          </div>
         </div>
       </div>
     );
   }
-
-  // Log final antes de renderizar
-  console.log('🎭 Rendering Calendar with events:', events.length, 'events:', events.slice(0, 2));
 
   return (
     <div className={styles.calendarContainer}>
@@ -338,24 +340,14 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
           <span className={styles.departmentBadge}>
             {department.toUpperCase()}
           </span>
-          <button
-            onClick={loadEvents}
-            style={{
-              background: '#20c997',
-              color: 'white',
-              border: 'none',
-              padding: '8px 16px',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '0.9rem',
-              fontWeight: '500',
-              transition: 'background-color 0.2s'
-            }}
-            onMouseOver={(e) => (e.target as HTMLButtonElement).style.background = '#17a085'}
-            onMouseOut={(e) => (e.target as HTMLButtonElement).style.background = '#20c997'}
-          >
-            🔄 Actualizar
-          </button>
+          <div className="blocking-modal-button-container blocking-modal-button-container--compact blocking-modal-button-container--light">
+            <span className="blocking-modal-button-label" aria-hidden="true">
+              Actualizar
+            </span>
+            <button type="button" onClick={loadEvents} aria-label="Actualizar calendario">
+              🔄 Actualizar
+            </button>
+          </div>
         </div>
       </div>
 
@@ -482,23 +474,18 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
               }}>
                 📅 {linkModalData.event.title}
               </h3>
-              <button
-                onClick={() => setLinkModalOpen(false)}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#ffffff',
-                  fontSize: '1.5rem',
-                  cursor: 'pointer',
-                  padding: '8px',
-                  borderRadius: '8px',
-                  transition: 'background-color 0.2s'
-                }}
-                onMouseOver={(e) => (e.target as HTMLButtonElement).style.background = 'rgba(255, 255, 255, 0.1)'}
-                onMouseOut={(e) => (e.target as HTMLButtonElement).style.background = 'transparent'}
-              >
-                ✕
-              </button>
+              <div className="blocking-modal-button-container blocking-modal-button-container--icon">
+                <span className="blocking-modal-button-label" aria-hidden="true">
+                  ✕
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setLinkModalOpen(false)}
+                  aria-label="Cerrar modal de enlaces"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
 
             {/* Información del evento */}
@@ -548,99 +535,56 @@ const DepartmentCalendar: React.FC<DepartmentCalendarProps> = ({
               </h4>
 
               {linkModalData.googleLink && (
-                <button
-                  onClick={() => {
-                    window.open(linkModalData.googleLink, '_blank', 'noopener,noreferrer');
-                    setLinkModalOpen(false);
-                  }}
-                  style={{
-                    background: 'linear-gradient(135deg, #4285f4, #1a73e8)',
-                    border: 'none',
-                    color: 'white',
-                    padding: '16px 24px',
-                    borderRadius: '10px',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(66, 133, 244, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '12px'
-                  }}
-                  onMouseOver={(e) => {
-                    (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
-                    (e.target as HTMLButtonElement).style.boxShadow = '0 6px 16px rgba(66, 133, 244, 0.6)';
-                  }}
-                  onMouseOut={(e) => {
-                    (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
-                    (e.target as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(66, 133, 244, 0.4)';
-                  }}
-                >
-                  📅 Abrir en Google Calendar
-                </button>
+                <div className="blocking-modal-button-container blocking-modal-button-container--wide">
+                  <span className="blocking-modal-button-label" aria-hidden="true">
+                    Abrir
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.open(linkModalData.googleLink!, '_blank', 'noopener,noreferrer');
+                      setLinkModalOpen(false);
+                    }}
+                    aria-label="Abrir evento en Google Calendar"
+                  >
+                    📅 Abrir en Google Calendar
+                  </button>
+                </div>
               )}
 
               {linkModalData.descriptionLinks.map((link, index) => (
-                <button
+                <div
                   key={index}
-                  onClick={() => {
-                    window.open(link, '_blank', 'noopener,noreferrer');
-                    setLinkModalOpen(false);
-                  }}
-                  style={{
-                    background: 'linear-gradient(135deg, #20c997, #17a2b8)',
-                    border: 'none',
-                    color: 'white',
-                    padding: '16px 24px',
-                    borderRadius: '10px',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(32, 201, 151, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '12px'
-                  }}
-                  onMouseOver={(e) => {
-                    (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
-                    (e.target as HTMLButtonElement).style.boxShadow = '0 6px 16px rgba(32, 201, 151, 0.6)';
-                  }}
-                  onMouseOut={(e) => {
-                    (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
-                    (e.target as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(32, 201, 151, 0.4)';
-                  }}
+                  className="blocking-modal-button-container blocking-modal-button-container--wide"
                 >
-                  🔗 Ir al enlace {linkModalData.descriptionLinks.length > 1 ? `${index + 1}` : ''}
-                </button>
+                  <span className="blocking-modal-button-label" aria-hidden="true">
+                    Enlace
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.open(link, '_blank', 'noopener,noreferrer');
+                      setLinkModalOpen(false);
+                    }}
+                    aria-label={`Abrir enlace ${index + 1}`}
+                  >
+                    🔗 Ir al enlace {linkModalData.descriptionLinks.length > 1 ? `${index + 1}` : ''}
+                  </button>
+                </div>
               ))}
 
-              <button
-                onClick={() => setLinkModalOpen(false)}
-                style={{
-                  background: 'rgba(108, 117, 125, 0.8)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: 'white',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  fontSize: '0.95rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  marginTop: '8px'
-                }}
-                onMouseOver={(e) => {
-                  (e.target as HTMLButtonElement).style.background = 'rgba(108, 117, 125, 1)';
-                }}
-                onMouseOut={(e) => {
-                  (e.target as HTMLButtonElement).style.background = 'rgba(108, 117, 125, 0.8)';
-                }}
-              >
-                ❌ Cerrar
-              </button>
+              <div className="blocking-modal-button-container blocking-modal-button-container--compact">
+                <span className="blocking-modal-button-label" aria-hidden="true">
+                  Cerrar
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setLinkModalOpen(false)}
+                  aria-label="Cerrar modal"
+                >
+                  ❌ Cerrar
+                </button>
+              </div>
             </div>
           </div>
         </div>
