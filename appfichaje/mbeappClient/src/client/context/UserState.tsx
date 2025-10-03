@@ -70,9 +70,11 @@ const UserState = (props: JSONObject) => {
 
                 })
                 if(response){
+                    // Store the profile data in userData state
+                    setUserData(response)
                     isRoleAllowed(router, callback)
                 }
-                
+
             }
             )()
 

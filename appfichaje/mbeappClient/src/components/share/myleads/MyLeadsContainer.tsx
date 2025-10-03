@@ -31,7 +31,7 @@ const MyLeadsContainer = ({ pathEdit }: {pathEdit: string}) => {
             <div className="w-[80rem] h-auto bg-[#badaed] border border-blue rounded-t-3xl grid table-filter">
                 <div className="w-full pt-4 pl-2 pr-1 flex">
                     <div className="w-full flex">
-                        <h1 className="w-full text-bold text-blue" style={{fontSize:'22px'}}>{ `Mis Leads` }</h1>
+                        <h1 className='text-lg text-primary font-bold'>{ `Mis Leads` }</h1>
                     </div>
                 </div>
 

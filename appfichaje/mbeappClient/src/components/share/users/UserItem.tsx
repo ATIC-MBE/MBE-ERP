@@ -60,7 +60,11 @@ const UserItem = ({ item, pathEdit, index } :
                         <BsLockFill title='Reset Contraseña' />
                     </div>
                     <div>
-                        <Link className="icon-table-row flex items-center justify-center rounded-full w-[1.8rem] h-[1.8rem] card-action" href={`/superadmin/users/${itemContent.id}/changepassword`}>
+                        { /* Si estamos en rrhhmaster, usar su propia ruta de cambio de contraseña */ }
+                        <Link
+                            className="icon-table-row flex items-center justify-center rounded-full w-[1.8rem] h-[1.8rem] card-action"
+                            href={`${router.pathname.startsWith('/rrhhmaster') ? '/rrhhmaster' : '/superadmin'}/users/${itemContent.id}/changepassword`}
+                        >
                             <BsFillShieldLockFill  size={'1.1rem'} title='Cambiar Contraseña' />
                         </Link>
                     </div>
