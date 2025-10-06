@@ -6,11 +6,14 @@ import UsersList from './UsersList'
 import useUser from '@/client/hooks/share/users/useUser'
 
 const UsersContainer = (
-                        { pathAdd, pathEdit, typeTotalData, pathGetData } : 
-                        {   pathAdd: string, 
+                        { pathAdd, pathEdit, pathUnsubscribe, typeTotalData, pathGetData, hideButtons = false, isUnsubscribeMode = false } : 
+                        {   pathAdd?: string, 
                             pathEdit: string,
+                            pathUnsubscribe?: string,
                             typeTotalData: string, 
-                            pathGetData: string
+                            pathGetData: string,
+                            hideButtons?: boolean,
+                            isUnsubscribeMode?: boolean
                         }) => {
     const { 
             pageCurrent,
@@ -33,9 +36,16 @@ const UsersContainer = (
                     <div className="w-full flex">
                         <h1 className='text-lg text-primary font-bold'>{ `Usuarios` }</h1>
                     </div>
-                    <div className="w-min flex justify-end">
-                        <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#005360] border border-[#005360] text-white" href={`${pathAdd}`}>Nuevo</Link>
-                    </div>
+                    {!hideButtons && pathAdd && (
+                        <div className="w-min flex justify-end">
+                            <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#005360] border border-[#005360] text-white" href={pathAdd}>Nuevo</Link>
+                        </div>
+                    )}
+                    {!hideButtons && pathUnsubscribe && (
+                        <div className="w-min flex justify-end ml-6">
+                            <Link className="ml-0 px-2 py-1 h-min text-[1rem] rounded-xl bg-[#005360] border border-[#005360] text-red" href={pathUnsubscribe}>Baja</Link>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex justify-end w-full h-[5rem] p-1">
@@ -75,7 +85,7 @@ const UsersContainer = (
                                         </div>
                                         : 
                                         <>
-                                            <UsersList items={listData} pathEdit={pathEdit} /> 
+                                            <UsersList items={listData} pathEdit={pathEdit} isUnsubscribeMode={isUnsubscribeMode} /> 
                                         </>
                                         
                                 )

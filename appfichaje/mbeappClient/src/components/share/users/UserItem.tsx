@@ -1,16 +1,17 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { BsFillShieldLockFill, BsLockFill, BsPencilFill } from 'react-icons/bs'
+import { BsFillShieldLockFill, BsLockFill, BsPencilFill, BsTrashFill } from 'react-icons/bs'
 import useUserItem from '@/client/hooks/share/users/useUserItem'
 import { user } from '@/client/types/globalTypes'
 import Link from 'next/link'
 import { TbLockSquare } from 'react-icons/tb'
 
-const UserItem = ({ item, pathEdit, index } : 
+const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } : 
                             {
                                 item: user,
                                 pathEdit: string,
-                                index: number
+                                index: number,
+                                isUnsubscribeMode?: boolean
                             }) => {
 
     const router = useRouter()
@@ -54,7 +55,11 @@ const UserItem = ({ item, pathEdit, index } :
 
                 <div className='flex justify-end'>
                     <div onClick={() => goEditData(itemContent.id!)} className='icon-table-row flex items-center justify-center rounded-full w-[1.8rem] h-[1.8rem] card-action'>
-                        <BsPencilFill title='Editar' />
+                        { isUnsubscribeMode ? (
+                            <BsTrashFill title='Dar de baja' />
+                        ) : (
+                            <BsPencilFill title='Editar' />
+                        ) }
                     </div>
                     <div onClick={() => handleResetPassword(itemContent.id || 0)} className='icon-table-row flex items-center justify-center rounded-full w-[1.8rem] h-[1.8rem] card-action'>
                         <BsLockFill title='Reset Contraseña' />

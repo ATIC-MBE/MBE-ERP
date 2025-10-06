@@ -41,11 +41,24 @@ const useUserItem = (  item: user, pathEdit: string ) => {
         }
     }
 
+    /**
+     * Nueva función para manejar la acción del candado en modo unsubscribe
+     * Funcionalidad por definir
+     */
+    const handleUnsubscribeLockAction = async (id: number) => {
+        // TODO: Implementar funcionalidad específica para unsubscribe
+        console.log('Acción de candado en modo unsubscribe para usuario:', id)
+        
+        // La funcionalidad se definirá más adelante
+        // Por ahora esta función queda en blanco
+    }
+
     return {
         itemContent,
         goEditData,
         eventMap,
-        handleResetPassword
+        handleResetPassword,
+        handleUnsubscribeLockAction
     }
 }
 
