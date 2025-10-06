@@ -15,7 +15,8 @@ const Atic = () => {
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
-        //MCH { title: 'Atención', message: 'Diario de abordo.' },
+        { title: 'Atención', message: 'Actualiza el GANTT.' },
+        { title: 'P1N', message: 'Recuerda además de poner los P1Nes, resolverlos por la tarde.' },
         { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // puedes añadir tantos objetos como quieras
     ];

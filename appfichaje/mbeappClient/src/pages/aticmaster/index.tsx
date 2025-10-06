@@ -20,7 +20,7 @@ const Atic = () => {
     ];
     // Cuando montamos la página, aseguramos que el modal aparece
     useEffect(() => {
-        const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
+        const seen = JSON.parse(localStorage.getItem('aticmaster_modals_seen') || 'null');
         if (Array.isArray(seen) && seen.length === modals.length) {
             // todos marcados como vistos
             setCurrentModalIndex(modals.length);

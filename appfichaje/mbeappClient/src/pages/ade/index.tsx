@@ -12,14 +12,18 @@ const Ade = () => {
     const [currentModalIndex, setCurrentModalIndex] = useState(0);
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
+        { title: 'Atención', message: 'S. RRHH.' },
+        { title: 'Atención', message: 'Leer correos.' },
         { title: 'Atención', message: 'Revisar las cuentas.' },
         { title: 'Atención', message: 'Facturas' },
+        { title: 'P1N', message: 'Recuerda además de poner los P1Nes, resolverlos por la tarde.' },
+        { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // puedes añadir tantos objetos como quieras
     ];
     
     // Cuando montamos la página, aseguramos que el modal aparece
     useEffect(() => {
-        const seen = JSON.parse(localStorage.getItem('atic_modals_seen') || 'null');
+        const seen = JSON.parse(localStorage.getItem('ade_modals_seen') || 'null');
         if (Array.isArray(seen) && seen.length === modals.length) {
             // todos marcados como vistos
             setCurrentModalIndex(modals.length);

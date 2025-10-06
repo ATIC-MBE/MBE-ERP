@@ -15,7 +15,8 @@ const Myd = () => {
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
         { title: 'Atención', message: 'Sucesos RRHH.' },
-        { title: 'Atención', message: 'Leer mensajes.' },
+        { title: 'Atención', message: 'Leer correos, revisar WPP y ver las interacciones.' },
+        { title: 'P1N', message: 'Recuerda además de poner los P1Nes, resolverlos por la tarde.' },
         { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // puedes añadir tantos objetos como quieras
     ];

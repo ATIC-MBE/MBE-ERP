@@ -14,9 +14,10 @@ const RRHH = () => {
     const [currentModalIndex, setCurrentModalIndex] = useState(0);
     // 1. Array de pop-ups que queremos mostrar en orden
     const modals = [
-        { title: 'Atención', message: 'Asistencia.' },
+        { title: 'Atención', message: 'Comprobar asistencia.' },
         { title: 'Atención', message: 'S. RRHH.' },
-        { title: 'Atención', message: 'Sucesos pisos.' },
+        { title: 'Atención', message: 'Leer correos.' },
+        { title: 'P1N', message: 'Recuerda además de ponerlos y resolverlos por la tarde.' },
         { title: 'Examen diario', message: 'Recuerda revisar tu correo personal por si te ha llegado.' },
         // puedes añadir tantos objetos como quieras
     ];
