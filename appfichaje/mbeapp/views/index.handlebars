@@ -157,8 +157,18 @@
 </div>
 
 <script>
+    // Mensaje mostrado tras el cierre de sesión. Personalízalo aquí.
+    const LOGOUT_NOTICE_MESSAGE = '¡Recuerda estar pendiente por si te llega un examen!';
+
     // Check for fichaje result in sessionStorage
     document.addEventListener('DOMContentLoaded', function() {
+        const logoutForm = document.querySelector('form[action="/logout"]');
+        if (logoutForm) {
+            logoutForm.addEventListener('submit', function() {
+                sessionStorage.setItem('logoutNotice', JSON.stringify({ message: LOGOUT_NOTICE_MESSAGE }));
+            });
+        }
+
         const fichajeResult = sessionStorage.getItem('fichajeResult');
         if (fichajeResult) {
             try {
