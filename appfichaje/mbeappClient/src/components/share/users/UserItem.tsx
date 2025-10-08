@@ -23,6 +23,12 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
         moverCarpeta: false,
         nominasFiniquitos: false,
     })
+    const [actionsDone, setActionsDone] = useState({
+        rrhh2Email: false,
+        examenDiario: false,
+        minqReminder: false,
+        erpEstado: false,
+    })
 
     // Resetear checklist al abrir/cerrar el modal
     useEffect(() => {
@@ -114,13 +120,21 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
                 title={`Dar de baja usuario`}
                 isOpen={openUnsubscribeModal}
                 cancelHandler={() => setOpenUnsubscribeModal(false)}
+                acceptHandler={() => { /* TODO: Confirmar baja (próximamente) */ }}
+                acceptLabel={'Confirmar baja'}
+                acceptClassName={'modal-accept-btn p-2 rounded-full'}
             >
                 <div className='text-sm space-y-2'>
-                    <div className='flex justify-between'><span className='font-semibold'>ID:</span><span>{itemContent.id}</span></div>
-                    <div className='flex justify-between'><span className='font-semibold'>Usuario:</span><span>{itemContent.username}</span></div>
-                    <div className='flex justify-between'><span className='font-semibold'>Nombre completo:</span><span>{itemContent.nombre_completo}</span></div>
-                    {/* <div className='flex justify-between'><span className='font-semibold'>Email:</span><span>{itemContent.email}</span></div> */}
-                    <div className='flex justify-between'><span className='font-semibold'>Rol:</span><span>{itemContent.nombrerol_str}</span></div>
+                    {/* Primera fila: ID y Rol */}
+                    <div className='grid grid-cols-2 gap-4'>
+                        <div className='flex items-center space-x-2'><span className='font-semibold'>ID:</span><span>{itemContent.id}</span></div>
+                        <div className='flex items-center space-x-2'><span className='font-semibold'>Rol:</span><span>{itemContent.nombrerol_str}</span></div>
+                    </div>
+                    {/* Segunda fila: Usuario y Nombre completo */}
+                    <div className='grid grid-cols-2 gap-4'>
+                        <div className='flex items-center space-x-2'><span className='font-semibold'>Usuario:</span><span>{itemContent.username}</span></div>
+                        <div className='flex items-center space-x-2'><span className='font-semibold'>Nombre completo:</span><span>{itemContent.nombre_completo}</span></div>
+                    </div>
                     {itemContent.fecha_inicio && (
                         <div className='flex justify-between'><span className='font-semibold'>Inicio:</span><span>{itemContent.fecha_inicio}</span></div>
                     )}
@@ -149,6 +163,24 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
                             <input type='checkbox' className='mt-[0.2rem]' checked={tasks.nominasFiniquitos} onChange={() => toggleTask('nominasFiniquitos')} />
                             <span>Nóminas: solicitarlas y los finiquitos de ser necesario, a Mario Todo Impuesto y reenviarlas a Diego, con copia a RRHH y ADE.</span>
                         </label>
+                        <hr className='my-3' />
+                        {/* Líneas de acciones con botón (placeholders sin funcionalidad) */}
+                        <div className='flex items-center justify-between'>
+                            <span>Cambio contraseña Email RRHH2.</span>
+                            <button type='button' onClick={() => setActionsDone(prev => ({...prev, rrhh2Email: true}))} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.rrhh2Email ? 'modal-action-btn--done' : 'modal-action-btn'}`}>Contraseña</button>
+                        </div>
+                        <div className='flex items-center justify-between'>
+                            <span>EXAMEN diario. Quitar su correo electrónico del documento de examen del departamento en que se encontrara.</span>
+                            <button type='button' onClick={() => setActionsDone(prev => ({...prev, examenDiario: true}))} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.examenDiario ? 'modal-action-btn--done' : 'modal-action-btn'}`}>Examen</button>
+                        </div>
+                        <div className='flex items-center justify-between'>
+                            <span>MINQ Cambiar el reminder_activated a FALSE de todos los registros con su teléfono.</span>
+                            <button type='button' onClick={() => setActionsDone(prev => ({...prev, minqReminder: true}))} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.minqReminder ? 'modal-action-btn--done' : 'modal-action-btn'}`}>MINQ</button>
+                        </div>
+                        <div className='flex items-center justify-between'>
+                            <span>ERP: Auto, Cambiar el registro de la tbl_usuario.estado a -1.</span>
+                            <button type='button' onClick={() => setActionsDone(prev => ({...prev, erpEstado: true}))} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.erpEstado ? 'modal-action-btn--done' : 'modal-action-btn'}`}>Estado</button>
+                        </div>
                     </div>
                 </div>
             </Modal>
