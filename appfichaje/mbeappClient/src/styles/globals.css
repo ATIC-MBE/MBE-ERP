@@ -18,6 +18,8 @@
   border: none !important;
   outline: none !important;
 }
+
+/* NO BORRARLOS: se desconfigura todo el frontend*/
 /* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind base;
 /* stylelint-disable-next-line at-rule-no-unknown */

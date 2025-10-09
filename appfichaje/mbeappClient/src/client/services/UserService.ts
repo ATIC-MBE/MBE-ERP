@@ -1,3 +1,4 @@
+import axios from "axios"
 import { JSONObject, profile, RequestErrorHandler, user, UserSignup, USERS_PATH } from "../types/globalTypes";
 import { getRequest, getRequestQuery, patchRequest, postRequest } from "../helpers/Util"
 import { ADMIN_USERS_PATH, AUTH_LOGIN_PATH, SHARE_PROFILE_PATH } from "../helpers/constants";
@@ -5,6 +6,42 @@ import { ADMIN_USERS_PATH, AUTH_LOGIN_PATH, SHARE_PROFILE_PATH } from "../helper
 export default class UserService {
 
     constructor() {
+    }
+
+    private readonly TOKEN_STORAGE_KEY = 'session_token'
+
+    private persistAuthToken(token?: string) {
+        if (!token) return
+        axios.defaults.headers.common['token'] = token
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(this.TOKEN_STORAGE_KEY, token)
+        }
+    }
+
+    private normalizeProfile(payload: any): profile {
+        if (!payload) {
+            return {
+                id: 0,
+                nombre: '',
+                apellido: '',
+                email: '',
+                estado: 0,
+                roles: []
+            }
+        }
+
+        const rawId = payload.id
+        const numericId = typeof rawId === 'number'
+            ? rawId
+            : Number.parseInt(String(rawId ?? '0'), 10)
+
+        const safeRoles = Array.isArray(payload.roles) ? payload.roles : []
+
+        return {
+            ...payload,
+            id: Number.isFinite(numericId) ? numericId : 0,
+            roles: safeRoles
+        }
     }
 
     /*--------------- General ---------------*/
@@ -36,11 +73,16 @@ export default class UserService {
             return undefined as unknown as profile
         }
 
+        const { token, data } = response.data ?? {}
+        if (token) {
+            this.persistAuthToken(token)
+        }
+
         console.info('[UserService.authUser] Response status:', response.status)
         console.debug('[UserService.authUser] Response.data:', response.data)
         console.groupEnd()
 
-        return response.data?.data as profile
+        return this.normalizeProfile(data)
     }
 
     async resetPasswordUser (path: string, handleError?: RequestErrorHandler): Promise<boolean> {
@@ -57,9 +99,12 @@ export default class UserService {
     // Get current user profile
     async getProfile(handleError: RequestErrorHandler): Promise<profile> {
 
-        return (
-            await getRequest(`${SHARE_PROFILE_PATH}`, handleError)
-        )?.data.data as profile
+        const response = await getRequest(`${SHARE_PROFILE_PATH}`, handleError)
+        if (!response) {
+            return undefined as unknown as profile
+        }
+
+        return this.normalizeProfile(response.data?.data)
     }
 
     /*--------------- MIX ---------------*/
@@ -123,14 +168,14 @@ export default class UserService {
     // Signup a new user: path: USERS_PATH
     async addUser(path: string, user: UserSignup, handleError?: RequestErrorHandler): Promise<JSONObject> {
         return (
-            await postRequest(`${path}`, user, null, handleError)
+            await postRequest(`${path}`, user, undefined, handleError)
         )?.data as JSONObject
     }
 
     // Update an existing user: path: USERS_PATH
     async setUser(path: string, userId:any ,updatedUser: UserSignup, handleError?: RequestErrorHandler): Promise<JSONObject> {
         return (
-            await patchRequest(`${path}/${userId}`, updatedUser, null, handleError)
+            await patchRequest(`${path}/${userId}`, updatedUser, undefined, handleError)
         )?.data as JSONObject
     }
 }
