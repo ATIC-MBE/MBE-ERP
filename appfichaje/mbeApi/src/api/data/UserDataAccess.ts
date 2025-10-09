@@ -499,8 +499,9 @@ class UserDataAccess implements IDataAccess<IUser> {
                               this.filterStatus
                         ]
                   }
-
-                  let lData = (await client.query(queryData)).rows as Array<IUser | IErrorResponse>
+                  console.log('PATCH updateRRHH - Datos enviados:', queryData.values);
+                  let lData = (await client.query(queryData)).rows as Array<IUser | IErrorResponse>;
+                  console.log('PATCH updateRRHH - Resultado SQL:', lData);
 
 
                   let queryDataRRHH = {

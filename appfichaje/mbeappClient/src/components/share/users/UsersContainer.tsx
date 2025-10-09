@@ -29,6 +29,11 @@ const UsersContainer = (
             handleActionSearch 
     } = useUser(typeTotalData, pathGetData)
 
+    // Función para refrescar usuarios (llama a handleActionSearch)
+    const refreshUsers = () => {
+        handleActionSearch();
+    };
+
     return (
         <div className="w-[80rem] h-auto grid1 grid-flow-row1">
             <div className="w-[80rem] h-auto bg-[#005360]/10 border border-[#005360] rounded-t-3xl grid table-filter">
@@ -85,7 +90,7 @@ const UsersContainer = (
                                         </div>
                                         : 
                                         <>
-                                            <UsersList items={listData} pathEdit={pathEdit} isUnsubscribeMode={isUnsubscribeMode} /> 
+                                            <UsersList items={listData} pathEdit={pathEdit} isUnsubscribeMode={isUnsubscribeMode} onUserUpdate={refreshUsers} />
                                         </>
                                         
                                 )

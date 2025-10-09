@@ -1505,7 +1505,7 @@ app.post("/logout", (req, res) => {
     res.redirect("/login")
 })
 
-app.listen(PORT, () => { console.log("Running on Port: ", PORT) })
+app.listen(PORT, '0.0.0.0', () => { console.log("Running on Port: ", PORT) })
 
 // Sin uso
 function checkUserOld(username, pass) {

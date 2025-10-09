@@ -37,6 +37,7 @@ class DbConnection {
                         //// establecer un error forzando un rollback 
                   } catch (err) {
                         await client.query('ROLLBACK')
+                        console.log('ERROR SQL (transacción):', err);
                         let _dataError = err
                         try{
                               let _tmp = (err as Error).cause
@@ -71,15 +72,16 @@ class DbConnection {
                                     dataDB = [ ...result.rows ]
                               })
                               .catch(err => {
+                                    console.log('ERROR SQL:', err);
                                     let errorCustom: IErrorSql = err as IErrorSql
                                     let errorDB = UtilInstance.getErrorSql(errorCustom.code, errorCustom.detail)
                                     // console.log(errorCustom)
                                     if ( errorDB ) dataDB = [ { error: 'Error sql', data: [ errorDB ] } ]
                                     else dataDB = [ { error: 'Error sql desconocido!', data: [] } ]
                               })
-                              .then(() => {
-                                    this._connection.end()
-                              })
+                              // .then(() => {
+                              //       this._connection.end()
+                              // })
                         )
                   })
                   .catch(err => {

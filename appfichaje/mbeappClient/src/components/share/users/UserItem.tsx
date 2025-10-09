@@ -4,16 +4,19 @@ import { BsFillShieldLockFill, BsLockFill, BsPencilFill, BsTrashFill } from 'rea
 import useUserItem from '@/client/hooks/share/users/useUserItem'
 import { user } from '@/client/types/globalTypes'
 import Link from 'next/link'
+import UserService from '@/client/services/UserService';
 import { TbLockSquare } from 'react-icons/tb'
 import Modal from '@/components/Modal'
 
-const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } : 
-                            {
-                                item: user,
-                                pathEdit: string,
-                                index: number,
-                                isUnsubscribeMode?: boolean
-                            }) => {
+interface UserItemProps {
+    item: user;
+    pathEdit: string;
+    index: number;
+    isUnsubscribeMode?: boolean;
+    onUserUpdate?: () => void;
+}
+
+const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false, onUserUpdate }: UserItemProps) => {
 
     const router = useRouter()
     const [openUnsubscribeModal, setOpenUnsubscribeModal] = useState(false)
@@ -55,6 +58,40 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
     // Alternar colores de fondo: custom turquesa (pares) y blanco (impares) - matching app theme
     const rowBgColor = index % 2 === 0 ? 'bg-[#005360]/15' : 'bg-white';
     
+    // --- FUNCIÓN PARA DAR DE BAJA USUARIO EN EL BACKEND ---
+    // Llama al endpoint /api/rrhh/p/users/unsubscribe enviando el id del usuario
+    // --- FUNCIÓN PARA DAR DE BAJA USUARIO EN EL BACKEND ---
+    // Usar UserService para modificar el estado igual que en [id].tsx
+    const manejoEstadoUsuario = async () => {
+        try {
+            // Enviar solo el campo estado al backend (tipado compatible)
+            const userData: any = { estado: -1 };
+            const result = await UserService.prototype.setUser.call(
+                new UserService(),
+                '/api/rrhh/users',
+                itemContent.id,
+                userData,
+                (err: any) => {
+                    const { status, data } = err.response || {};
+                    if (status === 409) {
+                        alert('Error de validación al dar de baja: ' + (data?.error || ''));
+                    } else {
+                        alert('Error al dar de baja: ' + (data?.error || ''));
+                    }
+                }
+            );
+            if (result && (result.estado === -1 || (result.data && result.data.estado === -1))) {
+                setActionsDone(prev => ({ ...prev, erpEstado: true }));
+                alert('Usuario dado de baja correctamente');
+                if (typeof onUserUpdate === 'function') onUserUpdate();
+            } else {
+                alert('No se pudo dar de baja al usuario');
+            }
+        } catch (err) {
+            alert('Error de conexión');
+        }
+    }
+
     return (
         <>
         <div className={`w-full h-auto`}>
@@ -130,6 +167,7 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
                         <div className='flex items-center space-x-2'><span className='font-semibold'>ID:</span><span>{itemContent.id}</span></div>
                         <div className='flex items-center space-x-2'><span className='font-semibold'>Rol:</span><span>{itemContent.nombrerol_str}</span></div>
                     </div>
+                    
                     {/* Segunda fila: Usuario y Nombre completo */}
                     <div className='grid grid-cols-2 gap-4'>
                         <div className='flex items-center space-x-2'><span className='font-semibold'>Usuario:</span><span>{itemContent.username}</span></div>
@@ -163,6 +201,7 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
                             <input type='checkbox' className='mt-[0.2rem]' checked={tasks.nominasFiniquitos} onChange={() => toggleTask('nominasFiniquitos')} />
                             <span>Nóminas: solicitarlas y los finiquitos de ser necesario, a Mario Todo Impuesto y reenviarlas a Diego, con copia a RRHH y ADE.</span>
                         </label>
+
                         <hr className='my-3' />
                         {/* Líneas de acciones con botón (placeholders sin funcionalidad) */}
                         <div className='flex items-center justify-between'>
@@ -179,14 +218,21 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false } :
                         </div>
                         <div className='flex items-center justify-between'>
                             <span>ERP: Auto, Cambiar el registro de la tbl_usuario.estado a -1.</span>
-                            <button type='button' onClick={() => setActionsDone(prev => ({...prev, erpEstado: true}))} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.erpEstado ? 'modal-action-btn--done' : 'modal-action-btn'}`}>Estado</button>
+                            {/* Botón Estado: llama a la función que hace la petición al backend para dar de baja al usuario */}
+                            <button
+                                type='button'
+                                onClick={manejoEstadoUsuario}
+                                className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.erpEstado ? 'modal-action-btn--done' : 'modal-action-btn'}`}
+                            >
+                                Estado
+                            </button>
                         </div>
                     </div>
                 </div>
             </Modal>
         )}
         </>
-    )
+    );
 }
 
 export default UserItem

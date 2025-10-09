@@ -128,7 +128,7 @@ export default class UserService {
     }
 
     // Update an existing user: path: USERS_PATH
-    async setUser(path: string, userId:any ,updatedUser: UserSignup, handleError?: RequestErrorHandler): Promise<JSONObject> {
+    async setUser(path: string, userId: any, updatedUser: Partial<UserSignup>, handleError?: RequestErrorHandler): Promise<JSONObject> {
         return (
             await patchRequest(`${path}/${userId}`, updatedUser, null, handleError)
         )?.data as JSONObject
