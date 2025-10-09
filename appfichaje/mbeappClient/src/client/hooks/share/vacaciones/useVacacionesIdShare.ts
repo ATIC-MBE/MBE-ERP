@@ -30,7 +30,8 @@ const useVacacionesIddShare = (pathGoToBack: string) => {
             'Permiso por fallecimiento familiar',
             'Permiso por exámenes',
             'Permiso por traslado del domicilio habitual',
-            'Permiso para el cumplimiento de un deber público y personal'
+            'Permiso para el cumplimiento de un deber público y personal',
+            'Permiso acompañamiento medico familiar'
         ];
     const router = useRouter()
     const { id } = router.query

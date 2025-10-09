@@ -73,6 +73,55 @@ body {
   text-shadow: 0 2px 8px rgba(0,83,96,0.10);
 }
 
+/* Modal accept button override (ensure red background despite global button styles) */
+.modal-accept-btn {
+  background-color: #dc2626 !important; /* Tailwind red-600 */
+  color: #ffffff !important;
+  border: 1px solid #dc2626 !important;
+}
+.modal-accept-btn:hover {
+  background-color: #b91c1c !important; /* Tailwind red-700 */
+  color: #ffffff !important;
+}
+button.modal-accept-btn {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 1px solid #dc2626 !important;
+}
+button.modal-accept-btn:hover {
+  background-color: #b91c1c !important;
+  color: #ffffff !important;
+}
+.blocking-modal-button-container button.modal-accept-btn {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 1px solid #dc2626 !important;
+}
+.blocking-modal-button-container button.modal-accept-btn:hover {
+  background-color: #b91c1c !important;
+  color: #ffffff !important;
+}
+
+/* Botón de acción en el modal (Ejecutar) */
+.modal-action-btn {
+  background-color: #005360 !important; /* color corporativo */
+  color: #ffffff !important;
+  border: 1px solid #005360 !important;
+}
+.modal-action-btn:hover {
+  background-color: #0077bd !important;
+  color: #ffffff !important;
+}
+.modal-action-btn--done {
+  background-color: #16a34a !important; /* Tailwind green-600 */
+  color: #ffffff !important;
+  border: 1px solid #16a34a !important;
+}
+.modal-action-btn--done:hover {
+  background-color: #15803d !important; /* Tailwind green-700 */
+  color: #ffffff !important;
+}
+
 
 .login-claim {
   margin-top: 1.5rem;
