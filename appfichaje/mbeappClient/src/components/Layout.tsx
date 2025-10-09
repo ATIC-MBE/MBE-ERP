@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Script from 'next/script'
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
@@ -122,16 +123,7 @@ export const Layout = (props: JSONObject) => {
 
     }
 
-    const { useAllowedEffect, changeCurrentRol, getCurrentRol, userData, setUserData, isMobileMenuOpen, setIsMobileMenuOpen } = useContext(UserContext)
-
-    const logout = async () => {
-        const response = await axios.get('/api/auth/logout')
-        changeCurrentRol('')
-        setUserData('')
-        setHasShownTasks(false)
-
-        router.push('/login')
-    }
+    const { useAllowedEffect, getCurrentRol } = useContext(UserContext)
 
     useAllowedEffect(router, () => {
         // console.log(userProfile)
@@ -161,8 +153,8 @@ export const Layout = (props: JSONObject) => {
                 <title>MBE</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
                 <link rel="shortcut icon" href="/img/ico/MBE_symbol.png" />
-                <script src="/js/dailyTasksTrigger.js"></script>
             </Head>
+            <Script src="/js/dailyTasksTrigger.js" strategy="afterInteractive" />
 
             <Disclosure as="nav" className="bg-gray-900 h-[15vh] lg:h-[15vh] h-[10vh] p-3 static top-0 c-bg-secondary">
                 {({ open }) => (

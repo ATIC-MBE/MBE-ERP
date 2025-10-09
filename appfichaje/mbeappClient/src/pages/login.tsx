@@ -1,8 +1,10 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import UserContext from '@/client/context/UserContext'
 import { useRouter } from "next/router"
 import UserService from '@/client/services/UserService'
 import type { JSONObject } from '@/client/types/globalTypes'
+
+const CURFEW_MESSAGE = process.env.NEXT_PUBLIC_SESSION_FORCE_LOGOUT_MESSAGE ?? 'Tu sesión se ha cerrado automáticamente a las 20:00.'
 
 const buildLoginMetadata = (): JSONObject => {
     if (typeof window === 'undefined') {
@@ -66,7 +68,26 @@ const Login = () => {
     const router = useRouter()
 
     const [isError, setIsError] = useState(false)
+    const [infoMessage, setInfoMessage] = useState<string | null>(null)
     const [credentials, setCredentials] = useState({ user: '', password: '' })
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return
+
+        const storedMessage = sessionStorage.getItem('session_force_logout_message')
+        if (storedMessage) {
+            setInfoMessage(storedMessage)
+            sessionStorage.removeItem('session_force_logout_message')
+            return
+        }
+
+        const searchParams = new URLSearchParams(router.asPath.split('?')[1] ?? '')
+        const sessionParam = searchParams.get('session')
+        const reasonParam = searchParams.get('reason')
+        if (sessionParam === 'expired' || reasonParam === 'curfew') {
+            setInfoMessage(CURFEW_MESSAGE)
+        }
+    }, [router.asPath])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCredentials({
@@ -77,6 +98,7 @@ const Login = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setInfoMessage(null)
         const metadata = buildLoginMetadata()
         console.groupCollapsed('[Login] handleSubmit')
         console.info('Usuario intentando login:', credentials.user)
@@ -162,6 +184,11 @@ const Login = () => {
                             {isError && (
                                 <p className="text-red-500 mt-4 text-center">
                                     Usuario o contraseña incorrectos
+                                </p>
+                            )}
+                            {infoMessage && (
+                                <p className="mt-4 text-center text-sm font-medium text-blue-900 bg-blue-100 border border-blue-300 rounded-lg px-4 py-3">
+                                    {infoMessage}
                                 </p>
                             )}
                         </form>
