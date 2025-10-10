@@ -92,6 +92,37 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false, onUserUpda
         }
     }
 
+    // --- FUNCIÓN PARA VINCULAR BOTÓN MINQ CON GOOGLE SHEETS ---
+    const handleMinqReminder = async () => {
+        try {
+            // Aquí irá la lógica para conectar con Google Sheets y buscar el teléfono
+            // Siguiente paso: implementar búsqueda en hoja PERSONAL
+            alert('Conexión con Google Sheets iniciada (próximo paso: buscar teléfono en hoja PERSONAL)');
+            if (typeof window !== 'undefined') {
+                // Solo en desarrollo, para mostrar en la terminal del backend
+                fetch('/api/log', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Conexión con Google Sheets iniciada (próximo paso: buscar teléfono en hoja PERSONAL)' })
+                });
+            }
+            // --- LÓGICA GOOGLE SHEETS ---
+            // 1. Importar googleapis
+            // 2. Autenticarse con las credenciales del .env
+            // 3. Acceder al archivo "Minq-MBE.gsheet" y hoja "PERSONAL"
+            // 4. Buscar en la columna "number" el teléfono del usuario
+            // (esto se implementa en el backend por seguridad)
+            setActionsDone(prev => ({ ...prev, minqReminder: true }));
+        } catch (error) {
+            alert('Error al conectar con Google Sheets');
+            fetch('/api/log', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Error al conectar con Google Sheets' })
+            });
+        }
+    }
+
     return (
         <>
         <div className={`w-full h-auto`}>
@@ -214,7 +245,7 @@ const UserItem = ({ item, pathEdit, index, isUnsubscribeMode = false, onUserUpda
                         </div>
                         <div className='flex items-center justify-between'>
                             <span>MINQ Cambiar el reminder_activated a FALSE de todos los registros con su teléfono.</span>
-                            <button type='button' onClick={() => setActionsDone(prev => ({...prev, minqReminder: true}))} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.minqReminder ? 'modal-action-btn--done' : 'modal-action-btn'}`}>MINQ</button>
+                            <button type='button' onClick={handleMinqReminder} className={`px-3 py-1 text-sm rounded-full w-[10rem] text-center ${actionsDone.minqReminder ? 'modal-action-btn--done' : 'modal-action-btn'}`}>MINQ</button>
                         </div>
                         <div className='flex items-center justify-between'>
                             <span>ERP: Auto, Cambiar el registro de la tbl_usuario.estado a -1.</span>
