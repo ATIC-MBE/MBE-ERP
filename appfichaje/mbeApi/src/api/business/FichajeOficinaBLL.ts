@@ -10,6 +10,8 @@ import { IUser } from "../models/IUser"
 import { ifError } from "assert"
 import EmailServiceInstance from "../helpers/EmailService"
 import TemplateEmails from "../helpers/TemplateEmails"
+import { DateTime } from "luxon"
+import { IFichajeLateSummary, IFichajeLateSummaryRow } from "../modelsextra/IFichajeLateSummary"
 
 class FichajeOficinaBLL implements IDataAccess<IFichajeOficina> {
     public dataAcces: FichajeOficinaDAL
@@ -81,6 +83,57 @@ class FichajeOficinaBLL implements IDataAccess<IFichajeOficina> {
             firstLoginAt: data.firstLoginAt,
             ip: data.ip ?? null
         })
+    }
+
+    async getLateSummaryByUserAndWeek(params: {
+        usuario: string
+        referenceDate?: string
+        thresholdTime?: string
+        limit?: number
+    }): Promise<IFichajeLateSummary | IErrorResponse> {
+        const zone = 'Europe/Madrid'
+        const limit = params.limit ?? 3
+        const thresholdTime = params.thresholdTime ?? '09:04:00'
+
+        let reference = params.referenceDate
+            ? DateTime.fromISO(params.referenceDate, { zone })
+            : DateTime.now().setZone(zone)
+
+        if (!reference.isValid) {
+            reference = DateTime.now().setZone(zone)
+        }
+
+        const weekStart = reference.startOf('week')
+        const weekEnd = reference.endOf('week')
+
+        const summaryRow = await this.dataAcces.getLateSummaryByUserAndWeek({
+            usuario: params.usuario,
+            weekStart: weekStart.toISODate()!,
+            weekEnd: weekEnd.toISODate()!,
+            thresholdTime
+        })
+
+        if ((summaryRow as IErrorResponse).error) {
+            return summaryRow as IErrorResponse
+        }
+
+        const row = summaryRow as IFichajeLateSummaryRow
+        const rawDetails = Array.isArray(row.details) ? row.details : []
+        const details = rawDetails.map((detail) => ({
+            fecha: detail.fecha,
+            entrada: detail.entrada,
+            minutosRetraso: detail.minutosRetraso ?? 0
+        }))
+
+        return {
+            weekKey: reference.toFormat("kkkk-'W'WW"),
+            weekStart: weekStart.toISODate()!,
+            weekEnd: weekEnd.toISODate()!,
+            thresholdTime,
+            limit,
+            totalLateDays: row.total_late_days ?? 0,
+            details
+        }
     }
 
     private validate(data: IFichajeOficina, error: IErrorResponse) {

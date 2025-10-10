@@ -1225,10 +1225,12 @@ app.post("/api/share/app/mch/fichar", async (req, res) => {
         console.log('External API response:', result);
         
         if (response.ok && result.data) {
+            const lateSummary = (result.meta && result.meta.lateSummary) ? result.meta.lateSummary : result.lateSummary;
             res.json({
                 status: 1,
                 message: 'Check-in registered successfully',
-                data: result.data
+                data: result.data,
+                lateSummary
             });
         } else {
             console.log('External API error:', result);
