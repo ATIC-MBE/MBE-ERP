@@ -7,7 +7,7 @@ const Fichar = {
     qr: null,
     token: null,
     isProcessing: false, // Add flag to prevent double processing
-    LATE_THRESHOLD_MINUTES: (9 * 60) + 4,
+    LATE_THRESHOLD_MINUTES: (9 * 60) + 6,
     LATE_LIMIT: 3,
 
     init: (tokenQR, urlServerIn, userLogin, tokenLogin) => {
@@ -268,7 +268,7 @@ const Fichar = {
             entrada,
             fecha: finalDateStr,
             horario,
-            threshold: '09:04',
+            threshold: '09:06',
             timestampCaptured: fallbackDate.toISOString(),
             parseSource: resolved.source || 'UNKNOWN'
         };
@@ -335,7 +335,7 @@ const Fichar = {
             remaining,
             shouldNotify: count >= limit,
             details,
-            thresholdTime: summary.thresholdTime || '09:04:00'
+            thresholdTime: summary.thresholdTime || '09:06:00'
         };
     },
 
