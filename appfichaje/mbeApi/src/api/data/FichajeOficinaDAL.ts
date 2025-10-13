@@ -8,6 +8,7 @@ import UtilInstance from "../helpers/Util";
 import { IModel } from "../helpers/IModel";
 import { IUser } from "../models/IUser";
 import { DateTime } from "luxon";
+import { IFichajeLateSummaryRow } from "../modelsextra/IFichajeLateSummary";
 
 class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
     public client: DbConnection;
@@ -466,6 +467,56 @@ class FichajeOficinaDAL implements IDataAccess<IFichajeOficina> {
         if (({ ...lData[0] } as IErrorResponse).error) return lData[0] as IErrorResponse;
 
         return lData as Array<IFichajeOficina>;
+    }
+
+    async getLateSummaryByUserAndWeek(params: {
+        usuario: string
+        weekStart: string
+        weekEnd: string
+        thresholdTime: string
+    }): Promise<IFichajeLateSummaryRow | IErrorResponse> {
+        const queryData = {
+            name: 'get-fichaje-late-summary-week',
+            text: `WITH daily_entries AS (
+                        SELECT
+                            fo.fecha::date AS fecha,
+                            MIN(fo.entrada) FILTER (WHERE fo.entrada IS NOT NULL) AS first_entry
+                        FROM ${Constants.tbl_fichaje_oficina_sql} fo
+                        WHERE fo.estado = 1
+                            AND fo.usuario = $1
+                            AND fo.fecha BETWEEN $2 AND $3
+                        GROUP BY fo.fecha
+                    ),
+                    late_data AS (
+                        SELECT
+                            fecha,
+                            first_entry,
+                            GREATEST(
+                                FLOOR(EXTRACT(EPOCH FROM (first_entry::time - $4::time)) / 60)::int,
+                                0
+                            ) AS late_minutes
+                        FROM daily_entries
+                        WHERE first_entry IS NOT NULL
+                    )
+                    SELECT
+                        COUNT(*) FILTER (WHERE late_minutes > 0) AS total_late_days,
+                        COALESCE(
+                            json_agg(
+                                json_build_object(
+                                    'fecha', fecha::text,
+                                    'entrada', to_char(first_entry, 'HH24:MI'),
+                                    'minutosRetraso', late_minutes
+                                )
+                                ORDER BY fecha
+                            ) FILTER (WHERE late_minutes > 0),
+                            '[]'::json
+                        ) AS details
+                    FROM late_data;`,
+            values: [params.usuario, params.weekStart, params.weekEnd, params.thresholdTime]
+        };
+
+        const result = (await this.client.exeQuery(queryData)) as Array<IFichajeLateSummaryRow | IErrorResponse>;
+        return result[0];
     }
 
     async getEsquemaxRol(): Promise<Array<IFichajeOficina> | IErrorResponse> {

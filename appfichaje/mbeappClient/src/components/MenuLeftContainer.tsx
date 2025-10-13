@@ -1,25 +1,21 @@
 import { MenuLeftType } from "@/client/types/globalTypes"
 import { PropBox } from "./Layout"
 import { useContext, useState } from "react"
+import type { MouseEvent } from "react"
 import UserContext from "@/client/context/UserContext"
-import { useRouter } from 'next/router'
-import axios from 'axios'
 import Link from 'next/link'
 import WebMCH24 from "./webMCH24"
-import FilterInstance from "@/client/helpers/Filter"
 
 const MenuLeftContainer = ({ data, itemSelected }: { data: Array<MenuLeftType>, itemSelected: string }) => {
-    const router = useRouter()
-    const { changeCurrentRol, setUserData } = useContext(UserContext)
+    const { logout }: any = useContext(UserContext)
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleExit = async () => {
-        const response = await axios.get('/api/auth/logout')
-        changeCurrentRol('')
-        setUserData('')
-        localStorage.removeItem('idlogin')
-        FilterInstance.resetLogout()
-        router.push('/login')
+    const handleExit = async (event?: MouseEvent) => {
+        event?.preventDefault?.()
+        setIsOpen(false)
+        if (typeof logout === 'function') {
+            await logout()
+        }
     }
 
     return (

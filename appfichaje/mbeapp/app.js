@@ -1225,10 +1225,12 @@ app.post("/api/share/app/mch/fichar", async (req, res) => {
         console.log('External API response:', result);
         
         if (response.ok && result.data) {
+            const lateSummary = (result.meta && result.meta.lateSummary) ? result.meta.lateSummary : result.lateSummary;
             res.json({
                 status: 1,
                 message: 'Check-in registered successfully',
-                data: result.data
+                data: result.data,
+                lateSummary
             });
         } else {
             console.log('External API error:', result);
@@ -1505,7 +1507,7 @@ app.post("/logout", (req, res) => {
     res.redirect("/login")
 })
 
-app.listen(PORT, () => { console.log("Running on Port: ", PORT) })
+app.listen(PORT, '0.0.0.0', () => { console.log("Running on Port: ", PORT) })
 
 // Sin uso
 function checkUserOld(username, pass) {

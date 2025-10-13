@@ -156,9 +156,108 @@
 
 </div>
 
+<!-- Modal aviso llegada tarde -->
+<div class="modal fade" id="lateAlertModal" tabindex="-1" aria-labelledby="lateAlertLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning bg-opacity-25">
+                <h5 class="modal-title" id="lateAlertLabel">Aviso de llegada tarde</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="lateMinutesMessage" class="mb-2 fw-bold text-danger"></p>
+                <p id="lateWeeklyCounter" class="mb-2 text-muted"></p>
+                <div id="lateNotifyWrapper" class="alert alert-warning d-none" role="alert">
+                    Se le notificará a su responsable (límite 3).
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" style="background-color: #fff0c2; color: #000;" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    // Mensaje mostrado tras el cierre de sesión. Personalízalo aquí.
+    const LOGOUT_NOTICE_MESSAGE = '¡Recuerda estar pendiente por si te llega un examen!';
+
+    const LateSummaryHelper = (() => {
+        const LATE_LIMIT = 3;
+
+        const getWeekKey = (dateStr) => {
+            if (!dateStr || typeof dateStr !== 'string') {
+                const today = new Date();
+                return getWeekKey(today.toISOString().split('T')[0]);
+            }
+            const [year, month, day] = dateStr.split('-').map(Number);
+            if ([year, month, day].some(Number.isNaN)) {
+                const today = new Date();
+                return getWeekKey(today.toISOString().split('T')[0]);
+            }
+            const dt = new Date(Date.UTC(year, month - 1, day));
+            const dayNum = dt.getUTCDay() || 7;
+            dt.setUTCDate(dt.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
+            const weekNo = Math.ceil((((dt - yearStart) / 86400000) + 1) / 7);
+            return `${dt.getUTCFullYear()}-W${weekNo.toString().padStart(2, '0')}`;
+        };
+
+        const readStored = (userId, targetWeekKey) => {
+            if (!userId) return null;
+            let stored;
+            try {
+                stored = JSON.parse(localStorage.getItem(`fichaje_late_counter_${userId}`) || '{}');
+            } catch (_) {
+                stored = null;
+            }
+            if (!stored || stored.weekKey !== targetWeekKey) return null;
+
+            const limit = typeof stored.limit === 'number' ? stored.limit : LATE_LIMIT;
+            let totalCount = 0;
+
+            if (Array.isArray(stored.details)) {
+                totalCount = stored.details.length;
+            } else if (typeof stored.count === 'number') {
+                totalCount = stored.count;
+            } else {
+                totalCount = Object.values(stored.days || {}).reduce(
+                    (acc, info) => acc + (info.occurrences || 1),
+                    0
+                );
+            }
+
+            const remainingRaw = typeof stored.remaining === 'number'
+                ? stored.remaining
+                : (limit - totalCount);
+            const remaining = Math.max(remainingRaw, 0);
+
+            const shouldNotify = typeof stored.shouldNotify === 'boolean'
+                ? stored.shouldNotify
+                : totalCount >= limit;
+
+            return {
+                weekKey: stored.weekKey,
+                count: totalCount,
+                limit,
+                remaining,
+                shouldNotify,
+                days: stored.details || stored.days || {}
+            };
+        };
+
+        return { getWeekKey, readStored };
+    })();
+
     // Check for fichaje result in sessionStorage
     document.addEventListener('DOMContentLoaded', function() {
+        const logoutForm = document.querySelector('form[action="/logout"]');
+        if (logoutForm) {
+            logoutForm.addEventListener('submit', function() {
+                sessionStorage.setItem('logoutNotice', JSON.stringify({ message: LOGOUT_NOTICE_MESSAGE }));
+            });
+        }
+
         const fichajeResult = sessionStorage.getItem('fichajeResult');
         if (fichajeResult) {
             try {
@@ -170,7 +269,13 @@
                 if (result.success) {
                     statusDiv.className = 'fichaje-message fichaje-success';
                     iconSpan.textContent = '✅';
-                    textSpan.textContent = result.message;
+                    if (result.lateInfo && result.lateInfo.isLate) {
+                        const minutes = Number(result.lateInfo.lateMinutes || 0);
+                        const minutesLabel = minutes === 1 ? 'minuto' : 'minutos';
+                        textSpan.textContent = `${result.message}. Llegaste tarde ${minutes} ${minutesLabel} respecto a las 09:04.`;
+                    } else {
+                        textSpan.textContent = result.message;
+                    }
                 } else {
                     statusDiv.className = 'fichaje-message fichaje-error';
                     iconSpan.textContent = '❌';
@@ -194,6 +299,50 @@
                 }
                 
                 statusDiv.style.display = 'block';
+
+                if (result.lateInfo && result.lateInfo.isLate) {
+                    const minutes = Number(result.lateInfo.lateMinutes || 0);
+                    const minutesLabel = minutes === 1 ? 'minuto' : 'minutos';
+                    const lateModalEl = document.getElementById('lateAlertModal');
+                    const lateMessageEl = document.getElementById('lateMinutesMessage');
+                    const lateCounterEl = document.getElementById('lateWeeklyCounter');
+                    const lateNotifyEl = document.getElementById('lateNotifyWrapper');
+
+                    if (lateModalEl && lateMessageEl && lateCounterEl && lateNotifyEl) {
+                        lateMessageEl.textContent = `Has llegado tarde ${minutes} ${minutesLabel}. Debías fichar antes de las 09:04.`;
+
+                        const weekKey = LateSummaryHelper.getWeekKey(result.lateInfo.fecha);
+                        let summary = result.lateSummary || LateSummaryHelper.readStored(result.user, weekKey);
+
+                        if (summary) {
+                            const countLabel = summary.count === 1 ? 'día' : 'días';
+                            const extraDays = Math.max(summary.count - summary.limit, 0);
+                            let counterMessage = `Retrasos esta semana: ${summary.count} ${countLabel} de ${summary.limit}.`;
+
+                            if (extraDays > 0) {
+                                const extraLabel = extraDays === 1 ? 'día' : 'días';
+                                counterMessage += ` Has superado el límite por ${extraDays} ${extraLabel}.`;
+                            } else if (summary.remaining > 0) {
+                                const remainingLabel = summary.remaining === 1 ? 'día' : 'días';
+                                counterMessage += ` Te quedan ${summary.remaining} ${remainingLabel} antes de llegar al límite.`;
+                            }
+
+                            lateCounterEl.textContent = counterMessage;
+
+                            if (summary.shouldNotify) {
+                                lateNotifyEl.classList.remove('d-none');
+                            } else {
+                                lateNotifyEl.classList.add('d-none');
+                            }
+                        } else {
+                            lateCounterEl.textContent = '';
+                            lateNotifyEl.classList.add('d-none');
+                        }
+
+                        const modalInstance = new bootstrap.Modal(lateModalEl);
+                        modalInstance.show();
+                    }
+                }
                 
                 // Clear the result after showing it
                 sessionStorage.removeItem('fichajeResult');

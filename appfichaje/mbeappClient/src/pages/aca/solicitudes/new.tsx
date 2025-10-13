@@ -79,8 +79,8 @@ const SolicitudNew = () => {
                                                     <AiOutlineBars title = "Tipo de solicitud" color={'white'} size={'1.2rem'} /> <span style = {{color : 'red'}} className='field-required'> * </span>
                                                 </span>
                                             </label>
-                                            <select value={dataDB.tipo_ausencia_permiso} name='idsolicitud' className="rounded-r-full p-1 w-[90%]" onChange={handleChange}>
-                                                {/* <option value={''}>Seleccione un Estado</option> */}
+                                            <select value={dataDB.idsolicitud ? dataDB.idsolicitud.toString() : ''} name='idsolicitud' className="rounded-r-full p-1 w-[90%]" onChange={handleChange}>
+                                                <option value={''} disabled>Seleccione un tipo</option>
                                                 <option value={1}>Enfermedad común</option>
                                                 <option value={2}>Renovar el DNI, pasaporte o visado</option>
                                                 <option value={3}>Enfermedad laboral</option>
@@ -98,6 +98,7 @@ const SolicitudNew = () => {
                                                 <option value={15}>Permiso por exámenes</option>
                                                 <option value={16}>Permiso por traslado del domicilio habitual</option>
                                                 <option value={17}>Permiso para el cumplimiento de un deber público y personal</option>
+                                                    <option value={18}>Permiso acompañamiento medico familiar</option>
                                             </select>
                                         </div>
                                     </div>

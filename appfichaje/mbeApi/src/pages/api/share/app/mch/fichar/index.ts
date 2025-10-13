@@ -7,6 +7,7 @@ import UtilInstance from '@/api/helpers/Util'
 import MiddlewareInstance from '@/api/helpers/Middleware'
 import FichajeOficinaBLL from '@/api/business/FichajeOficinaBLL'
 import { IFichajeOficina } from '@/api/models/IFichajeOficina'
+import { IFichajeLateSummary } from '@/api/modelsextra/IFichajeLateSummary'
 
 const handler = nc(
     {
@@ -41,13 +42,34 @@ const handler = nc(
                 res.status(404).json({ error: 'data not found' })
                 return
         }
-        if ( ({ ...dataDB } as IErrorResponse).error ) {
+    if ( ({ ...dataDB } as IErrorResponse).error ) {
                 // 409: conflicto con los datos enviados
                 res.status(409).json(dataDB as IErrorResponse)
                 return
         }
-        
-        res.json({ data: dataDB })
+
+    const dataRecord = dataDB as IFichajeOficina
+        let lateSummary: IFichajeLateSummary | undefined = undefined
+        try {
+            const summaryResult = await el.getLateSummaryByUserAndWeek({
+                usuario: usernameLogin,
+        referenceDate: dataRecord.fecha,
+                thresholdTime: '09:04:00',
+                limit: 3
+            })
+            if (!('error' in (summaryResult as IErrorResponse))) {
+                lateSummary = summaryResult as IFichajeLateSummary
+            }
+        } catch (err) {
+            console.error('Error obtaining late summary:', err)
+        }
+
+        const responsePayload: IResponse = { data: dataRecord }
+        if (lateSummary) {
+            responsePayload.meta = { lateSummary }
+        }
+
+        res.json(responsePayload)
     })
 
 export default handler

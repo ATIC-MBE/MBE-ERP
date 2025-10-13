@@ -134,7 +134,7 @@ export type JSONObject = {[key:string]:any}
 
 export type tAlert = 'info' | 'danger' | 'success' | 'warning' | 'dark'
 
-export type ModalPropsType = { children: JSX.Element, title: string, isOpen: boolean, acceptHandler?: () => any, cancelHandler?: () => any }
+export type ModalPropsType = { children: JSX.Element, title: string, isOpen: boolean, acceptHandler?: () => any, cancelHandler?: () => any, acceptLabel?: string, cancelLabel?: string, acceptClassName?: string, cancelClassName?: string }
 
 export type RMGPropiertieCardType = {piso:string, estado:string, alquiler:number, muebles:number, total:number, limite:number}
 

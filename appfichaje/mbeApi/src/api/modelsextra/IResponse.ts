@@ -4,4 +4,5 @@ export interface IResponse {
       data: IModel | Array<IModel>
       token?: string
       exp?: number
+      meta?: Record<string, unknown>
 }

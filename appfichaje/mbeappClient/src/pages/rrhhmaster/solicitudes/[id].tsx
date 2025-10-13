@@ -101,6 +101,7 @@ const SolicitudNew = () => {
                                                 <option value={15}>Permiso por exámenes</option>
                                                 <option value={16}>Permiso por traslado del domicilio habitual</option>
                                                 <option value={17}>Permiso para el cumplimiento de un deber público y personal</option>
+                                                    <option value={18}>Permiso acompañamiento medico familiar</option>
                                             </select>
                                         </div>
                                         <div className='grid grid-cols-1 space-x-3'>
