@@ -28,6 +28,7 @@ export default function ContactosUniversidadPage() {
   const [showForm, setShowForm] = useState(false);
   const [historial, setHistorial] = useState<HistoricoContacto[]>([]);
   const [loadingHist, setLoadingHist] = useState(false);
+  const [importing, setImporting] = useState(false);
 
   const fetchContactos = async () => {
     setLoading(true);
@@ -36,6 +37,43 @@ export default function ContactosUniversidadPage() {
   };
 
   useEffect(() => { fetchContactos(); }, []);
+
+  const handleImportFromSheets = async () => {
+    if (!confirm('¿Deseas importar los contactos desde Google Sheets? Esto puede tomar unos momentos.')) {
+      return;
+    }
+
+    setImporting(true);
+    try {
+      let API_BASE = '';
+      if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && window.location.port === '6969') {
+        API_BASE = 'http://localhost:3006';
+      } else if (process.env.NODE_ENV === 'production') {
+        API_BASE = process.env.API_END_POINT_PROD || 'http://185.252.233.57:3002';
+      } else {
+        API_BASE = process.env.API_END_POINT_DEV || 'http://localhost:3006';
+      }
+
+      const response = await fetch(`${API_BASE}/api/contactos-universidad/import`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        alert(`Importación exitosa!\n\nTotal: ${result.total}\nInsertados: ${result.insertados}\nActualizados: ${result.actualizados}\nErrores: ${result.errores}`);
+        await fetchContactos();
+      } else {
+        alert(`Error en la importación: ${result.error || result.details || 'Error desconocido'}`);
+      }
+    } catch (error: any) {
+      console.error('Error importando desde Google Sheets:', error);
+      alert(`Error de conexión: ${error.message}`);
+    } finally {
+      setImporting(false);
+    }
+  };
 
   const handleChange = (e: any) => {
     if (e.target.name === 'departamento') {
@@ -267,8 +305,8 @@ export default function ContactosUniversidadPage() {
               ))}
             </select>
           </div>
-          {/* Botón para mostrar/ocultar formulario */}
-          <div className="flex justify-center mb-4">
+          {/* Botones para mostrar/ocultar formulario e importar */}
+          <div className="flex justify-center gap-4 mb-4 flex-wrap">
             <button
               className="flex items-center gap-2 px-4 py-2 rounded-full font-semibold shadow transition-all"
               style={{
@@ -310,6 +348,30 @@ export default function ContactosUniversidadPage() {
                     Nuevo contacto
                   </span>
                   <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>
+                </>
+              )}
+            </button>
+
+            {/* Botón de importar desde Google Sheets */}
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-full font-semibold shadow transition-all bg-green-600 hover:bg-green-700 text-white border-2 border-green-600"
+              onClick={handleImportFromSheets}
+              disabled={importing}
+            >
+              {importing ? (
+                <>
+                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Importando...</span>
+                </>
+              ) : (
+                <>
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                  </svg>
+                  <span style={{fontWeight: 700, letterSpacing: '0.02em'}}>Importar desde Excel</span>
                 </>
               )}
             </button>
