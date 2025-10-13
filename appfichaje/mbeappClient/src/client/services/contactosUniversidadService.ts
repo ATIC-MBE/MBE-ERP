@@ -1,24 +1,54 @@
-
-import axios from 'axios';
-
 let API_BASE = '';
 if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && window.location.port === '6969') {
-  API_BASE = 'http://185.252.233.57:3002';
+  API_BASE = 'http://localhost:3006';
 } else if (process.env.NODE_ENV === 'production') {
   API_BASE = process.env.API_END_POINT_PROD || 'http://185.252.233.57:3002';
 } else {
-  API_BASE = process.env.API_END_POINT_DEV || 'http://185.252.233.57:3002';
+  API_BASE = process.env.API_END_POINT_DEV || 'http://localhost:3006';
 }
 export const API_CONTACTOS_UNIVERSIDAD_URL = `${API_BASE}/api/contactos-universidad`;
+export const API_CONTACTOS_UNIVERSIDAD_SHEETS_URL = `${API_BASE}/api/contactos-universidad/sheets`;
 
 export const getContactosUniversidad = async () => {
-  const res = await axios.get(API_CONTACTOS_UNIVERSIDAD_URL);
-  return res.data;
+  try {
+    const res = await fetch(API_CONTACTOS_UNIVERSIDAD_SHEETS_URL, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error al obtener contactos: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error obteniendo contactos desde Google Sheets:', error);
+    throw error;
+  }
 };
 
 export const getContactoUniversidad = async (id: number) => {
-  const res = await axios.get(`${API_CONTACTOS_UNIVERSIDAD_URL}?id=${id}`);
-  return res.data;
+  try {
+    const res = await fetch(`${API_CONTACTOS_UNIVERSIDAD_URL}?id=${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error al obtener contacto: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error obteniendo contacto:', error);
+    throw error;
+  }
 };
 
 
@@ -138,5 +168,23 @@ export const updateContactoUniversidad = async (id: number, data: any) => {
 };
 
 export const deleteContactoUniversidad = async (id: number) => {
-  await axios.delete(API_CONTACTOS_UNIVERSIDAD_URL, { data: { id } });
+  try {
+    const res = await fetch(API_CONTACTOS_UNIVERSIDAD_URL, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ id })
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error al eliminar contacto: ${res.status}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error eliminando contacto:', error);
+    throw error;
+  }
 };

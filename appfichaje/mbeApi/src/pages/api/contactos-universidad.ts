@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ContactoUniversidadBLL from '../../api/business/ContactoUniversidadBLL';
 import HistoricoContactoRRHHBLL from '../../api/business/HistoricoContactoRRHHBLL';
+import { GoogleSheetsService } from '../../services/GoogleSheetsService';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // CORS headers
@@ -25,7 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!contacto) return res.status(404).json({ error: 'No encontrado' });
         return res.status(200).json(contacto);
       }
-      const contactos = await ContactoUniversidadBLL.getAll();
+      // LEER DIRECTAMENTE DEL GOOGLE SHEET
+      const googleSheetsService = new GoogleSheetsService();
+      const contactos = await googleSheetsService.getContactosUniversidades();
+      console.log('Contactos del Google Sheet:', contactos.length);
       return res.status(200).json(contactos);
     }
     if (req.method === 'POST') {

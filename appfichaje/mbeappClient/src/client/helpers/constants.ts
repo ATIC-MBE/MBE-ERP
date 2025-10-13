@@ -271,7 +271,7 @@ export const MSG_ERROR_GENERIC = 'Ha ocurrido un error inesperado.';
 export const menu_rrhh_master: Array<MenuLeftType> = [
 	{ key: 'rrhh_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhhmaster', codeIcon: 'home' },
 	{ key: 'rrhh_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/rrhhmaster/users/', codeIcon: 'user' },
-//	{ key: 'rrhh_master_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhhmaster/contactos-universidad', codeIcon: 'birrete' },
+	{ key: 'rrhh_master_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhhmaster/contactos-universidad', codeIcon: 'birrete' },
     { key: 'rrhh_master_fichaje', isActive: false, propID: 'Fichaje', order: 4, menuPath: '/rrhhmaster/fichaje', codeIcon: 'fichaje' },
     { key: 'rrhh_master_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/rrhhmaster/calendario', codeIcon: 'calendario' },
     { key: 'rrhh_master_esquema', isActive: false, propID: 'Esquema', order: 6, menuPath: '/rrhhmaster/esquema', codeIcon: 'esquema' },
@@ -283,7 +283,7 @@ export const menu_rrhh_master: Array<MenuLeftType> = [
 export const menu_rrhh: Array<MenuLeftType> = [
 	{ key: 'rrhh_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhh', codeIcon: 'home' },
 //	{ key: 'rrhh_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/rrhh/users/', codeIcon: 'user' },
-//	{ key: 'rrhh_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhh/contactos-universidad', codeIcon: 'birrete' },
+	{ key: 'rrhh_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhh/contactos-universidad', codeIcon: 'birrete' },
 	{ key: 'rrhh_calendario', isActive: false, propID: 'Calendario', order: 4, menuPath: '/rrhh/calendario', codeIcon: 'calendario' },
     { key: 'rrhh_progreso', isActive: false, propID: 'Progreso', order: 5, menuPath: '/rrhh/progreso', codeIcon: 'progreso' },
     { key: 'rrhh_solicitudes', isActive: false, propID: 'Solicitudes', order: 6, menuPath: '/rrhh/solicitudes', codeIcon: 'solicitudes' },
