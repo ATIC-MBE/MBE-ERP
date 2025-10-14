@@ -1,11 +1,33 @@
-let API_BASE = '';
-if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && window.location.port === '6969') {
-  API_BASE = 'http://localhost:3006';
-} else if (process.env.NODE_ENV === 'production') {
-  API_BASE = process.env.API_END_POINT_PROD || 'http://185.252.233.57:3002';
-} else {
-  API_BASE = process.env.API_END_POINT_DEV || 'http://localhost:3006';
-}
+const resolveApiBase = () => {
+  const devFallback = process.env.API_END_POINT_DEV || 'http://localhost:3006';
+  const prodFallback = process.env.API_END_POINT_PROD || devFallback;
+
+  // When running on the server (SSR/SSG) we cannot inspect window, so rely on env defaults
+  if (typeof window === 'undefined') {
+    return process.env.NODE_ENV === 'production' ? prodFallback : devFallback;
+  }
+
+  const { protocol, hostname, port } = window.location;
+
+  // Local development: explicitly point to the backend dev server
+  if (hostname === 'localhost' && (port === '6969' || port === '3000')) {
+    return devFallback;
+  }
+
+  // Allow overriding via browser-exposed env var if present
+  const browserOverride = process.env.NEXT_PUBLIC_API_END_POINT;
+  let base = browserOverride || (process.env.NODE_ENV === 'production' ? prodFallback : devFallback);
+
+  // Avoid mixed-content issues when the app runs under HTTPS but the configured API uses HTTP
+  if (protocol === 'https:' && base.startsWith('http://')) {
+    base = base.replace('http://', 'https://');
+    console.warn('[contactosUniversidadService] Forcing HTTPS API base to avoid mixed-content:', base);
+  }
+
+  return base || `${protocol}//${window.location.host}`;
+};
+
+const API_BASE = resolveApiBase();
 export const API_CONTACTOS_UNIVERSIDAD_URL = `${API_BASE}/api/contactos-universidad`;
 export const API_CONTACTOS_UNIVERSIDAD_SHEETS_URL = `${API_BASE}/api/contactos-universidad/sheets`;
 

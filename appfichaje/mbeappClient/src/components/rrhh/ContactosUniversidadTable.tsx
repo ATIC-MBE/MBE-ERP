@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { FaEdit, FaTrash, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import React, { useMemo, useState } from 'react';
 
 type ContactoUniversidad = {
   id?: number;
@@ -25,104 +24,173 @@ interface ContactosUniversidadTableProps {
   loading: boolean;
 }
 
+const THIRTY_DAYS = 30;
+
 const ContactosUniversidadTable = ({ data, onEdit, onDelete, loading }: ContactosUniversidadTableProps) => {
-  // Agrupar por universidad manteniendo el orden original del Excel
-  const groupedByUniversity = data.reduce((acc, contact) => {
-    const uni = contact.universidad || 'Sin Universidad';
-    if (!acc[uni]) {
-      acc[uni] = [];
+  const [filterUltLlamadaStale, setFilterUltLlamadaStale] = useState(false);
+  const [filterUltActPortStale, setFilterUltActPortStale] = useState(false);
+
+  const MONTH_MAP: Record<string, number> = {
+    ene: 0,
+    enero: 0,
+    feb: 1,
+    febrero: 1,
+    mar: 2,
+    marzo: 2,
+    abr: 3,
+    abril: 3,
+    may: 4,
+    mayo: 4,
+    jun: 5,
+    junio: 5,
+    jul: 6,
+    julio: 6,
+    ago: 7,
+    agosto: 7,
+    set: 8,
+    sept: 8,
+    sep: 8,
+    septiembre: 8,
+    oct: 9,
+    octubre: 9,
+    nov: 10,
+    noviembre: 10,
+    dic: 11,
+    diciembre: 11,
+  };
+
+  const parseDate = (value?: string) => {
+    if (!value) return null;
+    const trimmed = value.trim();
+    if (!trimmed) return null;
+
+    const normalized = trimmed
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // remove accents
+      .toLowerCase();
+
+    const textMonthMatch = normalized.match(/^([0-9]{1,2})\s*([a-zñ]+)\s*([0-9]{2,4})$/i);
+    if (textMonthMatch) {
+      const day = parseInt(textMonthMatch[1], 10);
+      const monthKey = textMonthMatch[2].toLowerCase();
+      const yearVal = textMonthMatch[3];
+      const monthIndex = MONTH_MAP[monthKey];
+      if (monthIndex !== undefined) {
+        const year = parseInt(yearVal.length === 2 ? `20${yearVal}` : yearVal, 10);
+        const parsed = new Date(year, monthIndex, day);
+        return Number.isNaN(parsed.getTime()) ? null : parsed;
+      }
     }
-    acc[uni].push(contact);
-    return acc;
-  }, {} as Record<string, ContactoUniversidad[]>);
 
-  // Ordenar las universidades alfabéticamente
-  const universities = Object.keys(groupedByUniversity).sort();
-
-  // Estado para controlar qué universidades están expandidas - inicializar con todas expandidas
-  const [expandedUniversities, setExpandedUniversities] = useState<Set<string>>(new Set(universities));
-
-  // Actualizar universidades expandidas cuando cambie la data
-  useEffect(() => {
-    setExpandedUniversities(new Set(universities));
-  }, [data.length]);
-
-  // Toggle para expandir/contraer
-  const toggleUniversity = (uni: string) => {
-    const newExpanded = new Set(expandedUniversities);
-    if (newExpanded.has(uni)) {
-      newExpanded.delete(uni);
-    } else {
-      newExpanded.add(uni);
+    const compactTextMonthMatch = normalized.match(/^([0-9]{1,2})([a-zñ]+)([0-9]{2,4})$/i);
+    if (compactTextMonthMatch) {
+      const day = parseInt(compactTextMonthMatch[1], 10);
+      const monthKey = compactTextMonthMatch[2].toLowerCase();
+      const yearVal = compactTextMonthMatch[3];
+      const monthIndex = MONTH_MAP[monthKey];
+      if (monthIndex !== undefined) {
+        const year = parseInt(yearVal.length === 2 ? `20${yearVal}` : yearVal, 10);
+        const parsed = new Date(year, monthIndex, day);
+        return Number.isNaN(parsed.getTime()) ? null : parsed;
+      }
     }
-    setExpandedUniversities(newExpanded);
+
+    const direct = new Date(trimmed);
+    if (!Number.isNaN(direct.getTime())) return direct;
+    const match = trimmed.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if (!match) return null;
+    const day = parseInt(match[1], 10);
+    const month = parseInt(match[2], 10) - 1;
+    const year = parseInt(match[3].length === 2 ? `20${match[3]}` : match[3], 10);
+    const parsed = new Date(year, month, day);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
   };
 
-  // Expandir/contraer todas
-  const expandAll = () => {
-    setExpandedUniversities(new Set(universities));
+  const daysFromToday = (value?: string) => {
+    const date = parseDate(value);
+    if (!date) return null;
+    const diffMs = Date.now() - date.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
   };
 
-  const collapseAll = () => {
-    setExpandedUniversities(new Set());
-  };
+  const filteredUniversities = useMemo(() => {
+    const grouped = data.reduce((acc, contact) => {
+      const key = contact.universidad || 'Sin Universidad';
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(contact);
+      return acc;
+    }, {} as Record<string, ContactoUniversidad[]>);
 
-  const renderRow = (c: ContactoUniversidad, i: number, isFirstInGroup: boolean) => {
-    // Estilo diferente para la primera fila (datos generales de la universidad)
-    const rowClass = isFirstInGroup
-      ? "bg-gray-100 hover:bg-gray-200 transition-colors text-gray-900 border-b border-gray-300 font-semibold"
-      : "even:bg-white odd:bg-gray-50 hover:bg-blue-50 transition-colors text-gray-900 border-b border-gray-100";
+    return Object.keys(grouped)
+      .sort()
+      .map((uni) => {
+        const contacts = grouped[uni];
+        const firstContact = contacts[0];
+        if (!firstContact) return null;
+        const daysUltLlamada = daysFromToday(firstContact.ultima_llamada);
+        const daysUltActPort = daysFromToday((firstContact as any).ult_act_port);
+        const isUltLlamadaStale = daysUltLlamada !== null && daysUltLlamada > THIRTY_DAYS;
+        const isUltActPortStale = daysUltActPort !== null && daysUltActPort > THIRTY_DAYS;
+        return {
+          university: uni,
+          contact: firstContact,
+          contacts,
+          daysUltLlamada,
+          daysUltActPort,
+          isUltLlamadaStale,
+          isUltActPortStale,
+        };
+      })
+      .filter(Boolean) as Array<{
+        university: string;
+        contact: ContactoUniversidad;
+        contacts: ContactoUniversidad[];
+        daysUltLlamada: number | null;
+        daysUltActPort: number | null;
+        isUltLlamadaStale: boolean;
+        isUltActPortStale: boolean;
+      }>;
+  }, [data]);
+
+  const rows = useMemo(() => {
+    return filteredUniversities.filter((row) => {
+      if (filterUltLlamadaStale && !row.isUltLlamadaStale) return false;
+      if (filterUltActPortStale && !row.isUltActPortStale) return false;
+      return true;
+    });
+  }, [filteredUniversities, filterUltLlamadaStale, filterUltActPortStale]);
+
+  const getDateCellClass = (isStale: boolean) => (isStale ? 'text-red-600 font-semibold' : 'text-gray-900');
+
+  const [modalData, setModalData] = useState<{
+    university: string;
+    contacts: ContactoUniversidad[];
+    mode: 'llamada' | 'portal';
+  } | null>(null);
+
+  const renderDate = (
+    value: string | undefined,
+    daysDiff: number | null,
+    isStale: boolean,
+    onClick?: () => void,
+  ) => {
+    if (!value) return '';
+    const suffix = daysDiff !== null ? ` (${daysDiff} días)` : '';
+    const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+      event.stopPropagation();
+      onClick?.();
+    };
 
     return (
-      <tr key={c.id || i} className={rowClass}>
-        <td className={`px-1 py-1 break-words max-w-[120px] text-xs ${!isFirstInGroup ? 'pl-6' : ''}`}>
-          {isFirstInGroup ? c.universidad : ''}
-        </td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{c.tipo}</td>
-        <td className="px-1 py-1 break-words max-w-[120px] text-xs">{c.puesto}</td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{(c as any).nota_personal || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[100px] text-xs">{c.nombre}</td>
-        <td className="px-1 py-1 break-words max-w-[100px] text-xs">{c.apellido}</td>
-        <td className="px-1 py-1 break-words max-w-[90px] text-xs">{c.telefono}</td>
-        <td className="px-1 py-1 break-words max-w-[130px] text-xs">{c.email}</td>
-        <td className="px-1 py-1 break-words max-w-[150px] text-xs">{(c as any).historico || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{c.ultima_llamada || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{(c as any).ult_act_port || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[60px] text-xs">{(c as any).myd || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[60px] text-xs">{(c as any).ade || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[60px] text-xs">{(c as any).rrhh || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[60px] text-xs">{(c as any).aca || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[60px] text-xs">{(c as any).atic || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[90px] text-xs">{(c as any).estado_ofertas || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[100px] text-xs">{(c as any).portal_web || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{(c as any).user || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{(c as any).clave || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[80px] text-xs">{(c as any).firma_convenio || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[150px] text-xs">{(c as any).notas_ofertas || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[100px] text-xs">{(c as any).anexos || ''}</td>
-        <td className="px-1 py-1 break-words max-w-[100px] text-xs">{(c as any).convocatorias || ''}</td>
-      </tr>
-    );
-  };
-
-  const renderMobileCard = (c: ContactoUniversidad, i: number) => {
-    return (
-      <div
-        key={c.id || i}
-        className="bg-white rounded-2xl shadow p-3 mb-3 flex flex-col gap-1 border-2 border-[#005360]"
+      <span
+        className={`${getDateCellClass(isStale)} ${isStale && onClick ? 'cursor-pointer underline underline-offset-2' : ''}`}
+        onClick={isStale && onClick ? handleClick : undefined}
       >
-        <div><span className="font-bold text-[#005360]">Universidad:</span> {c.universidad}</div>
-        <div><span className="font-bold text-[#005360]">Tipo:</span> {c.tipo}</div>
-        <div><span className="font-bold text-[#005360]">Puesto:</span> {c.puesto}</div>
-        <div><span className="font-bold text-[#005360]">Nota.Per:</span> {(c as any).nota_personal || ''}</div>
-        <div><span className="font-bold text-[#005360]">Nombre:</span> {c.nombre}</div>
-        <div><span className="font-bold text-[#005360]">Apellidos:</span> {c.apellido}</div>
-        <div><span className="font-bold text-[#005360]">Teléfono:</span> {c.telefono}</div>
-        <div><span className="font-bold text-[#005360]">Email:</span> {c.email}</div>
-        <div><span className="font-bold text-[#005360]">Historico:</span> {(c as any).historico || ''}</div>
-        <div><span className="font-bold text-[#005360]">Última Llamada:</span> {c.ultima_llamada || ''}</div>
-        <div><span className="font-bold text-[#005360]">Ult.act.PORT:</span> {(c as any).ult_act_port || ''}</div>
-      </div>
+        {value}
+        {suffix}
+      </span>
     );
   };
 
@@ -140,26 +208,9 @@ const ContactosUniversidadTable = ({ data, onEdit, onDelete, loading }: Contacto
           display: 'inline-block',
         }}
       >
-        Contactos de Universidad (RRHH)
+        Alertas de Contactos Universidad
       </h2>
 
-      {/* Botones para expandir/contraer todo */}
-      <div className="hidden sm:flex gap-2 mb-3">
-        <button
-          onClick={expandAll}
-          className="bg-[#005360] hover:bg-[#006b7a] text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow border border-[#005360] hover:border-[#006b7a]"
-        >
-          Expandir Todo
-        </button>
-        <button
-          onClick={collapseAll}
-          className="bg-[#005360] hover:bg-[#006b7a] text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all shadow border border-[#005360] hover:border-[#006b7a]"
-        >
-          Contraer Todo
-        </button>
-      </div>
-
-      {/* Responsive tabla: horizontal en desktop, vertical en móvil */}
       <div className="hidden sm:block w-full">
         <div className="overflow-x-visible w-full rounded-2xl overflow-hidden">
           <table className="w-full text-xs sm:text-sm whitespace-normal break-words">
@@ -168,102 +219,243 @@ const ContactosUniversidadTable = ({ data, onEdit, onDelete, loading }: Contacto
                 <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Universidad</th>
                 <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Tipo</th>
                 <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Puesto</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Nota.Per</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Nombre</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Apellidos</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Teléfono</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Email</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Historico</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Ult.Llamada</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Ult.act.PORT</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">MYD</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">ADE</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">RRHH</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">ACA</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">ATIC</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Estado Ofertas</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Portal/web</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">User</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Clave</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Firma convenio</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Notas Ofertas</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Anexos</th>
-                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs">Convocatorias</th>
+                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs whitespace-nowrap">
+                  <div className="flex items-center gap-2 flex-nowrap">
+                    <span>Ult. llamada</span>
+                    <label className="flex items-center gap-1 text-[10px] font-normal uppercase">
+                      <input
+                        type="checkbox"
+                        className="accent-[#c9ac7e] h-3 w-3 cursor-pointer"
+                        checked={filterUltLlamadaStale}
+                        onChange={(event) => setFilterUltLlamadaStale(event.target.checked)}
+                        aria-label="Filtrar última llamada con más de 30 días"
+                      />
+                      <span className="tracking-wide">+30d</span>
+                    </label>
+                  </div>
+                </th>
+                <th className="px-2 py-2 font-bold text-left text-white uppercase text-xs whitespace-nowrap">
+                  <div className="flex items-center gap-2 flex-nowrap">
+                    <span>Ult. act. port</span>
+                    <label className="flex items-center gap-1 text-[10px] font-normal uppercase">
+                      <input
+                        type="checkbox"
+                        className="accent-[#c9ac7e] h-3 w-3 cursor-pointer"
+                        checked={filterUltActPortStale}
+                        onChange={(event) => setFilterUltActPortStale(event.target.checked)}
+                        aria-label="Filtrar última actualización del portal con más de 30 días"
+                      />
+                      <span className="tracking-wide">+30d</span>
+                    </label>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={24} className="text-center py-4">Cargando...</td></tr>
-              ) : data.length === 0 ? (
-                <tr><td colSpan={24} className="text-center py-4">No hay registros</td></tr>
+                <tr><td colSpan={5} className="text-center py-4">Cargando...</td></tr>
+              ) : rows.length === 0 ? (
+                <tr><td colSpan={5} className="text-center py-4">No hay registros para los filtros seleccionados.</td></tr>
               ) : (
-                universities.map((uni) => {
-                  const contacts = groupedByUniversity[uni];
-                  const isExpanded = expandedUniversities.has(uni);
-                  return (
-                    <React.Fragment key={uni}>
-                      {/* Fila de cabecera de universidad */}
-                      <tr
-                        className="bg-[#005360] cursor-pointer hover:bg-[#006b7a] transition-all"
-                        onClick={() => toggleUniversity(uni)}
-                      >
-                        <td colSpan={24} className="px-3 py-3 border-b border-gray-200">
-                          <div className="flex items-center gap-2">
-                            {isExpanded ? (
-                              <FaChevronDown className="text-white text-lg" />
-                            ) : (
-                              <FaChevronRight className="text-white text-lg" />
-                            )}
-                            <span className="text-white font-bold text-base">
-                              {uni} ({contacts.length} contacto{contacts.length !== 1 ? 's' : ''})
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                      {/* Filas de contactos (solo si está expandida) */}
-                      {isExpanded && contacts.map((contact, idx) => renderRow(contact, idx, idx === 0))}
-                    </React.Fragment>
-                  );
-                })
+                rows.map(({ university, contact, contacts, daysUltLlamada, daysUltActPort, isUltLlamadaStale, isUltActPortStale }) => (
+                  <tr
+                    key={university}
+                    className="even:bg-white odd:bg-gray-50 hover:bg-blue-50 transition-colors text-gray-900 border-b border-gray-200 cursor-pointer"
+                    onClick={() => contact.id && onEdit(contact)}
+                  >
+                    <td className="px-3 py-2 text-xs sm:text-sm font-semibold">{university}</td>
+                    <td className="px-3 py-2 text-xs sm:text-sm">{contact.tipo || ''}</td>
+                    <td className="px-3 py-2 text-xs sm:text-sm">{contact.puesto || ''}</td>
+                    <td className="px-3 py-2 text-xs sm:text-sm">
+                      {renderDate(contact.ultima_llamada, daysUltLlamada, isUltLlamadaStale, () =>
+                        setModalData({ university, contacts, mode: 'llamada' }),
+                      )}
+                    </td>
+                    <td className="px-3 py-2 text-xs sm:text-sm">
+                      {renderDate((contact as any).ult_act_port, daysUltActPort, isUltActPortStale, () =>
+                        setModalData({ university, contacts, mode: 'portal' }),
+                      )}
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Mobile vertical cards */}
       <div className="block sm:hidden w-full">
+        <div className="flex items-center justify-center gap-4 mb-3">
+          <label className="flex items-center gap-2 text-xs font-semibold text-[#005360] uppercase">
+            <input
+              type="checkbox"
+              className="accent-[#c9ac7e] h-4 w-4"
+              checked={filterUltLlamadaStale}
+              onChange={(event) => setFilterUltLlamadaStale(event.target.checked)}
+            />
+            <span>Ult. llamada +30d</span>
+          </label>
+          <label className="flex items-center gap-2 text-xs font-semibold text-[#005360] uppercase">
+            <input
+              type="checkbox"
+              className="accent-[#c9ac7e] h-4 w-4"
+              checked={filterUltActPortStale}
+              onChange={(event) => setFilterUltActPortStale(event.target.checked)}
+            />
+            <span>Ult. act. port +30d</span>
+          </label>
+        </div>
         {loading ? (
           <div className="text-center py-4">Cargando...</div>
-        ) : data.length === 0 ? (
-          <div className="text-center py-4">No hay registros</div>
+        ) : rows.length === 0 ? (
+          <div className="text-center py-4">No hay registros para los filtros seleccionados.</div>
         ) : (
-          universities.map((uni) => {
-            const contacts = groupedByUniversity[uni];
-            const isExpanded = expandedUniversities.has(uni);
-            return (
-              <div key={uni} className="mb-4">
-                {/* Cabecera de universidad para móvil */}
-                <div
-                  className="bg-[#005360] hover:bg-[#006b7a] rounded-xl p-3 mb-2 cursor-pointer flex items-center gap-2 transition-all shadow"
-                  onClick={() => toggleUniversity(uni)}
-                >
-                  {isExpanded ? (
-                    <FaChevronDown className="text-white text-lg" />
-                  ) : (
-                    <FaChevronRight className="text-white text-lg" />
-                  )}
-                  <span className="text-white font-bold text-base">
-                    {uni} ({contacts.length})
-                  </span>
-                </div>
-                {/* Cards de contactos */}
-                {isExpanded && contacts.map((contact, idx) => renderMobileCard(contact, idx))}
+          rows.map(({ university, contact, contacts, daysUltLlamada, daysUltActPort, isUltLlamadaStale, isUltActPortStale }) => (
+            <div key={university} className="bg-white rounded-2xl shadow p-3 mb-3 flex flex-col gap-2 border-2 border-[#005360]">
+              <div><span className="font-bold text-[#005360]">Universidad:</span> {university}</div>
+              <div><span className="font-bold text-[#005360]">Tipo:</span> {contact.tipo || ''}</div>
+              <div><span className="font-bold text-[#005360]">Puesto:</span> {contact.puesto || ''}</div>
+              <div>
+                <span className="font-bold text-[#005360]">Ult. llamada:</span>{' '}
+                {renderDate(contact.ultima_llamada, daysUltLlamada, isUltLlamadaStale, () =>
+                  setModalData({ university, contacts, mode: 'llamada' }),
+                )}
               </div>
-            );
-          })
+              <div>
+                <span className="font-bold text-[#005360]">Ult. act. port:</span>{' '}
+                {renderDate((contact as any).ult_act_port, daysUltActPort, isUltActPortStale, () =>
+                  setModalData({ university, contacts, mode: 'portal' }),
+                )}
+              </div>
+            </div>
+          ))
         )}
       </div>
+
+      {modalData && (
+        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[80vh] p-6 flex flex-col">
+            <div className="sticky top-0 flex items-center justify-between gap-4 bg-white pb-3 border-b border-gray-200">
+              <h3 className="text-2xl font-bold text-[#005360]">{modalData.university}</h3>
+              <button
+                type="button"
+                className="text-base font-semibold drop-shadow !text-[#c9ac7e] hover:!text-[#ffff] focus:!text-[#c9ac7e] !bg-[rgba(0,83,96,0.70)] hover:!bg-[rgba(0,83,96,0.70)] focus:!bg-[rgba(0,83,96,0.70)]"
+                style={{
+                  padding: '0.3rem 0.9rem',
+                  borderRadius: '0.75rem',
+                  letterSpacing: '0.02em',
+                  textShadow: '0 2px 6px #00536099, 0 1px 0 #fff',
+                  border: 'none',
+                  textTransform: 'none',
+                }}
+                onClick={() => setModalData(null)}
+              >
+                Cerrar
+              </button>
+            </div>
+            <div className="mt-4 space-y-6 overflow-y-auto pr-2">
+              {modalData.contacts.map((c, idx) => (
+                <div
+                  key={c.id || idx}
+                  className="rounded-2xl border border-gray-400 bg-gray-200 p-4 shadow-inner"
+                >
+                  {modalData.mode === 'llamada' ? (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Nombre</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{c.nombre || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Apellidos</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{c.apellido || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Puesto</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{c.puesto || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Última llamada</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{c.ultima_llamada || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Nota.Per</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).nota_personal || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Email</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{c.email || ''}</p>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Histórico</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm whitespace-pre-line">{(c as any).historico || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Firma convenio</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).firma_convenio || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Convocatorias</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm whitespace-pre-line">{(c as any).convocatorias || ''}</p>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Anexos</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm whitespace-pre-line">{(c as any).anexos || ''}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Portal web</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).portal_web || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">User</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).user || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Clave</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).clave || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">MYD</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).myd || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">ADE</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).ade || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">RRHH</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).rrhh || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">ACA</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).aca || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">ATIC</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm">{(c as any).atic || ''}</p>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Histórico</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm whitespace-pre-line">{(c as any).historico || ''}</p>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Estado ofertas</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm whitespace-pre-line">{(c as any).estado_ofertas || ''}</p>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <label className="block text-xs font-semibold text-[#005360] uppercase">Notas ofertas</label>
+                        <p className="mt-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm whitespace-pre-line">{(c as any).notas_ofertas || ''}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
