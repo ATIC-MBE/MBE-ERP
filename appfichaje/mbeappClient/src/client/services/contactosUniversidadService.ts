@@ -74,16 +74,12 @@ export const getContactoUniversidad = async (id: number) => {
 };
 
 
-// Ensure departamento is sent as a string (comma-separated) if it's an array
-
 // Normaliza los campos de fecha vacíos a null
 function normalizeContactoDates(obj: any) {
   const dateFields = [
     'ultima_actualizacion',
-    'siguiente_paso',
     'ultima_llamada',
-    'firma_convenio_fecha',
-    'vencimiento_convenio'
+    'firma_convenio_fecha'
   ];
   const out = { ...obj };
   dateFields.forEach(f => {
@@ -94,10 +90,7 @@ function normalizeContactoDates(obj: any) {
 
 export const createContactoUniversidad = async (data: any) => {
   try {
-    const normalizedData = normalizeContactoDates({
-      ...data,
-      departamento: Array.isArray(data.departamento) ? data.departamento.join(',') : data.departamento
-    });
+    const normalizedData = normalizeContactoDates(data);
     
     console.log('=== ENVIANDO DATOS AL BACKEND ===');
     console.log('URL:', API_CONTACTOS_UNIVERSIDAD_URL);
@@ -144,8 +137,7 @@ export const updateContactoUniversidad = async (id: number, data: any) => {
   try {
     const normalizedData = normalizeContactoDates({
       id,
-      ...data,
-      departamento: Array.isArray(data.departamento) ? data.departamento.join(',') : data.departamento
+      ...data
     });
     
     console.log('=== ACTUALIZANDO CONTACTO ===');

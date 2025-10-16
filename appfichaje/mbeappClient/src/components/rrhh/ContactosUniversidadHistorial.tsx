@@ -2,27 +2,37 @@ import React from 'react';
 import { FaUserEdit, FaRegCalendarCheck, FaRegStickyNote, FaPhoneAlt, FaArrowRight, FaUserShield, FaUniversity, FaUserTie, FaUser, FaUsers, FaEnvelope, FaLink, FaKey, FaCalendarCheck, FaCalendarTimes, FaFileSignature, FaCheckCircle, FaExclamationCircle, FaCommentDots } from 'react-icons/fa';
 
 export type HistoricoContacto = {
+  // Campos específicos del histórico
   id: number;
   usuario: string;
   fecha: string;
   notas?: string;
-  ultima_llamada?: string;
-  siguiente_paso?: string;
+  id_contacto?: number;
+  // Campos base del contacto (coinciden exactamente con IContactoUniversidad)
   universidad?: string;
   tipo?: string;
   puesto?: string;
-  departamento?: string;
-  email?: string;
+  nota_personal?: string;
+  nombre?: string;
+  apellido?: string;
   telefono?: string;
-  telefono2?: string;
-  portal?: string;
-  usuario_portal?: string;
-  contrasena_portal?: string;
+  email?: string;
+  historico?: string;
+  ultima_llamada?: string;
   ultima_actualizacion?: string;
-  firma_convenio?: string;
-  vencimiento_convenio?: string;
-  link_convenio?: string;
-  alta_seguridad_social?: string;
+  myd?: string;
+  ade?: string;
+  rrhh?: string;
+  aca?: string;
+  atic?: string;
+  estado_ofertas?: string;
+  portal_web?: string;
+  usuario_portal?: string;
+  clave?: string;
+  firma_convenio_fecha?: string;
+  notas_ofertas?: string;
+  anexos?: string;
+  convocatorias?: string;
 };
 
 interface Props {
@@ -60,9 +70,29 @@ const ContactosUniversidadHistorial: React.FC<Props> = ({ historial }) => (
                   <FaUser /> {h.puesto}
                 </span>
               )}
-              {h.departamento && (
-                <span className="flex items-center gap-2 text-base text-yellow-800 bg-yellow-100 px-3 py-1 rounded-full">
-                  <FaUsers /> {h.departamento}
+              {h.myd && (
+                <span className="flex items-center gap-2 text-base text-orange-800 bg-orange-100 px-3 py-1 rounded-full">
+                  <FaUsers /> MYD: {h.myd}
+                </span>
+              )}
+              {h.ade && (
+                <span className="flex items-center gap-2 text-base text-orange-800 bg-orange-100 px-3 py-1 rounded-full">
+                  <FaUsers /> ADE: {h.ade}
+                </span>
+              )}
+              {h.rrhh && (
+                <span className="flex items-center gap-2 text-base text-orange-800 bg-orange-100 px-3 py-1 rounded-full">
+                  <FaUsers /> RRHH: {h.rrhh}
+                </span>
+              )}
+              {h.aca && (
+                <span className="flex items-center gap-2 text-base text-orange-800 bg-orange-100 px-3 py-1 rounded-full">
+                  <FaUsers /> ACA: {h.aca}
+                </span>
+              )}
+              {h.atic && (
+                <span className="flex items-center gap-2 text-base text-orange-800 bg-orange-100 px-3 py-1 rounded-full">
+                  <FaUsers /> ATIC: {h.atic}
                 </span>
               )}
               {h.email && (
@@ -75,14 +105,9 @@ const ContactosUniversidadHistorial: React.FC<Props> = ({ historial }) => (
                   <FaPhoneAlt /> {h.telefono}
                 </span>
               )}
-              {h.telefono2 && (
-                <span className="flex items-center gap-2 text-base text-green-800 bg-green-100 px-3 py-1 rounded-full">
-                  <FaPhoneAlt /> {h.telefono2}
-                </span>
-              )}
-              {h.portal && (
+              {h.portal_web && (
                 <span className="flex items-center gap-2 text-base text-blue-800 bg-blue-100 px-3 py-1 rounded-full">
-                  <FaLink /> {h.portal}
+                  <FaLink /> {h.portal_web}
                 </span>
               )}
               {h.usuario_portal && (
@@ -90,9 +115,9 @@ const ContactosUniversidadHistorial: React.FC<Props> = ({ historial }) => (
                   <FaUser /> {h.usuario_portal}
                 </span>
               )}
-              {h.contrasena_portal && (
+              {h.clave && (
                 <span className="flex items-center gap-2 text-base text-gray-800 bg-gray-100 px-3 py-1 rounded-full">
-                  <FaKey /> {h.contrasena_portal}
+                  <FaKey /> {h.clave}
                 </span>
               )}
               {h.ultima_actualizacion && (
@@ -105,29 +130,24 @@ const ContactosUniversidadHistorial: React.FC<Props> = ({ historial }) => (
                   <FaPhoneAlt /> Últ. llamada: {h.ultima_llamada}
                 </span>
               )}
-              {h.firma_convenio && (
+              {h.firma_convenio_fecha && (
                 <span className="flex items-center gap-2 text-base text-green-800 bg-green-100 px-3 py-1 rounded-full">
-                  <FaFileSignature /> Firma convenio: {h.firma_convenio}
+                  <FaFileSignature /> Firma convenio: {h.firma_convenio_fecha}
                 </span>
               )}
-              {h.vencimiento_convenio && (
-                <span className="flex items-center gap-2 text-base text-red-800 bg-red-100 px-3 py-1 rounded-full">
-                  <FaCalendarTimes /> Vencimiento: {h.vencimiento_convenio}
-                </span>
-              )}
-              {h.link_convenio && (
-                <span className="flex items-center gap-2 text-base text-blue-800 bg-blue-100 px-3 py-1 rounded-full">
-                  <FaLink /> {h.link_convenio}
-                </span>
-              )}
-              {h.alta_seguridad_social && (
-                <span className="flex items-center gap-2 text-base text-blue-800 bg-blue-100 px-3 py-1 rounded-full">
-                  <FaUserShield /> Alta SS: {h.alta_seguridad_social}
-                </span>
-              )}
-              {h.siguiente_paso && (
+              {h.estado_ofertas && (
                 <span className="flex items-center gap-2 text-base text-green-800 bg-green-100 px-3 py-1 rounded-full">
-                  <FaArrowRight /> Siguiente paso: {h.siguiente_paso}
+                  <FaCheckCircle /> Estado ofertas: {h.estado_ofertas}
+                </span>
+              )}
+              {h.anexos && (
+                <span className="flex items-center gap-2 text-base text-purple-800 bg-purple-100 px-3 py-1 rounded-full">
+                  <FaFileSignature /> Anexos: {h.anexos}
+                </span>
+              )}
+              {h.convocatorias && (
+                <span className="flex items-center gap-2 text-base text-purple-800 bg-purple-100 px-3 py-1 rounded-full">
+                  <FaUsers /> Convocatorias: {h.convocatorias}
                 </span>
               )}
             </div>
@@ -135,6 +155,24 @@ const ContactosUniversidadHistorial: React.FC<Props> = ({ historial }) => (
               <div className="flex items-center gap-3 text-blue-900 text-lg mt-1 font-medium">
                 <FaCommentDots className="text-blue-400 text-xl" />
                 <span>{h.notas}</span>
+              </div>
+            )}
+            {h.nota_personal && (
+              <div className="flex items-center gap-3 text-blue-700 text-base mt-1">
+                <FaRegStickyNote className="text-blue-500 text-lg" />
+                <span><strong>Nota personal:</strong> {h.nota_personal}</span>
+              </div>
+            )}
+            {h.historico && (
+              <div className="flex items-center gap-3 text-gray-700 text-base mt-1">
+                <FaRegCalendarCheck className="text-gray-500 text-lg" />
+                <span><strong>Histórico:</strong> {h.historico}</span>
+              </div>
+            )}
+            {h.notas_ofertas && (
+              <div className="flex items-center gap-3 text-green-700 text-base mt-1">
+                <FaCheckCircle className="text-green-500 text-lg" />
+                <span><strong>Notas ofertas:</strong> {h.notas_ofertas}</span>
               </div>
             )}
           </li>

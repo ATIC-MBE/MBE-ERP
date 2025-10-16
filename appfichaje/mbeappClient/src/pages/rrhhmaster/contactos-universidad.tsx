@@ -13,8 +13,6 @@ import ContactosUniversidadTable from '@/components/rrhh/ContactosUniversidadTab
 import ContactosUniversidadHistorial, { HistoricoContacto } from '@/components/rrhh/ContactosUniversidadHistorial';
 import { getHistorialContactoUniversidad } from '@/client/services/contactosUniversidadHistorialService';
 
-const departamentos = ['ATIC', 'ADE', 'RRHH', 'MYD', 'ACA', 'TODOS'];
-
 export default function ContactosUniversidadPage() {
   const userCtx = useContext(UserContext);
   const [contactos, setContactos] = useState<any[]>([]);
@@ -73,24 +71,14 @@ export default function ContactosUniversidadPage() {
   };
 
   const handleChange = (e: any) => {
-    if (e.target.name === 'departamento') {
-      // Si el value ya es un array, lo usamos directamente (viene de los botones)
-      setForm({ ...form, departamento: e.target.value });
-    } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    }
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleEdit = async (c: any) => {
     setEditId(c.id);
     // Siempre pedir el contacto actualizado al backend
     const contactoActualizado = await getContactoUniversidad(c.id);
-    let depArr = contactoActualizado.departamento;
-    if (typeof depArr === 'string') {
-      depArr = depArr.split(',').map((d: string) => d.trim()).filter((d: string) => d);
-    }
-    if (!depArr) depArr = [];
-    setForm({ ...contactoActualizado, departamento: depArr, notas: '' });
+    setForm({ ...contactoActualizado });
     setShowForm(true);
     setLoadingHist(true);
     try {
@@ -115,69 +103,65 @@ export default function ContactosUniversidadPage() {
     if (userCtx && (userCtx.userData?.username || userCtx.userData?.nombre)) {
       usuario = userCtx.userData.username || userCtx.userData.nombre;
     }
-    
+
     // Preparar datos de forma más robusta
     const safeForm: any = {
-      // Campos de texto básicos
-      nombre: form.nombre || '',
-      apellido: form.apellido || '',
-      telefono: form.telefono || '',
-      telefono2: form.telefono2 || '',
+      // Campos básicos de información
       universidad: form.universidad || '',
       tipo: form.tipo || '',
       puesto: form.puesto || '',
+      nota_personal: form.nota_personal || '',
+      nombre: form.nombre || '',
+      apellido: form.apellido || '',
+      telefono: form.telefono || '',
       email: form.email || '',
+      historico: form.historico || '',
+      
+      // Campos de fecha
+      ultima_llamada: form.ultima_llamada || null,
+      ultima_actualizacion: form.ultima_actualizacion || null,
+      firma_convenio_fecha: form.firma_convenio_fecha || null,
+      
+      // Campos de departamentos (como text según esquema DB)
+      myd: form.myd || '',
+      ade: form.ade || '',
+      rrhh: form.rrhh || '',
+      aca: form.aca || '',
+      atic: form.atic || '',
+      
+      // Campos adicionales
+      estado_ofertas: form.estado_ofertas || '',
       portal_web: form.portal_web || '',
       usuario_portal: form.usuario_portal || '',
-      contrasena_portal: form.contrasena_portal || '',
-      firma_convenio_link: form.firma_convenio_link || '',
-      altas_social: form.altas_social || '',
-      notas: form.notas || '',
-      
-      // Campos de fecha - convertir strings vacíos a null
-      ultima_actualizacion: form.ultima_actualizacion || null,
-      siguiente_paso: form.siguiente_paso || null,
-      ultima_llamada: form.ultima_llamada || null,
-      firma_convenio_fecha: form.firma_convenio_fecha || null,
-      vencimiento_convenio: form.vencimiento_convenio || null,
-      
-      // Campo departamento - convertir array a string
-      departamento: Array.isArray(form.departamento) 
-        ? form.departamento.join(',') 
-        : (form.departamento || ''),
-      
-      // Usuario
-      usuario: usuario
+      clave: form.clave || '',
+      notas_ofertas: form.notas_ofertas || '',
+      anexos: form.anexos || '',
+      convocatorias: form.convocatorias || ''
     };
 
     console.log('=== DATOS DEL FORMULARIO PREPARADOS ===');
     console.log('Form original:', form);
     console.log('Datos preparados para enviar:', safeForm);
-    
+
     try {
       if (editId) {
         console.log('=== ACTUALIZANDO CONTACTO ===');
         console.log('ID a actualizar:', editId);
         const updated = await updateContactoUniversidad(editId, safeForm);
         console.log('Resultado actualización:', updated);
-        
+
         if (!updated || updated.error) {
           console.error('Error en actualización:', updated);
           alert(`Error actualizando el contacto: ${updated?.error || 'Error desconocido'}`);
           return;
         }
-        
+
         // Refrescar el contacto actualizado
         const contactoActualizado = await getContactoUniversidad(editId);
-        let depArr = contactoActualizado.departamento;
-        if (typeof depArr === 'string') {
-          depArr = depArr.split(',').map((d: string) => d.trim()).filter((d: string) => d);
-        }
-        if (!depArr) depArr = [];
-        setForm({ ...contactoActualizado, departamento: depArr, notas: '' });
-        
+        setForm({ ...contactoActualizado });
+
         await fetchContactos();
-        
+
         // Refrescar historial
         setLoadingHist(true);
         try {
@@ -187,19 +171,19 @@ export default function ContactosUniversidadPage() {
           setHistorial([]);
         }
         setLoadingHist(false);
-        
+
         alert('Contacto actualizado exitosamente');
       } else {
         console.log('=== CREANDO NUEVO CONTACTO ===');
         const created = await createContactoUniversidad(safeForm);
         console.log('Resultado de creación:', created);
-        
+
         if (!created || created.error) {
           console.error('Error en creación:', created);
           alert(`Error creando el contacto: ${created?.error || 'Error desconocido. Revisa la consola para más detalles.'}`);
           return;
         }
-        
+
         // Éxito - limpiar formulario
         console.log('=== CONTACTO CREADO EXITOSAMENTE ===');
         setForm({});
@@ -229,7 +213,7 @@ export default function ContactosUniversidadPage() {
       (c.apellido && c.apellido.toLowerCase().includes(search.toLowerCase())) ||
       (c.email && c.email.toLowerCase().includes(search.toLowerCase())) ||
       (c.telefono && c.telefono.toLowerCase().includes(search.toLowerCase()));
-    // Mejorar filtro de departamento: buscar aunque sea string separado por comas
+    
     return matchesSearch;
   });
 
@@ -326,7 +310,6 @@ export default function ContactosUniversidadPage() {
                 onSubmit={handleSubmit}
                 editId={editId}
                 onCancel={() => { setEditId(null); setForm({}); setShowForm(false); setHistorial([]); }}
-                departamentos={departamentos}
               />
               {editId && (
                 <div className="mt-2">

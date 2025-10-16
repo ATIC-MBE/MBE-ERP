@@ -14,7 +14,7 @@ import ContactosUniversidadTable from '@/components/rrhh/ContactosUniversidadTab
 import ContactosUniversidadHistorial, { HistoricoContacto } from '@/components/rrhh/ContactosUniversidadHistorial';
 import { getHistorialContactoUniversidad } from '@/client/services/contactosUniversidadHistorialService';
 
-const departamentos = ['ATIC', 'ADE', 'RRHH', 'MYD', 'ACA', 'TODOS'];
+const departamentos = ['MYD', 'ADE', 'RRHH', 'ACA', 'ATIC', 'TODOS'];
 
 export default function ContactosUniversidadPage() {
   const userCtx = useContext(UserContext);
@@ -76,24 +76,14 @@ export default function ContactosUniversidadPage() {
   };
 
   const handleChange = (e: any) => {
-    if (e.target.name === 'departamento') {
-      // Si el value ya es un array, lo usamos directamente (viene de los botones)
-      setForm({ ...form, departamento: e.target.value });
-    } else {
-      setForm({ ...form, [e.target.name]: e.target.value });
-    }
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleEdit = async (c: any) => {
     setEditId(c.id);
     // Siempre pedir el contacto actualizado al backend
     const contactoActualizado = await getContactoUniversidad(c.id);
-    let depArr = contactoActualizado.departamento;
-    if (typeof depArr === 'string') {
-      depArr = depArr.split(',').map((d: string) => d.trim()).filter((d: string) => d);
-    }
-    if (!depArr) depArr = [];
-    setForm({ ...contactoActualizado, departamento: depArr, notas: '' });
+    setForm({ ...contactoActualizado });
     setShowForm(true);
     setLoadingHist(true);
     try {
@@ -119,37 +109,41 @@ export default function ContactosUniversidadPage() {
       usuario = userCtx.userData.username || userCtx.userData.nombre;
     }
     
-    // Preparar datos de forma más robusta
+    // Preparar datos con los 24 campos exactos de IContactoUniversidad
     const safeForm: any = {
-      // Campos de texto básicos
-      nombre: form.nombre || '',
-      apellido: form.apellido || '',
-      telefono: form.telefono || '',
-      telefono2: form.telefono2 || '',
+      // Campos básicos
       universidad: form.universidad || '',
       tipo: form.tipo || '',
       puesto: form.puesto || '',
+      nota_personal: form.nota_personal || '',
+      nombre: form.nombre || '',
+      apellido: form.apellido || '',
+      telefono: form.telefono || '',
       email: form.email || '',
-      portal_web: form.portal_web || '',
-      usuario_portal: form.usuario_portal || '',
-      contrasena_portal: form.contrasena_portal || '',
-      firma_convenio_link: form.firma_convenio_link || '',
-      altas_social: form.altas_social || '',
-      notas: form.notas || '',
+      historico: form.historico || '',
       
       // Campos de fecha - convertir strings vacíos a null
-      ultima_actualizacion: form.ultima_actualizacion || null,
-      siguiente_paso: form.siguiente_paso || null,
       ultima_llamada: form.ultima_llamada || null,
+      ultima_actualizacion: form.ultima_actualizacion || null,
       firma_convenio_fecha: form.firma_convenio_fecha || null,
-      vencimiento_convenio: form.vencimiento_convenio || null,
       
-      // Campo departamento - convertir array a string
-      departamento: Array.isArray(form.departamento) 
-        ? form.departamento.join(',') 
-        : (form.departamento || ''),
+      // Campos departamentos
+      myd: form.myd || '',
+      ade: form.ade || '',
+      rrhh: form.rrhh || '',
+      aca: form.aca || '',
+      atic: form.atic || '',
       
-      // Usuario
+      // Campos ofertas y portal
+      estado_ofertas: form.estado_ofertas || '',
+      portal_web: form.portal_web || '',
+      usuario_portal: form.usuario_portal || '',
+      clave: form.clave || '',
+      notas_ofertas: form.notas_ofertas || '',
+      anexos: form.anexos || '',
+      convocatorias: form.convocatorias || '',
+      
+      // Usuario para histórico
       usuario: usuario
     };
 
@@ -172,12 +166,7 @@ export default function ContactosUniversidadPage() {
         
         // Refrescar el contacto actualizado
         const contactoActualizado = await getContactoUniversidad(editId);
-        let depArr = contactoActualizado.departamento;
-        if (typeof depArr === 'string') {
-          depArr = depArr.split(',').map((d: string) => d.trim()).filter((d: string) => d);
-        }
-        if (!depArr) depArr = [];
-        setForm({ ...contactoActualizado, departamento: depArr, notas: '' });
+        setForm({ ...contactoActualizado });
         
         await fetchContactos();
         
@@ -228,12 +217,16 @@ export default function ContactosUniversidadPage() {
       (c.email && c.email.toLowerCase().includes(search.toLowerCase())) ||
       (c.telefono && c.telefono.toLowerCase().includes(search.toLowerCase()));
     const matchesUniversidad = !filterUniversidad || (c.universidad && c.universidad.toLowerCase().includes(filterUniversidad.toLowerCase()));
-    // Mejorar filtro de departamento: buscar aunque sea string separado por comas
-    let depArr = c.departamento;
-    if (typeof depArr === 'string') {
-      depArr = depArr.split(',').map((d: string) => d.trim()).filter((d: string) => d);
-    }
-    const matchesDepartamento = !filterDepartamento || (Array.isArray(depArr) ? depArr.includes(filterDepartamento) : depArr === filterDepartamento);
+    
+    // Filtrar por departamentos usando los nuevos campos myd, ade, rrhh, aca, atic
+    const matchesDepartamento = !filterDepartamento || 
+      (filterDepartamento === 'MYD' && c.myd) ||
+      (filterDepartamento === 'ADE' && c.ade) ||
+      (filterDepartamento === 'RRHH' && c.rrhh) ||
+      (filterDepartamento === 'ACA' && c.aca) ||
+      (filterDepartamento === 'ATIC' && c.atic) ||
+      (filterDepartamento === 'TODOS');
+      
     return matchesSearch && matchesUniversidad && matchesDepartamento;
   });
 
@@ -384,7 +377,6 @@ export default function ContactosUniversidadPage() {
                 onSubmit={handleSubmit}
                 editId={editId}
                 onCancel={() => { setEditId(null); setForm({}); setShowForm(false); setHistorial([]); }}
-                departamentos={departamentos}
               />
               {editId && (
                 <div className="mt-2">

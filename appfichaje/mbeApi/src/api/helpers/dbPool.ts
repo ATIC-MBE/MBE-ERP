@@ -11,9 +11,9 @@ types.setTypeParser(types.builtins.DATE, UtilInstance.noParse);
 
 const defaultPool = new Pool({
     connectionString,
-    max: 20,
-    idleTimeoutMillis: 30_000,
-    connectionTimeoutMillis: 5_000,
+    max: 40,
+    idleTimeoutMillis: 30_000, // Tiempo máximo de inactividad de una conexión
+    connectionTimeoutMillis: 5_000, // Tiempo máximo para obtener una conexión del pool 
 });
 
 const transactionPool = new Pool({
