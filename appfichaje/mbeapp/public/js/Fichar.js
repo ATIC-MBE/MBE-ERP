@@ -7,8 +7,9 @@ const Fichar = {
     qr: null,
     token: null,
     isProcessing: false, // Add flag to prevent double processing
-    LATE_THRESHOLD_MINUTES: (9 * 60) + 6,
+    LATE_THRESHOLD_MINUTES: (9 * 60) + 4,
     LATE_LIMIT: 3,
+    LATE_ALERT_STORAGE_PREFIX: 'fichaje_late_alert_sent_',
 
     init: (tokenQR, urlServerIn, userLogin, tokenLogin) => {
         // Check if we're already processing (using localStorage for persistence across page loads)
@@ -169,6 +170,15 @@ const Fichar = {
                                 lateSummary = Fichar.updateWeeklyLateCount(user, lateInfo);
                                 lateSummarySource = 'local';
                             }
+
+                            if (lateSummary && lateSummary.shouldNotify) {
+                                Fichar.notifyLateThreshold({
+                                    userId: user,
+                                    summary: lateSummary,
+                                    lateInfo,
+                                    source: lateSummarySource
+                                });
+                            }
                             
                             sessionStorage.setItem('fichajeResult', JSON.stringify({
                                 success: true,
@@ -268,7 +278,7 @@ const Fichar = {
             entrada,
             fecha: finalDateStr,
             horario,
-            threshold: '09:06',
+            threshold: '09:04',
             timestampCaptured: fallbackDate.toISOString(),
             parseSource: resolved.source || 'UNKNOWN'
         };
@@ -335,7 +345,7 @@ const Fichar = {
             remaining,
             shouldNotify: count >= limit,
             details,
-            thresholdTime: summary.thresholdTime || '09:06:00'
+            thresholdTime: summary.thresholdTime || '09:04:00'
         };
     },
 
@@ -354,6 +364,87 @@ const Fichar = {
         };
         localStorage.setItem(storageKey, JSON.stringify(payload));
         return normalized;
+    },
+
+    notifyLateThreshold: ({ userId, summary, lateInfo, source }) => {
+        if (!userId || !summary || !summary.weekKey) return;
+
+        const storageKey = `${Fichar.LATE_ALERT_STORAGE_PREFIX}${userId}_${summary.weekKey}`;
+        try {
+            const existing = localStorage.getItem(storageKey);
+            if (existing) {
+                return;
+            }
+        } catch (storageErr) {
+            console.warn('Late alert storage read failed', storageErr);
+        }
+
+        let summaryDetails = null;
+        if (Array.isArray(summary.details)) {
+            summaryDetails = summary.details;
+        } else if (summary.days && typeof summary.days === 'object') {
+            summaryDetails = Object.keys(summary.days).map(key => ({
+                fecha: key,
+                ...(summary.days[key] || {})
+            }));
+        }
+
+        const payload = {
+            userId,
+            weekKey: summary.weekKey,
+            count: summary.count,
+            limit: summary.limit,
+            remaining: summary.remaining,
+            thresholdTime: summary.thresholdTime,
+            lateInfo,
+            summaryDetails,
+            source
+        };
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+
+        if (typeof token === 'string' && token.length) {
+            headers['token'] = token;
+        }
+        if (typeof user === 'string' && user.length) {
+            headers['x-username'] = user;
+        }
+
+        const requestId = `${userId || 'unknown'}_${summary.weekKey}_${Date.now()}`;
+        headers['x-request-id'] = requestId;
+
+        fetch('/api/share/app/mch/late-alert', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(payload)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Late alert API failed with status ${response.status}`);
+                }
+                return response.json().catch(() => ({}));
+            })
+            .then(result => {
+                if (result && (result.status === 'ok' || result.status === 1)) {
+                    try {
+                        localStorage.setItem(storageKey, JSON.stringify({
+                            sentAt: new Date().toISOString(),
+                            requestId,
+                            emailQueued: !!result.emailQueued,
+                            responsible: result.responsible || null
+                        }));
+                    } catch (storageErr) {
+                        console.warn('Late alert storage write failed', storageErr);
+                    }
+                } else {
+                    console.warn('Late alert API returned unexpected payload', result);
+                }
+            })
+            .catch(err => {
+                console.error('Late alert notification failed', err);
+            });
     },
 
     resolveEntryTime: (entrada, fecha) => {

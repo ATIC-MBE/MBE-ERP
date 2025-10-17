@@ -37,6 +37,7 @@ const EWeLinkServiceInstance = require("./modules/services/EWeLinkService")
 const AuthServiceInstance = require("./modules/services/AuthService")
 const ApiConfigurationInstance = require("./modules/services/ApiConfiguration")
 const FirstLoginServiceInstance = require("./modules/services/FirstLoginService")
+const NotificationService = require("./modules/services/NotificationService")
 const { Constants, RouteApp, getDataGitHub,
     encryptData, getDevicesServer, getLabelAction,
     formatDateSQLToScreen,
@@ -1246,6 +1247,104 @@ app.post("/api/share/app/mch/fichar", async (req, res) => {
             status: 0,
             error: 'Error, no se puede guardar la información, intentelo más tarde!!'
         });
+    }
+});
+
+app.post("/api/share/app/mch/late-alert", async (req, res) => {
+    try {
+        const {
+            userId,
+            weekKey,
+            count,
+            limit,
+            thresholdTime,
+            lateInfo,
+            summaryDetails,
+            responsibleEmail
+        } = req.body || {};
+
+        if (!userId || !weekKey || typeof count !== 'number') {
+            return res.status(400).json({
+                status: 'error',
+                error: 'INVALID_PAYLOAD'
+            });
+        }
+
+        const requestContext = {
+            requestId: req.headers['x-request-id'] || null,
+            requestedBy: req.headers['x-username'] || null,
+            ip: req.ip
+        };
+
+        const result = await NotificationService.handleLateAlert({
+            userId,
+            weekKey,
+            count,
+            limit: typeof limit === 'number' ? limit : undefined,
+            thresholdTime: thresholdTime || null,
+            lateInfo: lateInfo || null,
+            summaryDetails: summaryDetails || null,
+            responsibleEmail: responsibleEmail || null,
+            requestContext
+        });
+
+        const statusCode = result.emailQueued
+            ? 200
+            : (NotificationService.isEmailConfigured() ? 200 : 202);
+
+        return res.status(statusCode).json({
+            status: 'ok',
+            emailQueued: result.emailQueued,
+            responsible: result.responsible,
+            deduped: result.deduped,
+            messageId: result.messageId || null,
+            reason: result.reason || null
+        });
+    } catch (error) {
+        console.error('Late alert endpoint error:', error);
+        return res.status(500).json({
+            status: 'error',
+            error: 'LATE_ALERT_FAILED'
+        });
+    }
+});
+
+// Ruta de depuración para enviar un email de prueba (PROTEGIDA)
+app.post('/admin/debug/send-test-email', async (req, res) => {
+    try {
+        const secretHeader = req.headers['x-debug-secret'] || req.body.debugSecret;
+        const secretEnv = process.env.DEBUG_ADMIN_SECRET || '';
+        if (!secretEnv || secretHeader !== secretEnv) {
+            return res.status(403).json({ status: 'error', error: 'FORBIDDEN' });
+        }
+
+        const {
+            userId = 'test.user',
+            weekKey = 'test-week',
+            count = 3,
+            limit = 3,
+            thresholdTime = '09:04:00',
+            lateInfo = null,
+            summaryDetails = null,
+            responsibleEmail = process.env.LATE_ALERT_FALLBACK_RECIPIENT || null
+        } = req.body || {};
+
+        const result = await NotificationService.handleLateAlert({
+            userId,
+            weekKey,
+            count,
+            limit,
+            thresholdTime,
+            lateInfo,
+            summaryDetails,
+            responsibleEmail,
+            requestContext: { requestedBy: 'debug' }
+        });
+
+        return res.json({ status: 'ok', result });
+    } catch (err) {
+        console.error('Error sending debug email', err);
+        return res.status(500).json({ status: 'error', error: 'DEBUG_FAILED' });
     }
 });
 
