@@ -67,6 +67,19 @@ body {
   color: #005360 !important;
 }
 
+.contactos-header-button {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.contactos-header-button:hover,
+.contactos-header-button:focus {
+  color: #c9ac7e !important;
+}
+
 .c-link, a, .link, .text-link {
   color: #c9ac7e !important;
   text-decoration: underline;

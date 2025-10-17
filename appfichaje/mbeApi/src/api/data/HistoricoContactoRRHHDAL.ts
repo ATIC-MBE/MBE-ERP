@@ -13,15 +13,21 @@ class HistoricoContactoRRHHDAL {
   async insert(data: IHistoricoContactoRRHH): Promise<IHistoricoContactoRRHH | null> {
     const result = await new DbConnection().exeQuery({
       text: `INSERT INTO tbl_historico_contactos_rrhh (
-            id_contacto, usuario, fecha, notas, ultima_llamada, siguiente_paso,
-            nombre, apellido, telefono, telefono2, universidad, tipo, puesto, email, portal_web, departamento, usuario_portal, contrasena_portal, firma_convenio_fecha, firma_convenio_link, vencimiento_convenio, altas_social
+            id_contacto, usuario, fecha, universidad, tipo, puesto, nota_personal,
+            nombre, apellido, telefono, email, historico, ultima_llamada, ultima_actualizacion,
+            myd, ade, rrhh, aca, atic, estado_ofertas, portal_web, usuario_portal, 
+            clave, firma_convenio_fecha, notas_ofertas, anexos, convocatorias
       ) VALUES (
-            $1, $2, $3, $4, $5, $6,
-            $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22
+            $1, $2, $3, $4, $5, $6, $7,
+            $8, $9, $10, $11, $12, $13, $14,
+            $15, $16, $17, $18, $19, $20, $21, $22,
+            $23, $24, $25, $26, $27
       ) RETURNING *`,
       values: [
-            data.id_contacto, data.usuario, data.fecha, data.notas, data.ultima_llamada, data.siguiente_paso,
-            data.nombre, data.apellido, data.telefono, data.telefono2, data.universidad, data.tipo, data.puesto, data.email, data.portal_web, data.departamento, data.usuario_portal, data.contrasena_portal, data.firma_convenio_fecha, data.firma_convenio_link, data.vencimiento_convenio, data.altas_social
+            data.id_contacto, data.usuario, data.fecha, data.universidad, data.tipo, data.puesto, data.nota_personal,
+            data.nombre, data.apellido, data.telefono, data.email, data.historico, data.ultima_llamada, data.ultima_actualizacion,
+            data.myd, data.ade, data.rrhh, data.aca, data.atic, data.estado_ofertas, data.portal_web, data.usuario_portal,
+            data.clave, data.firma_convenio_fecha, data.notas_ofertas, data.anexos, data.convocatorias
       ]
     });
     return (result && result.length > 0) ? (result[0] as IHistoricoContactoRRHH) : null;

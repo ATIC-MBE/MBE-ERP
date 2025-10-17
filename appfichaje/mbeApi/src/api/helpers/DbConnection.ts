@@ -1,24 +1,16 @@
-import { Client, QueryConfig, types, Pool, PoolClient } from 'pg';
+import { PoolClient, QueryConfig } from 'pg';
+import type { Pool } from 'pg';
 import UtilInstance from './Util';
 import { IModel } from './IModel';
 import { IErrorSql } from '../modelsextra/IErrorSql';
 import { IErrorResponse } from '../modelsextra/IErrorResponse';
-import DbConfigurationInstance from './DbConfiguration';
+import { getPool } from './dbPool';
 
 class DbConnection {
-      private _connectionString = DbConfigurationInstance.getConnectionStringPostgres()
-      private _connection: Client | Pool
-      
+      private readonly _pool: Pool
+
       constructor( public isTransactions: boolean = false ) {
-            // Cambiar el formato de tipo de bigint to int
-            types.setTypeParser(types.builtins.INT8, UtilInstance.parseInteger)
-            // No cambiar el formato de fecha guardado previamente [TIMESTAMP]
-            types.setTypeParser(types.builtins.TIMESTAMP, UtilInstance.noParse)
-            // No cambiar el formato de fecha guardado previamente [DATE]
-            types.setTypeParser(types.builtins.DATE, UtilInstance.noParse)
-            // Create conexion
-            this._connection = ( isTransactions ) ? new Pool({connectionString: this._connectionString})
-                                                            : new Client({connectionString: this._connectionString})
+            this._pool = getPool(isTransactions)
       }
 
       /**
@@ -28,9 +20,9 @@ class DbConnection {
        */
       public async execQueryPool(callback: (client: PoolClient) => Promise<Array<IModel | IErrorResponse>>): Promise<Array<IModel | IErrorResponse>> {
             let dataDB: Array<IModel | IErrorResponse> = []
-            let client = (await this._connection.connect()) as PoolClient
+            const client = await this._pool.connect()
             try {
-                  await client.query('BEGIN')
+                        await client.query('BEGIN')
                   try {
                         dataDB = await callback(client)
                         await client.query('COMMIT')
@@ -63,32 +55,28 @@ class DbConnection {
        */
       async exeQuery(query: QueryConfig): Promise<Array<IModel | IErrorResponse>> {
             let dataDB: Array<IModel | IErrorResponse> = []
-            await (
-                  this._connection
-                  .connect()
-                  .then(async () => {
-                        await (     this._connection.query(query)
-                              .then(result => {
-                                    dataDB = [ ...result.rows ]
-                              })
-                              .catch(err => {
-                                    console.log('ERROR SQL:', err);
-                                    let errorCustom: IErrorSql = err as IErrorSql
-                                    let errorDB = UtilInstance.getErrorSql(errorCustom.code, errorCustom.detail)
-                                    // console.log(errorCustom)
-                                    if ( errorDB ) dataDB = [ { error: 'Error sql', data: [ errorDB ] } ]
-                                    else dataDB = [ { error: 'Error sql desconocido!', data: [] } ]
-                              })
-                              // .then(() => {
-                              //       this._connection.end()
-                              // })
-                        )
-                  })
-                  .catch(err => {
-                        console.log('Connection error!!')
-                        dataDB = [ { error: 'Error connection sql!', data: [] } ]
-                  })
-            )
+            const client = await this._pool.connect().catch(err => {
+                  console.log('Connection error!!')
+                  dataDB = [ { error: 'Error connection sql!', data: [] } ]
+                  throw err
+            })
+
+            if (!client) {
+                  return dataDB
+            }
+
+            try {
+                  const result = await client.query(query)
+                  dataDB = [ ...result.rows ]
+            } catch (err) {
+                  console.log('ERROR SQL:', err);
+                  let errorCustom: IErrorSql = err as IErrorSql
+                  let errorDB = UtilInstance.getErrorSql(errorCustom.code, errorCustom.detail)
+                  if ( errorDB ) dataDB = [ { error: 'Error sql', data: [ errorDB ] } ]
+                  else dataDB = [ { error: 'Error sql desconocido!', data: [] } ]
+            } finally {
+                  client.release()
+            }
 
             return dataDB
       }

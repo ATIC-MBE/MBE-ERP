@@ -1,11 +1,7 @@
-let API_BASE = '';
-if (typeof window !== 'undefined' && window.location.hostname === 'localhost' && window.location.port === '6969') {
-  API_BASE = 'http://localhost:3006';
-} else if (process.env.NODE_ENV === 'production') {
-  API_BASE = process.env.API_END_POINT_PROD || 'http://185.252.233.57:3002';
-} else {
-  API_BASE = process.env.API_END_POINT_DEV || 'http://localhost:3006';
-}
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_END_POINT_PROD ||
+  'http://185.252.233.57:3006';
+
 export const API_CONTACTOS_UNIVERSIDAD_URL = `${API_BASE}/api/contactos-universidad`;
 export const API_CONTACTOS_UNIVERSIDAD_SHEETS_URL = `${API_BASE}/api/contactos-universidad/sheets`;
 
@@ -52,16 +48,12 @@ export const getContactoUniversidad = async (id: number) => {
 };
 
 
-// Ensure departamento is sent as a string (comma-separated) if it's an array
-
 // Normaliza los campos de fecha vacíos a null
 function normalizeContactoDates(obj: any) {
   const dateFields = [
     'ultima_actualizacion',
-    'siguiente_paso',
     'ultima_llamada',
-    'firma_convenio_fecha',
-    'vencimiento_convenio'
+    'firma_convenio_fecha'
   ];
   const out = { ...obj };
   dateFields.forEach(f => {
@@ -72,10 +64,7 @@ function normalizeContactoDates(obj: any) {
 
 export const createContactoUniversidad = async (data: any) => {
   try {
-    const normalizedData = normalizeContactoDates({
-      ...data,
-      departamento: Array.isArray(data.departamento) ? data.departamento.join(',') : data.departamento
-    });
+    const normalizedData = normalizeContactoDates(data);
     
     console.log('=== ENVIANDO DATOS AL BACKEND ===');
     console.log('URL:', API_CONTACTOS_UNIVERSIDAD_URL);
@@ -122,8 +111,7 @@ export const updateContactoUniversidad = async (id: number, data: any) => {
   try {
     const normalizedData = normalizeContactoDates({
       id,
-      ...data,
-      departamento: Array.isArray(data.departamento) ? data.departamento.join(',') : data.departamento
+      ...data
     });
     
     console.log('=== ACTUALIZANDO CONTACTO ===');

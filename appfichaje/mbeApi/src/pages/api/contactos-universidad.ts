@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       // LEER DIRECTAMENTE DEL GOOGLE SHEET
       const googleSheetsService = new GoogleSheetsService();
-      const contactos = await googleSheetsService.getContactosUniversidades();
+      const contactos = await googleSheetsService.getContactosUniversidad('1UoyfT3LB_lOYm4lM1b-2ht_X5LJbQKh7xHo1G6hUMIM');
       console.log('Contactos del Google Sheet:', contactos.length);
       return res.status(200).json(contactos);
     }
@@ -64,11 +64,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         // Comparar cada campo y solo agregar los que cambiaron
         const fields = [
-          'nombre', 'apellido', 'telefono', 'telefono2', 'universidad', 'tipo', 
-          'puesto', 'email', 'portal_web', 'departamento', 'usuario_portal', 
-          'contrasena_portal', 'firma_convenio_fecha', 'firma_convenio_link', 
-          'vencimiento_convenio', 'altas_social', 'notas', 'ultima_llamada', 
-          'siguiente_paso'
+          'universidad', 'tipo', 'puesto', 'nota_personal', 'nombre', 'apellido', 
+          'telefono', 'email', 'historico', 'ultima_llamada', 'ultima_actualizacion',
+          'myd', 'ade', 'rrhh', 'aca', 'atic', 'estado_ofertas', 'portal_web', 
+          'usuario_portal', 'clave', 'firma_convenio_fecha', 'notas_ofertas', 
+          'anexos', 'convocatorias'
         ];
         
         let huboChangios = false;

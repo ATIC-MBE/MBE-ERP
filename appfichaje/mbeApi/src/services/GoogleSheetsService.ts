@@ -2,6 +2,14 @@ import axios from 'axios';
 
 export class GoogleSheetsService {
   /**
+   * Convierte un valor de texto a boolean basado en contenido típico de Excel
+   */
+  private convertToBoolean(value: string): boolean {
+    const lowerValue = value.toLowerCase().trim();
+    return lowerValue === 'x' || lowerValue === 'sí' || lowerValue === 'si' || lowerValue === 'true' || lowerValue === '1';
+  }
+
+  /**
    * Obtener datos de una hoja de Google Sheets pública (sin autenticación)
    * @param spreadsheetId ID del Google Sheet
    * @param sheetName Nombre de la hoja
@@ -166,17 +174,12 @@ export class GoogleSheetsService {
             atic: (row[15] || '').toString().trim(), // Columna P - ATIC
             estado_ofertas: (row[16] || '').toString().trim(), // Columna Q - Estado Ofertas
             portal_web: (row[17] || '').toString().trim(), // Columna R - Portal/web
-            user: (row[18] || '').toString().trim(), // Columna S - User
+            usuario_portal: (row[18] || '').toString().trim(), // Columna S - User
             clave: (row[19] || '').toString().trim(), // Columna T - Clave
-            firma_convenio: (row[20] || '').toString().trim(), // Columna U - Firma convenio
+            firma_convenio_fecha: (row[20] || '').toString().trim(), // Columna U - Firma convenio
             notas_ofertas: (row[21] || '').toString().trim(), // Columna V - NOTAS OFERTAS
             anexos: (row[22] || '').toString().trim(), // Columna W - ANEXOS
             convocatorias: (row[23] || '').toString().trim(), // Columna X - Convocatorias
-            telefono2: '', // No existe en el Excel
-            siguiente_paso: null,
-            vencimiento_convenio: '',
-            altas_social: '',
-            departamento: '',
           };
         });
 
