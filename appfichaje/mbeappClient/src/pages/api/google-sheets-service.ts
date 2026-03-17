@@ -39,6 +39,15 @@ class GoogleSheetsService {
   private auth: any
   private sheets: any
 
+  private normalizeString(str: any): string {
+    if (!str && str !== 0) return ''
+    try {
+      return String(str).normalize('NFD').replace(/\p{Diacritic}/gu, '').trim().toLowerCase()
+    } catch (e) {
+      return String(str).replace(/[\u0300-\u036f]/g, '').trim().toLowerCase()
+    }
+  }
+
   constructor() {
     this.initializeAuth()
   }
@@ -356,16 +365,31 @@ class GoogleSheetsService {
 
   async findEmployeeRow(employeeId: string, sheetName: string): Promise<number> {
     try {
-      const range = `${sheetName}!C:C`
-      const data = await this.getSheetData(SHEETS_CONFIG.spreadsheetId, range)
+      const columnsToTry = ['C', 'A'] // buscar en C primero (antiguo), luego en A (config recomendado)
+      const normalizedTarget = this.normalizeString(employeeId)
 
-      for (let i = 0; i < data.length; i++) {
-        if (data[i][0] === employeeId || data[i][0]?.includes(employeeId) || employeeId?.includes(data[i][0])) {
-          return i + 1
+      for (const col of columnsToTry) {
+        const range = `${sheetName}!${col}:${col}`
+        const data = await this.getSheetData(SHEETS_CONFIG.spreadsheetId, range)
+
+        for (let i = 0; i < data.length; i++) {
+          const cell = data[i][0]
+          const normalizedCell = this.normalizeString(cell)
+          if (!normalizedCell && !normalizedTarget) continue
+
+          if (
+            normalizedCell === normalizedTarget ||
+            normalizedCell.includes(normalizedTarget) ||
+            normalizedTarget.includes(normalizedCell)
+          ) {
+            const row = i + 1
+            console.log(`Empleado ${employeeId} encontrado en ${sheetName} columna ${col} fila ${row} (valor hoja: "${cell}")`)
+            return row
+          }
         }
       }
 
-      throw new Error(`Empleado ${employeeId} no encontrado en ${sheetName}`)
+      throw new Error(`Empleado ${employeeId} no encontrado en ${sheetName} (se buscaron columnas C y A)`)
     } catch (error) {
       console.error(`Error buscando empleado en ${sheetName}:`, error)
       throw error
