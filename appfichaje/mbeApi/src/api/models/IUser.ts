@@ -43,4 +43,7 @@ export interface IUser extends IModel {
 
       // usuario WP
       user_wp?: string
+
+      //pins
+      pins?: number;
 }

@@ -61,26 +61,6 @@ class UserBusiness implements IDataAccess<IUser> {
                               msg: 'El campo Nombre completo debe contener al menos 3 caracteres y máximo 150!' } 
                   )
             }
-
-            // // nombre
-            // if (  !(ValidationsInstance.checkMinLetters( data.nombre, 3 ) && 
-            //       ValidationsInstance.checkMaxLetters( data.nombre, 150 )) ) {
-            //       error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
-            //                   code: '', 
-            //                   field:'nombre', 
-            //                   msg: 'El campo nombre debe contener al menos 3 caracteres y máximo 150!' } 
-            //       )
-            // }
-
-            // // apellido
-            // if (  !(ValidationsInstance.checkMinLetters( data.apellido, 3 ) && 
-            //       ValidationsInstance.checkMaxLetters( data.apellido, 150 )) ) {
-            //       error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
-            //                   code: '', 
-            //                   field:'apellido', 
-            //                   msg: 'El campo apellido debe contener al menos 3 caracteres y máximo 150!' } 
-            //       )
-            // }
       }
 
       insert(data: IUser): Promise<IUser | IErrorResponse> {
@@ -110,7 +90,6 @@ class UserBusiness implements IDataAccess<IUser> {
             let error: IErrorResponse = { error: 'Error, integridad de datos', data:[] }
 
             // data.idrol = Constants.code_rol_propietario as CodeRoleType // DN solo puede crear usuarios propietarios
-
 
             this.validate(data, error)
 
@@ -179,16 +158,6 @@ class UserBusiness implements IDataAccess<IUser> {
                   )
             }
 
-            // apellido
-            // if (  !(ValidationsInstance.checkMinLetters( data.apellido, 3 ) && 
-            //       ValidationsInstance.checkMaxLetters( data.apellido, 150 )) ) {
-            //       error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
-            //                   code: '', 
-            //                   field:'apellido', 
-            //                   msg: 'El campo apellido debe contener al menos 3 caracteres y máximo 150!' } 
-            //       )
-            // }
-
             // password
             if (  !(ValidationsInstance.checkMinLetters( data.password?data.password:'', 4 ) && 
                   ValidationsInstance.checkMaxLetters( data.password?data.password:'', 15 )) ) {
@@ -203,7 +172,6 @@ class UserBusiness implements IDataAccess<IUser> {
             return (error.data?.length === 0) ? this.dataAccess.insert(data) : 
                                                 new Promise<IErrorResponse>((resolve, reject) => { resolve(error) })
       }
-
 
       // NO TOCAR, ESTA POR REVISAR SI FUNCIONA O SE EDITA EN UN FUTURO!!!
       
@@ -439,7 +407,7 @@ class UserBusiness implements IDataAccess<IUser> {
 
        
       updateRRHH(id: BigInt, data: IUser): Promise<IUser | IErrorResponse> {
-           
+            
 
            // Validaciones de usuario y de campos
            let error: IErrorResponse = { error: 'Error, integridad de datos', data:[] }
@@ -641,7 +609,7 @@ class UserBusiness implements IDataAccess<IUser> {
                                                 new Promise<IErrorResponse>((resolve, reject) => { resolve(error) })
       }
 
-     
+      
 
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -670,26 +638,6 @@ class UserBusiness implements IDataAccess<IUser> {
                               msg: 'El campo Nombre completo debe contener al menos 3 caracteres y máximo 150!' } 
                   )
             }
-
-            // // nombre
-            // if (  !(ValidationsInstance.checkMinLetters( data.nombre, 3 ) && 
-            //       ValidationsInstance.checkMaxLetters( data.nombre, 150 )) ) {
-            //       error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
-            //                   code: '', 
-            //                   field:'nombre', 
-            //                   msg: 'El campo nombre debe contener al menos 3 caracteres y máximo 150!' } 
-            //       )
-            // }
-
-            // // apellido
-            // if (  !(ValidationsInstance.checkMinLetters( data.apellido, 3 ) && 
-            //       ValidationsInstance.checkMaxLetters( data.apellido, 150 )) ) {
-            //       error.data?.push( {   type: Constants.error_type_custom as ErrorFieldType,
-            //                   code: '', 
-            //                   field:'apellido', 
-            //                   msg: 'El campo apellido debe contener al menos 3 caracteres y máximo 150!' } 
-            //       )
-            // }
 
             // Estado
             ValidationsInstance.checkStatus( (parseInt(data.estado!.toString())) as StatusDataType ) || 
@@ -764,6 +712,29 @@ class UserBusiness implements IDataAccess<IUser> {
       getWithPagination(): Promise<Array<IUser> | IErrorResponse> {
             return this.dataAccess.getWithPagination()
       }
+
+      // =========================================================================
+      // COMENTARIO: NUEVO MÉTODO PARA ACTUALIZAR PINS
+      // Valida y pasa la petición a la capa de datos
+      // =========================================================================
+      async updatePins(userId: number, value: number): Promise<boolean | IErrorResponse> {
+            let error: IErrorResponse = { error: 'Error de validación', data: [] };
+
+            // Validar que el valor sea exactamente 1 o -1 para evitar abusos
+            if (value !== 1 && value !== -1) {
+                  error.data?.push({
+                        type: Constants.error_type_custom as ErrorFieldType,
+                        code: '',
+                        field: 'value',
+                        msg: 'El valor de actualización de pins debe ser 1 o -1'
+                  });
+                  return new Promise<IErrorResponse>((resolve) => { resolve(error) });
+            }
+
+            // Si pasa la validación, llamamos a DataAccess
+            return this.dataAccess.updatePins(userId, value);
+      }
+      // =========================================================================
 }
 
 export default UserBusiness

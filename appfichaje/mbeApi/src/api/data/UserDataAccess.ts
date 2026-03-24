@@ -26,8 +26,9 @@ class UserDataAccess implements IDataAccess<IUser> {
       async get(): Promise<Array<IUser> | IErrorResponse> {
             const queryData = {
                   name: 'get-users',
+                  // COMENTARIO: Se añade usu.pins a la consulta SELECT
                   text: `SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                        usu.telefono, usu.nombre_completo,
+                        usu.telefono, usu.nombre_completo, usu.pins,
                         (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
@@ -67,6 +68,7 @@ class UserDataAccess implements IDataAccess<IUser> {
 
             const queryData = {
                   name: 'get-users-admin',
+                  // COMENTARIO: Tu query text original estaba vacío aquí, lo dejo igual por si se carga dinámicamente en otro lado o si lo omitiste sin querer al pegar. Si necesitas la query, avísame.
                   text: `
 
                         `,
@@ -92,8 +94,9 @@ class UserDataAccess implements IDataAccess<IUser> {
       async getRRHH(): Promise<Array<IUser> | IErrorResponse> {
             const queryData = {
                   name: 'get-users-rrhh',
+                  // COMENTARIO: Se añade usu.pins a la consulta SELECT
                   text: `SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                        usu.telefono, usu.nombre_completo, usu.ref_lead,
+                        usu.telefono, usu.nombre_completo, usu.ref_lead, usu.pins,
                         (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
@@ -126,8 +129,9 @@ class UserDataAccess implements IDataAccess<IUser> {
       async getById(id: BigInt): Promise<IUser | IErrorResponse> {
             const queryData = {
                   name: 'get-user-x-id',
+                  // COMENTARIO: Se añade usu.pins a la consulta SELECT
                   text: `SELECT usu.id, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                        usu.telefono, usu.nombre_completo, usu.ref_lead,
+                        usu.telefono, usu.nombre_completo, usu.ref_lead, usu.pins,
                         (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
@@ -209,7 +213,8 @@ class UserDataAccess implements IDataAccess<IUser> {
       async getByIdRRHH(id: BigInt): Promise<IUser | IErrorResponse> {
             const queryData = {
                   name: 'get-user-x-id-rrhh',
-                  text: `SELECT usu.id, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario, usu.telefono, usu.nombre_completo, usu.ref_lead,
+                  // COMENTARIO: Se añade usu.pins a la consulta SELECT
+                  text: `SELECT usu.id, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario, usu.telefono, usu.nombre_completo, usu.ref_lead, usu.pins,
                         (CASE
                               WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]'
@@ -237,10 +242,11 @@ class UserDataAccess implements IDataAccess<IUser> {
       async getAllRRHH(): Promise<Array<IUser> | IErrorResponse> {
             const queryData = {
                   name: 'get-usuarios-RRHH',
+                  // COMENTARIO: Se añade usu.pins a la subconsulta SELECT
                   text: `SELECT us.* , ur.correo_personal , ur.jornada
                         FROM
                               (SELECT usu.id, usu.ref_lead, usu.nombre, usu.apellido, usu.email, usu.estado, usu.username, usu.idusuario,
-                              usu.nombre_completo, usu.ref_lead,
+                              usu.nombre_completo, usu.ref_lead, usu.pins,
                                     (CASE WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                               WHEN count(srol.*) = 0 THEN '[]' 
                               END) AS roles
@@ -273,7 +279,7 @@ class UserDataAccess implements IDataAccess<IUser> {
 
                   FROM
                         (
-                        SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario, usu.nombre_completo,
+                        SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario, usu.nombre_completo, usu.pins,
                         (CASE
                         WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                         WHEN count(srol.*) = 0 THEN '[]' END) AS roles
@@ -309,11 +315,11 @@ class UserDataAccess implements IDataAccess<IUser> {
 
             const queryData = {
                   name: 'get-users-rrhh-p',
-                  text: `	
-                  SELECT * FROM	
+                  text: `     
+                  SELECT * FROM     
                         (SELECT us.* , ur.correo_personal , ur.jornada
                   FROM (SELECT usu.id, usu.email, usu.estado, usu.username, usu.idusuario,
-                        usu.nombre_completo,
+                        usu.nombre_completo, usu.pins,
                         (CASE
                         WHEN count(srol.*) > 0 THEN jsonb_agg(json_build_object('id', srol.idrol, 'nombre', srol.nombre))
                         WHEN count(srol.*) = 0 THEN '[]'
@@ -327,7 +333,7 @@ class UserDataAccess implements IDataAccess<IUser> {
                               ) srol on (srol.idusuario = usu.id)
                         WHERE usu.estado >= $1 AND usu.estado IS NOT NULL AND srol.idrol NOT IN ('propietario', 'colaborador', 'admin' , 'superadmin','limpieza', 'mantenimiento')
                         AND srol.ismain = true
-                  GROUP BY usu.id							
+                  GROUP BY usu.id                       
                   ) as us
                   LEFT JOIN tbl_usuario_rrhh ur ON us.id = ur.id) AS usp
                         WHERE ( 
@@ -665,7 +671,7 @@ class UserDataAccess implements IDataAccess<IUser> {
                   }
 
 
-                  //Verificar si es la mejor forma     
+                  //Verificar si es la mejor forma    
                   let querySelect = {
                         name: 'select-etapa-x-user',
                         text: `SELECT etapa FROM ${Constants.tbl_etapa_usuario_rrhh_sql}
@@ -856,7 +862,8 @@ class UserDataAccess implements IDataAccess<IUser> {
 
             const queryData = {
                   name: 'get-users',
-                  text: `SELECT u.id, u.ref_lead, u.nombre, u.apellido, u.email, u.estado, u.username, u.telefono, u.nombre_completo, u.ref_lead 
+                  // COMENTARIO: Se añade u.pins a la consulta SELECT
+                  text: `SELECT u.id, u.ref_lead, u.nombre, u.apellido, u.email, u.estado, u.username, u.telefono, u.nombre_completo, u.ref_lead, u.pins 
                         FROM ${Constants.tbl_usuario_x_rol_sql} us
                         JOIN ${Constants.tbl_usuario_sql} u on (u.id = us.idusuario)
                         WHERE us.idrol LIKE $1 AND 
@@ -883,8 +890,9 @@ class UserDataAccess implements IDataAccess<IUser> {
       async getUsersDN(): Promise<Array<IUser> | IErrorResponse> {
             const queryData = {
                   name: 'get-users-dn',
+                  // COMENTARIO: Se añade u.pins a la consulta SELECT
                   text: `SELECT u.id, u.ref_lead, u.nombre, u.apellido, u.email, u.estado, u.username, r.nombre as nombrerol,
-                        u.telefono, u.nombre_completo, u.ref_lead 
+                        u.telefono, u.nombre_completo, u.ref_lead, u.pins 
                         FROM ${Constants.tbl_usuario_x_rol_sql} us
                         JOIN ${Constants.tbl_usuario_sql} u on (u.id = us.idusuario)
                         JOIN ${Constants.tbl_rol_sql} r on (r.id = us.idrol)
@@ -908,6 +916,7 @@ class UserDataAccess implements IDataAccess<IUser> {
       async getResponsablesDN(): Promise<Array<IUser> | IErrorResponse> {
             const queryData = {
                   name: 'get-users-responsables-dn',
+                  // COMENTARIO: u.* ya incluirá u.pins, no hace falta modificar el text
                   text: `
                         SELECT u.*
                         FROM ${Constants.tbl_usuario_sql} u
@@ -925,6 +934,48 @@ class UserDataAccess implements IDataAccess<IUser> {
 
             return lData as Array<IUser>
       }
+
+      // =========================================================================
+      // COMENTARIO: NUEVO MÉTODO PARA ACTUALIZAR PINS
+      // Este método recibe el ID del usuario y el valor a incrementar/decrementar
+      // =========================================================================
+      async updatePins(userId: number, value: number): Promise<boolean | IErrorResponse> {
+            try {
+                  const queryData = {
+                        name: 'update-user-pins',
+                        // COMENTARIO: Usamos COALESCE por si acaso pins es NULL, lo trate como 0
+                        text: `
+                              UPDATE ${Constants.tbl_usuario_sql}
+                              SET pins = COALESCE(pins, 0) + $1
+                              WHERE id = $2
+                              RETURNING id, pins;
+                        `,
+                        values: [value, userId]
+                  };
+
+                  let lData: any = await this.client.exeQuery(queryData);
+
+                  // Si exeQuery devuelve un arreglo y el primer elemento tiene la propiedad error
+                  if (Array.isArray(lData) && lData.length > 0 && (lData[0] as unknown as IErrorResponse).error) {
+                        return lData[0] as IErrorResponse;
+                  }
+
+                  // Verificar si la consulta fue exitosa (si devolvió alguna fila)
+                  if (Array.isArray(lData) && lData.length > 0) {
+                       return true; 
+                  }
+                  
+                  // Si no devolvió filas, asumimos que no se encontró el usuario o falló
+                  return false;
+
+            } catch (error: any) {
+                  // Manejar errores imprevistos respetando la interfaz IErrorResponse
+                  return {
+                        error: "Error al intentar actualizar los pins: " + (error.message || "Error desconocido")
+                  } as IErrorResponse;
+            }
+      }
+      // =========================================================================
 }
 
 export default UserDataAccess
