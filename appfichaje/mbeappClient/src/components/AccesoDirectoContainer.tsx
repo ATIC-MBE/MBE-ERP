@@ -123,6 +123,12 @@ const getIcon = (value: string, lblIcon?: string) => {
                     style={{ width: '7rem', height: '7rem' }}
                 />
             )
+            case 'drive':
+            return (
+                <svg title={_titleIcon} style={{ width: '5rem', height: '5rem', fill: '#005360' }} viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M58.3 52H29L14.4 78h29.2L58.3 52zm14.6-26l-14.5 26H29.1L43.7 26h29.2zM29.1 0L0 52l14.6 26L43.7 26 29.1 0z"/>
+                </svg>
+            )
         case 'review':
             return <MdOutlineRateReview title={_titleIcon} color='#005360' size={'5rem'} />
 
