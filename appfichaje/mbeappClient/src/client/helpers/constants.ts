@@ -290,15 +290,16 @@ export const MSG_ERROR_GENERIC = 'Ha ocurrido un error inesperado.';
 // === MENÚS LATERALES ===
 
 export const menu_rrhh_master: Array<MenuLeftType> = [
-	{ key: 'rrhh_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhhmaster', codeIcon: 'home' },
-	{ key: 'rrhh_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/rrhhmaster/users/', codeIcon: 'user' },
-	{ key: 'rrhh_master_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhhmaster/contactos-universidad', codeIcon: 'birrete' },
+    { key: 'rrhh_master_home', isActive: false, propID: 'Inicio', order: 1, menuPath: '/rrhhmaster', codeIcon: 'home' },
+    { key: 'rrhh_master_users', isActive: false, propID: 'Usuarios', order: 2, menuPath: '/rrhhmaster/users/', codeIcon: 'user' },
+    { key: 'rrhh_master_contactos_universidad', isActive: false, propID: 'Universidades', order: 3, menuPath: '/rrhhmaster/contactos-universidad', codeIcon: 'birrete' },
     { key: 'rrhh_master_fichaje', isActive: false, propID: 'Fichaje', order: 4, menuPath: '/rrhhmaster/fichaje', codeIcon: 'fichaje' },
     { key: 'rrhh_master_calendario', isActive: false, propID: 'Calendario', order: 5, menuPath: '/rrhhmaster/calendario', codeIcon: 'calendario' },
     { key: 'rrhh_master_esquema', isActive: false, propID: 'Esquema', order: 6, menuPath: '/rrhhmaster/esquema', codeIcon: 'esquema' },
     { key: 'rrhh_master_vacaciones', isActive: false, propID: 'Vacaciones', order: 7, menuPath: '/rrhhmaster/vacaciones', codeIcon: 'vacaciones' },
     { key: 'rrhh_master_progreso', isActive: false, propID: 'Progreso', order: 8, menuPath: '/rrhhmaster/progreso', codeIcon: 'progreso' },
     { key: 'rrhh_master_solicitudes', isActive: false, propID: 'Solicitudes', order: 9, menuPath: '/rrhhmaster/solicitudes', codeIcon: 'solicitudes' },
+    { key: 'rrhh_master_pins', isActive: false, propID: 'Pins', order: 10, menuPath: '/rrhhmaster/pins', codeIcon: 'user' }
 ];
 
 export const menu_rrhh: Array<MenuLeftType> = [

@@ -277,9 +277,20 @@ const UserState = (props: JSONObject) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [])
     }
+    const updatePinsLocally = (amount: number) => {
+        // Asumiendo que tu estado de usuario se maneja con 'setLoginData' o similar.
+        // Adaptaremos el objeto del usuario que está en memoria.
+        const currentUser = userData(); // Tu función existente que devuelve el usuario
+        if (currentUser) {
+            currentUser.pins = (currentUser.pins || 0) + amount;
+            // Forzamos un re-render actualizando el estado de React que contiene al usuario
+            // (Si usas setUserState, setState, setLoginData, etc., ponlo aquí si no se actualiza la UI sola)
+        }
+    };
 
     return (
         <UserContext.Provider value={{
+            updatePinsLocally,
             solPendientesRMG,
             updateSolPendientesRMG,
             userData,
@@ -292,7 +303,7 @@ const UserState = (props: JSONObject) => {
             isMobileMenuOpen,
             setIsMobileMenuOpen
         }}>
-            {children}
+            {props.children}
         </UserContext.Provider>
     )
 }
