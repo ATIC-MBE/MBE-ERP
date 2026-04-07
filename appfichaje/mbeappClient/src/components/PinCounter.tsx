@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import UserContext from '@/client/context/UserContext';
-// 1. IMPORTACIÓN POR DEFECTO (Sin llaves)
+// IMPORTACIÓN CORRECTA AL SINGLETON
 import FetchApiService from '@/client/services/FetchApiService';
 
 const PinCounter = () => {
@@ -15,16 +15,16 @@ const PinCounter = () => {
         if (isLoading) return;
         setIsLoading(true);
         
+        // Actualizamos primero visualmente
         if (updatePinsLocally) {
             updatePinsLocally(value);
         }
 
         try {
-            // 2. LLAMADA DIRECTA: Usamos el objeto directamente, sin "new"
-            // (Si TypeScript te marca error en postData, cámbialo por patchData o putData según los métodos que tenga tu FetchApiService)
-            const response = await FetchApiService.postData(`share/users/${user.id}/pins`, { value });
+            // CORRECCIÓN: Le añadimos 'api/' al principio de la ruta
+            const responseData = await FetchApiService.update(`api/share/users/${user.id}/pins`, { id: user.id, value: value } as any);
             
-            if (!response || !response.status) {
+            if (responseData === undefined) {
                 console.error("Error al actualizar pins en base de datos");
                 if (updatePinsLocally) updatePinsLocally(-value); 
             }

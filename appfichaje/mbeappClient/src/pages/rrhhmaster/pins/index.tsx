@@ -3,7 +3,7 @@ import MenuLeftContainer from '@/components/MenuLeftContainer';
 import ContentContainer from '@/components/ContentContainer';
 import { menu_rrhh_master } from '@/client/helpers/constants';
 import React, { useEffect, useState } from 'react';
-// 1. IMPORTACIÓN POR DEFECTO (Sin llaves)
+// IMPORTACIÓN CORRECTA AL SINGLETON
 import FetchApiService from '@/client/services/FetchApiService';
 
 const PinsManagement = () => {
@@ -17,12 +17,11 @@ const PinsManagement = () => {
 
     const fetchUsers = async () => {
         try {
-            // 2. LLAMADA DIRECTA: Usamos el objeto directamente, sin la palabra "new"
-            const response = await FetchApiService.getData('share/users'); 
+            // CORRECCIÓN: Le añadimos 'api/' al principio de la ruta
+            const responseData = await FetchApiService.getAllData('api/share/users'); 
             
-            if (response && response.status && response.data) {
-                const data = Array.isArray(response.data) ? response.data : [];
-                setUsers(data);
+            if (responseData && Array.isArray(responseData)) {
+                setUsers(responseData);
             }
         } catch (error) {
             console.error("Error obteniendo la lista de usuarios:", error);
