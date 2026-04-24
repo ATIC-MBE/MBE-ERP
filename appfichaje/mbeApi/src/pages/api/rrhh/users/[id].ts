@@ -19,23 +19,7 @@ const handler = nc(
             }
       })
       .use(MiddlewareInstance.verifyToken)
-      // .get(async (req, res: NextApiResponse<IResponse | IErrorResponse>) => { 
-      //       const {idUserLogin, filterState} = UtilInstance.getDataRequest(req)
-      //       let el: UserBusiness = new UserBusiness(idUserLogin, filterState, false)
-            
-      //       let dataDB: IUser | IErrorResponse = await el.getByIdRRHH(BigInt(parseInt(req.query.id as string)))
-      //       if ( !dataDB ) {
-      //             res.status(404).json({ error: 'data not found' })
-      //             return
-      //       }
-      //       if ( ({ ...dataDB } as IErrorResponse).error ) {
-      //             let _d = dataDB as IErrorResponse
-      //             if (_d.code === 403) res.status(403).json(_d)
-      //             else res.status(404).json(_d)
-      //             return
-      //       }
-      //       res.json({ data: dataDB })
-      // })
+      
       .get(async (req , res : NextApiResponse <IResponse | IErrorResponse>)=>{
             const {idUserLogin , filterState} = UtilInstance.getDataRequest(req)
             let el : UserBusiness = new UserBusiness(idUserLogin , filterState , false)
@@ -54,85 +38,60 @@ const handler = nc(
             }
             res.json({data : dataDB})
       })
-      // .patch(async (req: NextApiRequest, res: NextApiResponse<IResponse | IErrorResponse>) => { 
-      //       const {idUserLogin, filterState} = UtilInstance.getDataRequest(req)
-      //       let el: UserBusiness = new UserBusiness(idUserLogin, filterState, true)
+      
+      .patch(async (req: NextApiRequest, res: NextApiResponse<IResponse | IErrorResponse>) => {
+    const { idUserLogin, filterState } = UtilInstance.getDataRequest(req);
+    let el = new UserBusiness(idUserLogin, filterState, true);
 
-      //       let data: IUser = {
-      //             username: req.body.username || '',
-      //             email: req.body.email || '',
-      //             nombre: req.body.nombre || '',
-      //             apellido: req.body.apellido || '',
-      //             estado: req.body.estado,
-      //             idrol: req.body.idrol || '',
-      //             idusuario: idUserLogin || '',
-      //             nombre_completo: req.body.nombre_completo || ''
-      //       }
-      //       let dataDB: IUser | IErrorResponse = await el.updateRRHH(BigInt(parseInt(req.query.id as string)), data)
-      //       if ( !dataDB ) {
-      //             res.status(204).json({ error: 'data not found' })
-      //             return
-      //       }
-      //       if ( ({ ...dataDB } as IErrorResponse).error ) {
-      //             // 409: conflicto con los datos enviados
-      //             // Ademas del 409 verificar el estatus del error y enviar que no esta autorizado
-      //             res.status(409).json(dataDB as IErrorResponse)
-      //             return
-      //       }
-      //       res.json({ data: dataDB })
-      // })
-      .patch(async (req: NextApiRequest , res: NextApiResponse <IResponse | IErrorResponse>)=>{
+    let usuarioActual = await el.getByIdRRHH_(BigInt(parseInt(req.query.id as string)));
+    if (!usuarioActual || (usuarioActual as IErrorResponse).error) {
+        res.status(404).json({ error: 'Usuario no encontrado' });
+        return;
+    }
 
-                  const { idUserLogin, filterState } = UtilInstance.getDataRequest(req);
-                  let el = new UserBusiness(idUserLogin, filterState, true);
-                  // Obtener datos actuales del usuario
-                        let usuarioActual = await el.getByIdRRHH_(BigInt(parseInt(req.query.id as string)));
-                        if (!usuarioActual || (usuarioActual as IErrorResponse).error) {
-                              res.status(404).json({ error: 'Usuario no encontrado' });
-                              return;
-                        }
-                              // Solo continuar si es un usuario válido
-                              const usuarioValido = usuarioActual as IUser;
-                              let data: Partial<IUser> = { ...usuarioValido };
-                              // Actualizar solo los campos enviados en el body
-                              Object.keys(req.body).forEach((key) => {
-                                    if (key in usuarioValido) {
-                                          (data as any)[key] = req.body[key];
-                                    }
-                              });
-                                    // Si no se recibe idrol, consultar el valor actual en la base de datos y añadirlo
-                                    if (!('idrol' in req.body)) {
-                                                      // Consulta del rol actual usando exeQuery
-                                                      const query = {
-                                                            name: 'get-user-rol',
-                                                            text: `SELECT idrol FROM tbl_usuario_x_rol WHERE idusuario = $1 LIMIT 1`,
-                                                            values: [parseInt(req.query.id as string)]
-                                                      };
-                                                      try {
-                                                            const resultArr = await el.dataAccess.client.exeQuery(query);
-                                                            if (resultArr && resultArr[0] && (resultArr[0] as any).idrol) {
-                                                                  data.idrol = (resultArr[0] as any).idrol;
-                                                            } else {
-                                                                  res.status(409).json({ error: 'El usuario no tiene rol asignado. No se puede modificar.' });
-                                                                  return;
-                                                            }
-                                                      } catch (err) {
-                                                            res.status(500).json({ error: 'Error consultando el rol actual del usuario.' });
-                                                            return;
-                                                      }
-                                    }
-                                    // Puedes añadir aquí otros campos obligatorios si los hay
-                                    let dataDB: IUser | IErrorResponse = await el.updateRRHH(BigInt(parseInt(req.query.id as string)), data as IUser);
-                  if (!dataDB) {
-                        res.status(204).json({ error: 'data not found' });
-                        return;
-                  }
-                  if (({ ...dataDB } as IErrorResponse).error) {
-                        res.status(409).json(dataDB as IErrorResponse);
-                        return;
-                  }
-                  res.json({ data: dataDB });
-        })
+    const usuarioValido = usuarioActual as IUser;
+    // Forzamos que data contenga idrol si viene en el body
+    let data: IUser = { 
+        ...usuarioValido,
+        idrol: req.body.idrol // <--- ASIGNACIÓN DIRECTA
+    };
+
+    // Actualizar el resto de campos
+    Object.keys(req.body).forEach((key) => {
+        if (key in usuarioValido) {
+            (data as any)[key] = req.body[key];
+        }
+    });
+
+    // Validar si idrol sigue siendo nulo tras el mapeo
+    if (!data.idrol) {
+        // Lógica de rescate: intentar sacar el rol actual de la DB si no se envió uno nuevo
+        const query = {
+            name: 'get-user-rol',
+            text: `SELECT idrol FROM tbl_usuario_x_rol WHERE idusuario = $1 LIMIT 1`,
+            values: [parseInt(req.query.id as string)]
+        };
+        const resultArr = await el.dataAccess.client.exeQuery(query);
+        if (resultArr && resultArr[0]) {
+            data.idrol = (resultArr[0] as any).idrol;
+        } else {
+            res.status(409).json({ error: 'El campo idrol es obligatorio y no se encontró uno previo.' });
+            return;
+        }
+    }
+
+    let dataDB: IUser | IErrorResponse = await el.updateRRHH(BigInt(parseInt(req.query.id as string)), data);
+    
+    if (!dataDB) {
+        res.status(204).json({ error: 'data not found' });
+        return;
+    }
+    if ((dataDB as IErrorResponse).error) {
+        res.status(409).json(dataDB as IErrorResponse);
+        return;
+    }
+    res.json({ data: dataDB });
+})
       .delete(async (req: NextApiRequest, res: NextApiResponse<IResponse | IErrorResponse>) => { 
             const {idUserLogin, filterState} = UtilInstance.getDataRequest(req)
             let el: UserBusiness = new UserBusiness(idUserLogin, filterState, false)
