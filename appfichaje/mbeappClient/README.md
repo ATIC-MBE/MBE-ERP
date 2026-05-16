@@ -19,6 +19,26 @@ pnpm dev
 
 Open [http://localhost:6969](http://localhost:6969) with your browser to see the result.
 
+## 🔐 P1N Google Sheets Credentials
+
+The P1N section reads Google Sheets using a service account key.
+
+Recommended paths for the key file:
+- Local: C:\Users\alex_\secrets\mbe-p1n-service.json
+- Server: /home/aticmbe/.secrets/mbe-p1n-service.json
+
+Set the environment variable to point to the key:
+
+```bash
+GOOGLE_APPLICATION_CREDENTIALS=/home/aticmbe/.secrets/mbe-p1n-service.json
+```
+
+Local example:
+
+```bash
+GOOGLE_APPLICATION_CREDENTIALS=C:\Users\alex_\secrets\mbe-p1n-service.json
+```
+
 ## 📚 Project Overview
 
 This application is built with:

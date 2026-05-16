@@ -56,15 +56,38 @@ body {
 /* Brand button styles */
 .c-btn-primary, .c-btn, .btn, button, .c-btnLogin {
   background-color: #005360 !important;
-  color: #fff !important;
+  color: #ffffff !important;
   border: none;
-  box-shadow: 0 2px 8px 0 rgba(0,83,96,0.08);
-  transition: background 0.2s, color 0.2s;
+  border-radius: 0.65rem;
+  box-shadow: 0 6px 16px rgba(0, 83, 96, 0.18);
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .c-btn-primary:hover, .c-btn:hover, .btn:hover, button:hover, .c-btnLogin:hover {
-  background-color: #005360 !important;
-  color: #005360 !important;
+  background-color: #007486 !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 22px rgba(0, 83, 96, 0.24);
+  transform: translateY(-1px);
+}
+
+.c-btn-primary:active, .c-btn:active, .btn:active, button:active, .c-btnLogin:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 83, 96, 0.18);
+}
+
+.c-btn-primary:focus-visible, .c-btn:focus-visible, .btn:focus-visible, button:focus-visible, .c-btnLogin:focus-visible {
+  outline: 2px solid rgba(0, 116, 134, 0.5);
+  outline-offset: 2px;
+}
+
+.icon-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contactos-header-button {

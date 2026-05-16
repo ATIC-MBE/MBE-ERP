@@ -248,6 +248,8 @@ export const PropBox = (props: JSONObject) => {
                 return <FaCalendarAlt title='Calendario' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'progreso':
                 return <FaChartLine title='Progreso' color={isActive?'white':'white'} style={{border: 1}} size={35} />
+            case 'p1n':
+                return <AiOutlineSnippets title='P1N' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             case 'key':
                 return  <GoKey title='Llaves' color={isActive?'white':'white'} style={{border: 1}} size={35} />
             default:
